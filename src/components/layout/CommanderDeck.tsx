@@ -294,7 +294,7 @@ export const CommanderDeck: React.FC = () => {
                       onClick={() => handleNavigate('/library')}
                       className="text-primary hover:underline cursor-pointer flex items-center gap-0.5"
                     >
-                      All 67 Games →
+                      All {GAMES_CATALOG.length} Games →
                     </button>
                   </div>
 
@@ -426,7 +426,7 @@ export const CommanderDeck: React.FC = () => {
                     </div>
                     <div className="p-1.5 rounded-lg bg-white/5 border border-white/5">
                       <span className="text-white/40 block text-[8px] uppercase">Catalog</span>
-                      <span className="text-cyan-300 text-xs">67 Titles</span>
+                      <span className="text-cyan-300 text-xs">{GAMES_CATALOG.length} Titles</span>
                     </div>
                     <div className="p-1.5 rounded-lg bg-white/5 border border-white/5">
                       <span className="text-white/40 block text-[8px] uppercase">Status</span>

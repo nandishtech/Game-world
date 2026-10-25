@@ -27,7 +27,17 @@ export const Library: React.FC = () => {
     if (filterType === 'WEB') return game.type === 'web';
     if (filterType === 'DESKTOP') return game.type === 'desktop';
 
-    return game.genre.toUpperCase().replace(/[\s&]+/g, '_') === filterType;
+    const gUpper = game.genre.toUpperCase();
+    if (filterType === 'RACING') return gUpper.includes('RACING') || gUpper.includes('CAR') || gUpper.includes('DRIVING');
+    if (filterType === 'ACTION') return gUpper.includes('ACTION') || gUpper.includes('SHOOTING') || gUpper.includes('FIGHT');
+    if (filterType === 'IO_MULTIPLAYER') return gUpper.includes('IO') || gUpper.includes('MULTIPLAYER');
+    if (filterType === 'PUZZLE') return gUpper.includes('PUZZLE') || gUpper.includes('BRAIN') || gUpper.includes('BOARD') || gUpper.includes('STRATEGY');
+    if (filterType === 'MERGE_IDLE') return gUpper.includes('MERGE') || gUpper.includes('IDLE') || gUpper.includes('CLICKER');
+    if (filterType === 'PLATFORMER') return gUpper.includes('PLATFORMER') || gUpper.includes('OBBY') || gUpper.includes('SKILL') || gUpper.includes('ARCADE');
+    if (filterType === 'SPORTS') return gUpper.includes('SPORT') || gUpper.includes('SOCCER') || gUpper.includes('BASKETBALL') || gUpper.includes('FOOTBALL');
+    if (filterType === 'HORROR') return gUpper.includes('HORROR') || gUpper.includes('ADVENTURE') || gUpper.includes('RPG');
+
+    return gUpper.replace(/[\s&]+/g, '_') === filterType;
   });
 
   const handleAction = (game: GameItem) => {
@@ -38,14 +48,15 @@ export const Library: React.FC = () => {
   const categories = [
     { label: 'ALL GAMES', value: 'ALL', count: GAMES_CATALOG.length },
     { label: 'ONLINE GAMES', value: 'WEB', count: GAMES_CATALOG.filter(g => g.type === 'web').length },
-    { label: 'STANDALONE', value: 'DESKTOP', count: GAMES_CATALOG.filter(g => g.type === 'desktop').length },
-    { label: 'STRATEGY', value: 'STRATEGY' },
-    { label: 'ARCADE', value: 'ARCADE' },
-    { label: 'ACTION & MOBA', value: 'ACTION_MOBA' },
-    { label: 'PUZZLE', value: 'PUZZLE' },
-    { label: 'RPG', value: 'RPG' },
-    { label: 'RACING', value: 'CAR_RACING' },
-    { label: 'BOARD GAME', value: 'BOARD_GAME' }
+    { label: '🏎️ RACING & CARS', value: 'RACING' },
+    { label: '⚔️ ACTION & SHOOTING', value: 'ACTION' },
+    { label: '🌐 .IO & MULTIPLAYER', value: 'IO_MULTIPLAYER' },
+    { label: '🧩 PUZZLE & BRAIN', value: 'PUZZLE' },
+    { label: '⚡ MERGE & IDLE', value: 'MERGE_IDLE' },
+    { label: '🏃 PLATFORMER & OBBY', value: 'PLATFORMER' },
+    { label: '⚽ SPORTS', value: 'SPORTS' },
+    { label: '👁️ HORROR & ADVENTURE', value: 'HORROR' },
+    { label: '💻 STANDALONE', value: 'DESKTOP', count: GAMES_CATALOG.filter(g => g.type === 'desktop').length }
   ];
 
   return (
@@ -60,7 +71,7 @@ export const Library: React.FC = () => {
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-widest bg-primary/20 text-primary border border-primary/30 uppercase flex items-center gap-1">
-                <Sparkles className="w-3 h-3" /> 67 Master Titles Available
+                <Sparkles className="w-3 h-3" /> {GAMES_CATALOG.length} Master Titles Available
               </span>
             </div>
             <h1 className="text-headline-xl font-headline-xl text-white font-bold">Game Universe Library</h1>
@@ -71,11 +82,11 @@ export const Library: React.FC = () => {
 
           <div className="flex items-center gap-3 text-xs text-on-surface-variant bg-black/40 backdrop-blur-md px-4 py-2 rounded-xl border border-white/5">
             <span className="flex items-center gap-1.5 text-white/90 font-medium">
-              <Globe className="w-4 h-4 text-primary" /> 45 Instant Play
+              <Globe className="w-4 h-4 text-primary" /> {GAMES_CATALOG.filter(g => g.type === 'web').length} Instant Play
             </span>
             <span>•</span>
             <span className="flex items-center gap-1.5 text-white/90 font-medium">
-              <Monitor className="w-4 h-4 text-emerald-400" /> 22 Premium Titles
+              <Monitor className="w-4 h-4 text-emerald-400" /> {GAMES_CATALOG.filter(g => g.type === 'desktop').length} Premium Titles
             </span>
           </div>
         </div>
@@ -155,6 +166,9 @@ export const Library: React.FC = () => {
                     <img 
                       src={game.img} 
                       alt={game.name} 
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = '/assets/games/classic_2048.svg';
+                      }}
                       className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-all duration-500 group-hover:scale-105" 
                     />
                     

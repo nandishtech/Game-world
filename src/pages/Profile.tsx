@@ -419,7 +419,7 @@ export const Profile: React.FC = () => {
                 <h4 className="text-sm font-bold text-white uppercase tracking-wider">Ready to Climb?</h4>
               </div>
               <p className="text-xs text-on-surface-variant leading-relaxed">
-                Compete in over 67 master titles. Win matches to level up your combatant status and claim coins on the global leaderboard.
+                Compete in over 180 master titles. Win matches to level up your combatant status and claim coins on the global leaderboard.
               </p>
               <Button
                 variant="neon"
