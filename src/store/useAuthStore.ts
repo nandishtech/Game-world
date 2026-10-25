@@ -40,13 +40,12 @@ export interface UserProfile {
 interface AuthState {
   isAuthenticated: boolean;
   user: UserProfile | null;
-  login: (username: string, email: string, role?: UserRole) => void;
+  login: (username: string, email: string) => void;
   logout: () => void;
   addXP: (amount: number) => void;
   addCoins: (amount: number) => void;
   spendCoins: (amount: number) => boolean;
   updateBio: (newBio: string) => void;
-  setRole: (role: UserRole) => void;
   enable2FA: (secret: string, codes: string[]) => void;
   disable2FA: () => void;
   logoutAllDevices: () => void;
@@ -77,7 +76,7 @@ const DEFAULT_USER: UserProfile = {
   id: 'user_nexus_01',
   username: 'Commander_Nexus',
   email: 'nexus@gameworld.gg',
-  role: 'SUPER_ADMIN',
+  role: 'USER',
   avatarUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDQs_tjqcECUn5t-6vextXiJCGpj2pM2n_UHY4uLJ1zGXx9KvTRY6F-z7iRuPYOaUAHVa8rLgJeE7baNoV1602KAL04FvITaBTAdFMSpN-NkHTSRdc2HRZTO-K9-HOHt0ke3cEngpUI6HUjlafvrhlAF-YKpKK6dwhnEE7NVTNVdLnSpbwY55PaIEP-zh4bzs5tsTkUDZV_IjF9gvI_KFXJJ1dV2S-8EMy0jFKWAogup6sxfPkQFUGe13WKiZlmYWLOyWCyNxRwsII',
   bio: 'Cyber Nexus Vanguard commander. Competitive gamer and esports enthusiast.',
   country: 'Cyber City',
@@ -90,9 +89,7 @@ const DEFAULT_USER: UserProfile = {
     rank: 1850,
     hoursPlayed: 120.5
   },
-  is2FAEnabled: true,
-  twoFactorSecret: 'JBSWY3DPEHPK3PXP',
-  recoveryCodes: ['9A8F-4D21', '7C3B-8E90', '1F4E-6A22', '3D8C-5E11'],
+  is2FAEnabled: false,
   activeSessions: DEFAULT_SESSIONS
 };
 
@@ -100,13 +97,13 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   isAuthenticated: false,
   user: null,
 
-  login: (username, email, role = 'SUPER_ADMIN') => {
+  login: (username, email) => {
     securityAuditLogger.log({
       severity: 'INFO',
       eventType: 'AUTH_LOGIN_SUCCESS',
       actor: username,
       ipAddress: '192.168.1.104',
-      details: `User session authenticated with role ${role}`
+      details: 'User session authenticated with role USER'
     });
 
     set({
@@ -115,7 +112,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         ...DEFAULT_USER,
         username,
         email,
-        role
+        role: 'USER'
       }
     });
   },
@@ -132,19 +129,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       });
     }
     set({ isAuthenticated: false, user: null });
-  },
-
-  setRole: (role: UserRole) => {
-    const user = get().user;
-    if (!user) return;
-    securityAuditLogger.log({
-      severity: 'WARN',
-      eventType: 'ADMIN_ACTION',
-      actor: user.username,
-      ipAddress: '192.168.1.104',
-      details: `User role transitioned to ${role}`
-    });
-    set({ user: { ...user, role } });
   },
 
   enable2FA: (secret: string, codes: string[]) => {
