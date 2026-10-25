@@ -45,18 +45,32 @@ export const Library: React.FC = () => {
     navigate(`/play/embed/${game.id}`);
   };
 
+  const countForFilter = (f: string) => {
+    return GAMES_CATALOG.filter((game) => {
+      if (f === 'ALL') return true;
+      if (f === 'WEB') return game.type === 'web';
+      if (f === 'DESKTOP') return game.type === 'desktop';
+      const gUpper = game.genre.toUpperCase();
+      if (f === 'RACING') return gUpper.includes('RACING') || gUpper.includes('CAR') || gUpper.includes('DRIVING');
+      if (f === 'ACTION') return gUpper.includes('ACTION') || gUpper.includes('SHOOTING') || gUpper.includes('FIGHT');
+      if (f === 'IO_MULTIPLAYER') return gUpper.includes('IO') || gUpper.includes('MULTIPLAYER');
+      if (f === 'PUZZLE') return gUpper.includes('PUZZLE') || gUpper.includes('BRAIN') || gUpper.includes('BOARD') || gUpper.includes('STRATEGY');
+      if (f === 'PLATFORMER') return gUpper.includes('PLATFORMER') || gUpper.includes('OBBY') || gUpper.includes('SKILL') || gUpper.includes('ARCADE');
+      if (f === 'HORROR') return gUpper.includes('HORROR') || gUpper.includes('ADVENTURE') || gUpper.includes('RPG');
+      return gUpper.replace(/[\s&]+/g, '_') === f;
+    }).length;
+  };
+
   const categories = [
-    { label: 'ALL GAMES', value: 'ALL', count: GAMES_CATALOG.length },
-    { label: 'ONLINE GAMES', value: 'WEB', count: GAMES_CATALOG.filter(g => g.type === 'web').length },
-    { label: '🏎️ RACING & CARS', value: 'RACING' },
-    { label: '⚔️ ACTION & SHOOTING', value: 'ACTION' },
-    { label: '🌐 .IO & MULTIPLAYER', value: 'IO_MULTIPLAYER' },
-    { label: '🧩 PUZZLE & BRAIN', value: 'PUZZLE' },
-    { label: '⚡ MERGE & IDLE', value: 'MERGE_IDLE' },
-    { label: '🏃 PLATFORMER & OBBY', value: 'PLATFORMER' },
-    { label: '⚽ SPORTS', value: 'SPORTS' },
-    { label: '👁️ HORROR & ADVENTURE', value: 'HORROR' },
-    { label: '💻 STANDALONE', value: 'DESKTOP', count: GAMES_CATALOG.filter(g => g.type === 'desktop').length }
+    { label: 'ALL GAMES', value: 'ALL', count: countForFilter('ALL') },
+    { label: 'ONLINE PLAY', value: 'WEB', count: countForFilter('WEB') },
+    { label: '🏎️ RACING', value: 'RACING', count: countForFilter('RACING') },
+    { label: '⚔️ ACTION', value: 'ACTION', count: countForFilter('ACTION') },
+    { label: '🌐 .IO & ARENA', value: 'IO_MULTIPLAYER', count: countForFilter('IO_MULTIPLAYER') },
+    { label: '🧩 PUZZLE & BOARD', value: 'PUZZLE', count: countForFilter('PUZZLE') },
+    { label: '🏃 RUNNER & ARCADE', value: 'PLATFORMER', count: countForFilter('PLATFORMER') },
+    { label: '🗡️ ADVENTURE & RPG', value: 'HORROR', count: countForFilter('HORROR') },
+    { label: '💻 DESKTOP', value: 'DESKTOP', count: countForFilter('DESKTOP') }
   ];
 
   return (
