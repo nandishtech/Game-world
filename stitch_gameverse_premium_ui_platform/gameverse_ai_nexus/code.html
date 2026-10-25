@@ -1,0 +1,452 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>GameVerse | AI Gaming Assistant</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#93000a",
+                        "on-secondary-fixed": "#23005c",
+                        "on-tertiary": "#003640",
+                        "on-secondary": "#3c0091",
+                        "on-primary-fixed-variant": "#004395",
+                        "primary-container": "#4d8eff",
+                        "on-secondary-container": "#c4abff",
+                        "tertiary-container": "#009eb9",
+                        "on-secondary-fixed-variant": "#5516be",
+                        "secondary-fixed": "#e9ddff",
+                        "background": "#131313",
+                        "surface-container-lowest": "#0e0e0e",
+                        "primary-fixed": "#d8e2ff",
+                        "inverse-primary": "#005ac2",
+                        "error": "#ffb4ab",
+                        "on-error-container": "#ffdad6",
+                        "on-background": "#e5e2e1",
+                        "tertiary-fixed": "#acedff",
+                        "on-surface": "#e5e2e1",
+                        "on-primary-fixed": "#001a42",
+                        "surface-dim": "#131313",
+                        "surface-container-low": "#1c1b1b",
+                        "secondary-fixed-dim": "#d0bcff",
+                        "surface-container-high": "#2a2a2a",
+                        "on-tertiary-fixed": "#001f26",
+                        "surface-variant": "#353534",
+                        "primary-fixed-dim": "#adc6ff",
+                        "tertiary-fixed-dim": "#4cd7f6",
+                        "surface-tint": "#adc6ff",
+                        "inverse-on-surface": "#313030",
+                        "surface-container": "#201f1f",
+                        "secondary-container": "#571bc1",
+                        "on-tertiary-fixed-variant": "#004e5c",
+                        "on-tertiary-container": "#002f38",
+                        "on-surface-variant": "#c2c6d6",
+                        "on-error": "#690005",
+                        "tertiary": "#4cd7f6",
+                        "outline": "#8c909f",
+                        "surface": "#131313",
+                        "on-primary-container": "#00285d",
+                        "surface-container-highest": "#353534",
+                        "primary": "#adc6ff",
+                        "surface-bright": "#3a3939",
+                        "outline-variant": "#424754",
+                        "secondary": "#d0bcff",
+                        "inverse-surface": "#e5e2e1",
+                        "on-primary": "#002e6a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1440px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "48px",
+                        "gutter": "24px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Space Grotesk"],
+                        "display-lg": ["Space Grotesk"],
+                        "display-lg-mobile": ["Space Grotesk"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Space Grotesk"],
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-sm": ["Space Grotesk"]
+                    },
+                    "fontSize": {
+                        "headline-xl": ["40px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "display-lg-mobile": ["40px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "1", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "500"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #050505;
+            color: #e5e2e1;
+            overflow-x: hidden;
+        }
+
+        .glass-panel {
+            background: rgba(28, 27, 27, 0.4);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .neon-glow-primary {
+            box-shadow: 0 0 40px rgba(173, 198, 255, 0.15);
+        }
+
+        .scanline {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(173, 198, 255, 0.2), transparent);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(173, 198, 255, 0.3);
+            border-radius: 10px;
+        }
+
+        .floating-orb {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md antialiased">
+<!-- Ambient Background Shader -->
+
+<!-- Top Navigation -->
+<header class="fixed top-0 w-full z-50 bg-surface/40 dark:bg-surface-container/40 backdrop-blur-3xl border-b border-white/10 shadow-xl">
+<div class="flex justify-between items-center px-margin-desktop py-4 max-w-container-max mx-auto">
+<div class="flex items-center gap-8">
+<span class="font-headline-sm text-headline-sm font-bold text-primary tracking-tighter cursor-pointer hover:scale-105 transition-all">GameVerse</span>
+<nav class="hidden md:flex gap-6">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-label-md text-label-md" href="#">Home</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md" href="#">Games</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md" href="#">Community</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md" href="#">Leaderboards</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" data-icon="search">search</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" data-icon="notifications">notifications</span>
+<button class="px-6 py-2 bg-primary-container text-on-primary-container font-label-md text-label-md rounded-xl hover:scale-105 active:scale-95 transition-all">Sign In</button>
+</div>
+</div>
+</header>
+<div class="flex h-screen pt-20">
+<!-- Sidebar Navigation (SideNavBar) -->
+<aside class="fixed left-0 top-0 h-full w-64 z-40 bg-surface-container-low dark:bg-surface-container-low/60 backdrop-blur-xl border-r border-white/5 shadow-2xl flex flex-col pt-24 py-8 gap-4 px-4">
+<div class="mb-8 px-2">
+<div class="flex items-center gap-3">
+<img class="w-12 h-12 rounded-full border-2 border-primary/30" data-alt="A futuristic circular profile avatar for a pro gamer with glowing cyan accents and a high-tech interface overlay, set against a dark carbon fiber texture. Premium AAA gaming aesthetic with sharp focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNzMeQidMJL4LdhbWlo1Yd4hLQubN22afCyuat3_7wXJtfzPdGO4H7hSjsARjaQacvlDJc9Z32jS0SRINMgPgfEVrAW7NXFmTzpYxGw60wXnAgiyajofi2XQbE803yQ2EqLQc2caNag7S7fJgVPtFT-SyVsDMIzyqdafSiNGSCA-yM3e8xAm35hy2KuD4AZllLcMEZkBVYx91YbLCFcMGUL4No1Fo-6uRv138c6aU5-N7zPK5y7qrtQbKfDpG5K6tGzCgeg_R7ef0">
+<div>
+<p class="font-headline-sm text-[16px] text-primary">Pro Gamer</p>
+<p class="text-[12px] text-on-surface-variant">Level 42 Elite</p>
+</div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer text-on-surface-variant hover:bg-white/5 group transition-all">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors" data-icon="person">person</span>
+<span class="font-label-md text-label-md">Profile</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer bg-primary/10 text-primary border-r-4 border-primary">
+<span class="material-symbols-outlined" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-label-md text-label-md">AI Coaching</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer text-on-surface-variant hover:bg-white/5 group transition-all">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors" data-icon="analytics">analytics</span>
+<span class="font-label-md text-label-md">Match Analysis</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer text-on-surface-variant hover:bg-white/5 group transition-all">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors" data-icon="military_tech">military_tech</span>
+<span class="font-label-md text-label-md">Achievements</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer text-on-surface-variant hover:bg-white/5 group transition-all">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</div>
+</div>
+<div class="mt-auto space-y-1 border-t border-white/5 pt-4">
+<div class="flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer text-on-surface-variant hover:bg-white/5 group transition-all">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors" data-icon="help">help</span>
+<span class="font-label-md text-label-md">Support</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer text-error/80 hover:bg-error/10 group transition-all">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label-md text-label-md">Sign Out</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 flex-1 flex flex-col md:flex-row gap-gutter px-margin-desktop py-8 overflow-y-auto custom-scrollbar">
+<!-- Left & Center: AI Core and Chat -->
+<div class="flex-1 flex flex-col gap-6">
+<!-- AI Core Visualization -->
+<div class="relative w-full h-[450px] glass-panel rounded-3xl overflow-hidden neon-glow-primary group">
+<div class="absolute top-6 left-6 z-10">
+<h2 class="font-headline-lg text-headline-lg text-primary">Nexus AI Core</h2>
+<p class="text-on-surface-variant font-label-md">Active Sync: 98.4% Efficiency</p>
+</div>
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+
+</div>
+<!-- Performance Score Overlay -->
+<div class="absolute bottom-6 left-6 glass-panel p-6 rounded-2xl border-white/5 flex gap-8">
+<div>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold mb-1">Performance Score</p>
+<div class="flex items-baseline gap-2">
+<span class="text-headline-xl font-headline-xl text-primary">2,840</span>
+<span class="text-tertiary text-label-md">+12% vs LW</span>
+</div>
+</div>
+<div class="w-[1px] h-full bg-white/10"></div>
+<div>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold mb-1">AI Trust Index</p>
+<div class="flex items-baseline gap-2">
+<span class="text-headline-xl font-headline-xl text-secondary">A+</span>
+<span class="text-on-surface-variant text-label-md">Expert</span>
+</div>
+</div>
+</div>
+<!-- Scanlines effect -->
+<div class="absolute inset-0 pointer-events-none opacity-10 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%]"></div>
+</div>
+<!-- Chat Interface -->
+<div class="flex-1 flex flex-col glass-panel rounded-3xl min-h-[400px]">
+<div class="p-6 border-b border-white/5 flex justify-between items-center">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></div>
+<span class="font-label-md text-on-surface">Nexus Assistant Terminal</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]" data-icon="fullscreen">fullscreen</span>
+</div>
+<div class="flex-1 p-6 space-y-6 overflow-y-auto custom-scrollbar">
+<!-- AI Message -->
+<div class="flex gap-4">
+<div class="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-primary" data-icon="smart_toy">smart_toy</span>
+</div>
+<div class="space-y-2 max-w-[80%]">
+<p class="text-on-surface-variant text-[14px]">Nexus AI • <span class="text-[12px] opacity-50">Just now</span></p>
+<div class="bg-surface-container-high/50 p-4 rounded-2xl rounded-tl-none border border-white/5">
+<p class="text-body-md">Welcome back, Commander. I've analyzed your last 5 ranked matches in <span class="text-primary font-bold">CyberStrike 2</span>. Your reaction speed in mid-lane encounters has improved by 14ms, but your resource management in the late game remains suboptimal. Would you like a breakdown of the optimal farming paths for the current meta?</p>
+</div>
+</div>
+</div>
+<!-- User Message -->
+<div class="flex gap-4 flex-row-reverse">
+<div class="w-10 h-10 rounded-lg bg-secondary/20 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-secondary" data-icon="person">person</span>
+</div>
+<div class="space-y-2 max-w-[80%] text-right">
+<p class="text-on-surface-variant text-[14px]">You • <span class="text-[12px] opacity-50">2 mins ago</span></p>
+<div class="bg-primary/10 p-4 rounded-2xl rounded-tr-none border border-primary/20">
+<p class="text-body-md">Yes, show me the farming paths for the Tier 2 tournament this weekend.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="p-6 border-t border-white/5 bg-surface-container-low/30">
+<div class="relative">
+<input class="w-full bg-background/50 border border-white/10 rounded-xl px-6 py-4 focus:outline-none focus:border-primary transition-all text-on-surface placeholder:text-on-surface-variant/50" placeholder="Ask Nexus for tactical advice..." type="text">
+<div class="absolute right-3 top-1/2 -translate-y-1/2 flex gap-2">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="mic">mic</span>
+</button>
+<button class="p-2 bg-primary text-on-primary rounded-lg hover:scale-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="send">send</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Panel: Insights & Strategy -->
+<div class="w-full md:w-[380px] flex flex-col gap-6">
+<!-- Skill Radar Chart Placeholder -->
+<div class="glass-panel p-6 rounded-3xl space-y-6">
+<div class="flex justify-between items-center">
+<h3 class="font-headline-sm text-[20px] text-on-surface">Skill Radar</h3>
+<span class="material-symbols-outlined text-tertiary" data-icon="radar">radar</span>
+</div>
+<div class="aspect-square relative flex items-center justify-center p-4">
+<!-- Simulated Radar SVG -->
+<svg class="w-full h-full drop-shadow-[0_0_10px_rgba(173,198,255,0.4)]" viewBox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="45" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"></circle>
+<circle cx="50" cy="50" fill="none" r="30" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"></circle>
+<circle cx="50" cy="50" fill="none" r="15" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"></circle>
+<path d="M50 5 L50 95 M5 50 L95 50 M18 18 L82 82 M82 18 L18 82" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"></path>
+<polygon fill="rgba(173,198,255,0.2)" points="50,15 80,40 70,75 30,80 20,45" stroke="rgba(173,198,255,1)" stroke-width="2"></polygon>
+</svg>
+<div class="absolute inset-0 flex flex-col justify-between text-[10px] font-bold text-on-surface-variant p-2 uppercase tracking-tighter">
+<div class="text-center">Aim</div>
+<div class="flex justify-between">
+<span>Speed</span>
+<span>Tactics</span>
+</div>
+<div class="flex justify-between">
+<span>Teamwork</span>
+<span>Stealth</span>
+</div>
+<div class="text-center">Economy</div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-white/5 p-3 rounded-xl">
+<p class="text-[10px] text-on-surface-variant">Top Stat</p>
+<p class="text-primary font-bold">Tactics (94)</p>
+</div>
+<div class="bg-white/5 p-3 rounded-xl">
+<p class="text-[10px] text-on-surface-variant">Growth</p>
+<p class="text-tertiary font-bold">+5.2 pts</p>
+</div>
+</div>
+</div>
+<!-- Strategy Suggestions -->
+<div class="glass-panel rounded-3xl flex-1 flex flex-col">
+<div class="p-6 border-b border-white/5">
+<h3 class="font-headline-sm text-[20px] text-on-surface">Tactical Insights</h3>
+<p class="text-on-surface-variant text-[12px]">Optimized for upcoming Tournament</p>
+</div>
+<div class="p-6 space-y-4 flex-1 overflow-y-auto custom-scrollbar">
+<!-- Strategy Card 1 -->
+<div class="p-4 bg-surface-container-high/50 rounded-2xl border-l-4 border-primary hover:translate-x-1 transition-transform cursor-pointer group">
+<div class="flex justify-between items-start mb-2">
+<span class="bg-primary/20 text-primary text-[10px] font-bold px-2 py-0.5 rounded uppercase">Meta Alert</span>
+<span class="text-on-surface-variant text-[10px]">High Impact</span>
+</div>
+<h4 class="font-bold text-on-surface mb-1 group-hover:text-primary transition-colors">Mid-Lane Rotations</h4>
+<p class="text-[13px] text-on-surface-variant">Switch to the 'Aggressive Drift' rotation pattern after minute 12 to maximize XP gain.</p>
+</div>
+<!-- Strategy Card 2 -->
+<div class="p-4 bg-surface-container-high/50 rounded-2xl border-l-4 border-tertiary hover:translate-x-1 transition-transform cursor-pointer group">
+<div class="flex justify-between items-start mb-2">
+<span class="bg-tertiary/20 text-tertiary text-[10px] font-bold px-2 py-0.5 rounded uppercase">Equipment</span>
+<span class="text-on-surface-variant text-[10px]">Moderate</span>
+</div>
+<h4 class="font-bold text-on-surface mb-1 group-hover:text-tertiary transition-colors">Neural Sync 500</h4>
+<p class="text-[13px] text-on-surface-variant">Recommended loadout change: Prioritize thermal optics for the 'Shadow Map' variant.</p>
+</div>
+<!-- Strategy Card 3 -->
+<div class="p-4 bg-surface-container-high/50 rounded-2xl border-l-4 border-secondary hover:translate-x-1 transition-transform cursor-pointer group">
+<div class="flex justify-between items-start mb-2">
+<span class="bg-secondary/20 text-secondary text-[10px] font-bold px-2 py-0.5 rounded uppercase">Team Strategy</span>
+<span class="text-on-surface-variant text-[10px]">Critical</span>
+</div>
+<h4 class="font-bold text-on-surface mb-1 group-hover:text-secondary transition-colors">Alpha Formation</h4>
+<p class="text-[13px] text-on-surface-variant">Data shows your team's win rate increases by 22% when using Alpha formation during sieges.</p>
+</div>
+</div>
+<button class="m-6 py-3 border border-white/10 rounded-xl hover:bg-white/5 text-label-md transition-all">View Full Report</button>
+</div>
+</div>
+</main>
+</div>
+<!-- Footer -->
+<footer class="bg-background dark:bg-background border-t border-outline-variant/20 relative bottom-0 w-full z-10">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-desktop py-12 max-w-container-max mx-auto">
+<div class="col-span-1 md:col-span-1">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">GameVerse</span>
+<p class="text-on-surface-variant font-body-md text-body-md mt-4">Elevating gaming performance through advanced AI and neural analytics.</p>
+</div>
+<div class="space-y-4">
+<p class="text-primary font-label-md">Ecosystem</p>
+<ul class="space-y-2">
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-label-sm" href="#">Discord</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-label-sm" href="#">YouTube</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-label-sm" href="#">Twitch</a></li>
+</ul>
+</div>
+<div class="space-y-4">
+<p class="text-primary font-label-md">Legal</p>
+<ul class="space-y-2">
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-label-sm" href="#">Terms of Service</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-label-sm" href="#">Privacy Policy</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-label-sm" href="#">Security</a></li>
+</ul>
+</div>
+<div class="space-y-4 text-right md:text-left">
+<p class="text-primary font-label-md">© 2024 GameVerse Nexus</p>
+<p class="text-on-surface-variant text-label-sm">All rights reserved. Professional Grade AI Tools.</p>
+<div class="flex gap-4 mt-6">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer" data-icon="share">share</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer" data-icon="email">email</span>
+</div>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interactions and atmospheric effects
+        document.addEventListener('mousemove', (e) => {
+            const panels = document.querySelectorAll('.glass-panel');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            panels.forEach(panel => {
+                const rect = panel.getBoundingClientRect();
+                const dx = e.clientX - (rect.left + rect.width / 2);
+                const dy = e.clientY - (rect.top + rect.height / 2);
+                
+                // Subtle tilt effect
+                if (Math.abs(dx) < 500 && Math.abs(dy) < 500) {
+                    const tiltX = dy / 50;
+                    const tiltY = -dx / 50;
+                    panel.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+                } else {
+                    panel.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+                }
+            });
+        });
+
+        // Chat simulation
+        const input = document.querySelector('input');
+        const sendBtn = document.querySelector('button .material-symbols-outlined[data-icon="send"]').parentElement;
+        
+        sendBtn.addEventListener('click', () => {
+            if (input.value.trim() !== "") {
+                input.value = "";
+                // Logic to append message would go here
+            }
+        });
+
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendBtn.click();
+            }
+        });
+    </script>
+</body></html>

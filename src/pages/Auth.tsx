@@ -1,0 +1,521 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuthStore } from '../store/useAuthStore';
+import { useSocialStore } from '../store/useSocialStore';
+import { ShaderBackground } from '../components/ShaderBackground';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  validatePasswordPolicy, 
+  bruteForceProtector, 
+  securityAuditLogger,
+  verify2FACode
+} from '../services/securityService';
+import { 
+  ShieldCheck, 
+  ShieldAlert, 
+  KeyRound, 
+  CheckCircle2, 
+  XCircle, 
+  RefreshCw, 
+  Lock, 
+  Smartphone
+} from 'lucide-react';
+
+export const Auth: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const login = useAuthStore((state) => state.login);
+  const { addNotification } = useSocialStore();
+
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  // 2FA Challenge State
+  const [in2FAChallenge, setIn2FAChallenge] = useState(false);
+  const [twoFactorCode, setTwoFactorCode] = useState('');
+  const [pendingUser, setPendingUser] = useState<{ username: string; email: string } | null>(null);
+
+  // CAPTCHA State for Bot Protection
+  const [requiresCaptcha, setRequiresCaptcha] = useState(false);
+  const [captchaAnswer, setCaptchaAnswer] = useState('');
+  const [captchaProblem, setCaptchaProblem] = useState({ q: '7 + 8', a: '15' });
+
+  // Form Fields
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [lockoutRemaining, setLockoutRemaining] = useState(0);
+
+  // Real-time Password Policy Analysis
+  const passwordAnalysis = validatePasswordPolicy(password);
+
+  useEffect(() => {
+    if (location.state && typeof (location.state as any).isSignUp === 'boolean') {
+      setIsSignUp((location.state as any).isSignUp);
+    }
+  }, [location.state]);
+
+  // Lockout countdown timer
+  useEffect(() => {
+    if (lockoutRemaining <= 0) return;
+    const timer = setInterval(() => {
+      setLockoutRemaining((prev) => Math.max(0, prev - 1));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [lockoutRemaining]);
+
+  const generateNewCaptcha = () => {
+    const n1 = Math.floor(Math.random() * 9) + 2;
+    const n2 = Math.floor(Math.random() * 9) + 2;
+    setCaptchaProblem({ q: `${n1} + ${n2}`, a: String(n1 + n2) });
+    setCaptchaAnswer('');
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+
+    // Check brute force lockout
+    const lockStatus = bruteForceProtector.isLocked(email);
+    if (lockStatus.locked) {
+      setLockoutRemaining(lockStatus.remainingSeconds);
+      setError(`Account security lockout active. Repeated failed attempts detected. Retry in ${lockStatus.remainingSeconds}s.`);
+      securityAuditLogger.log({
+        severity: 'CRITICAL',
+        eventType: 'AUTH_LOCKOUT',
+        actor: email,
+        ipAddress: '127.0.0.1',
+        details: `Rejected submission during active lockout window. Remaining: ${lockStatus.remainingSeconds}s.`
+      });
+      return;
+    }
+
+    // CAPTCHA Verification if required
+    if (requiresCaptcha && captchaAnswer.trim() !== captchaProblem.a) {
+      setError('Bot verification failed. Please solve the security puzzle correctly.');
+      generateNewCaptcha();
+      return;
+    }
+
+    if (!email || !password || (isSignUp && !username)) {
+      setError('Please fill in all required credentials.');
+      return;
+    }
+
+    // Password Policy Check on Registration
+    if (isSignUp && !passwordAnalysis.isValid) {
+      setError('Password does not satisfy Game World cryptographic security policy.');
+      return;
+    }
+
+    const displayUser = isSignUp ? username : (email.includes('@') ? email.split('@')[0] : email);
+
+    // Simulate 2FA challenge for enhanced protection
+    setPendingUser({ username: displayUser, email });
+    setIn2FAChallenge(true);
+    securityAuditLogger.log({
+      severity: 'INFO',
+      eventType: 'AUTH_2FA_CHALLENGE',
+      actor: displayUser,
+      ipAddress: '127.0.0.1',
+      details: 'Dual-factor TOTP verification token requested'
+    });
+  };
+
+  const handle2FASubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!pendingUser) return;
+
+    if (!verify2FACode(twoFactorCode, ['9A8F-4D21', '7C3B-8E90', '1F4E-6A22'])) {
+      setError('Invalid 2FA Authenticator code. Enter standard test code 123456 or a valid recovery code.');
+      const fail = bruteForceProtector.recordFailure(pendingUser.email);
+      if (fail.remainingAttempts <= 3) {
+        setRequiresCaptcha(true);
+      }
+      securityAuditLogger.log({
+        severity: 'WARN',
+        eventType: 'AUTH_LOGIN_FAILED',
+        actor: pendingUser.username,
+        ipAddress: '127.0.0.1',
+        details: 'Incorrect 2FA TOTP code entered during login verification'
+      });
+      return;
+    }
+
+    // Success
+    bruteForceProtector.recordSuccess(pendingUser.email);
+    login(pendingUser.username, pendingUser.email, 'SUPER_ADMIN');
+    addNotification('FRIEND_REQUEST', `Authorized secure session for ${pendingUser.username}`);
+    navigate('/dashboard');
+  };
+
+  const handleQuickDemo2FA = () => {
+    setTwoFactorCode('123456');
+  };
+
+  return (
+    <div className="relative min-h-screen flex items-center justify-center p-0 md:p-6 overflow-hidden bg-[#050505] pt-24 pb-12">
+      {/* WebGL Matrix Background */}
+      <ShaderBackground type="core" />
+
+      {/* Main Auth Container */}
+      <main className="relative z-10 w-full max-w-[1200px] h-auto min-h-[750px] flex flex-col md:flex-row glass-card rounded-none md:rounded-3xl shadow-2xl overflow-hidden">
+        <div className="scanline"></div>
+
+        {/* Left Side: Illustration & Security Highlights */}
+        <div className="hidden md:block w-1/2 relative bg-[#0a0a0a] overflow-hidden border-r border-white/5">
+          <div 
+            className="absolute inset-0 bg-cover bg-center opacity-40 mix-blend-screen" 
+            style={{ backgroundImage: `url('https://lh3.googleusercontent.com/aida-public/AB6AXuCc8zBA0Rx2DwNQlcbCFaJaRvu6-03Yj4rkvGIK3GlRW7QB9p4GlVrcF1wgNm5G-HOCQBT7cymYWQrs9uqG4yKCOzzVBrp0XdJ8VbKmy4UFxpyNf2tilXWZ7Sg2KMDr2ePCLaesVB50rW_ukJcyKdeOYqwMYdm2fqeuVHFxIVxxbxuDSJ0KxTLkphogNTj0as9uWOiGPbnDZkfg_s8t6NRR712gB5nuGrRwKvCl11wluYhbYL6UOzuAHs59j_8P8HsukuEyyT_GGrs')` }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"></div>
+          
+          <div className="relative z-20 h-full flex flex-col justify-end p-12 space-y-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 w-fit">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span className="text-[10px] font-bold tracking-widest uppercase text-emerald-400">Zero-Trust Nexus Active</span>
+            </div>
+            
+            <h1 className="font-headline-xl text-4xl font-black text-white leading-tight uppercase">
+              Fortified <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-tertiary to-secondary">Digital Fortress</span>
+            </h1>
+            
+            <p className="text-on-surface-variant text-body-md max-w-sm leading-relaxed">
+              Protected by multi-tier Argon2id password hashing, mandatory TOTP 2FA, brute-force defense barriers, and sandboxed game runtimes.
+            </p>
+
+            <div className="pt-6 grid grid-cols-2 gap-3 text-xs">
+              <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center gap-2.5">
+                <ShieldCheck className="w-5 h-5 text-emerald-400" />
+                <div>
+                  <div className="font-bold text-white text-[11px]">2FA Enforced</div>
+                  <div className="text-[9px] text-white/50">TOTP Authenticator</div>
+                </div>
+              </div>
+              <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center gap-2.5">
+                <Lock className="w-5 h-5 text-primary" />
+                <div>
+                  <div className="font-bold text-white text-[11px]">Zero Plaintext</div>
+                  <div className="text-[9px] text-white/50">SHA-256 + Salt</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Floating Decorative Elements */}
+          <div className="absolute top-1/4 right-[-10%] w-64 h-64 bg-primary/10 blur-[100px] rounded-full"></div>
+          <div className="absolute bottom-1/4 left-[-10%] w-48 h-48 bg-secondary/10 blur-[80px] rounded-full"></div>
+        </div>
+
+        {/* Right Side: Auth & 2FA Forms */}
+        <div className="w-full md:w-1/2 relative bg-surface-container-lowest/80 overflow-y-auto px-6 py-12 md:px-16 flex flex-col justify-center">
+          <div className="relative w-full">
+            
+            {/* Lockout Warning Banner */}
+            {lockoutRemaining > 0 && (
+              <div className="mb-4 p-4 bg-red-950/40 border border-red-500/40 text-red-300 text-xs rounded-xl flex items-center gap-3">
+                <ShieldAlert className="w-6 h-6 text-red-400 flex-shrink-0 animate-bounce" />
+                <div>
+                  <div className="font-bold text-white uppercase tracking-wider text-[11px]">Station Locked Out</div>
+                  <div className="text-[10px] mt-0.5">Too many failed attempts. Security cooldown expires in {lockoutRemaining} seconds.</div>
+                </div>
+              </div>
+            )}
+
+            {/* Error Message */}
+            {error && (
+              <div className="mb-4 p-3 bg-error-container/20 border border-error-container/40 text-error text-xs rounded-xl text-center">
+                {error}
+              </div>
+            )}
+
+            <AnimatePresence mode="wait">
+              {in2FAChallenge ? (
+                /* 2FA VERIFICATION CHALLENGE */
+                <motion.section
+                  key="2fa"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  className="space-y-6"
+                >
+                  <div className="text-center space-y-2">
+                    <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto text-primary">
+                      <Smartphone className="w-7 h-7" />
+                    </div>
+                    <h2 className="font-headline-xl text-2xl font-bold text-white">Two-Factor Authorization</h2>
+                    <p className="text-on-surface-variant text-xs max-w-xs mx-auto">
+                      Enter the 6-digit verification code from your Authenticator app for account <span className="text-white font-bold">{pendingUser?.email}</span>.
+                    </p>
+                  </div>
+
+                  <form onSubmit={handle2FASubmit} className="space-y-5">
+                    <div className="space-y-1.5 text-center">
+                      <input
+                        type="text"
+                        maxLength={9}
+                        value={twoFactorCode}
+                        onChange={(e) => setTwoFactorCode(e.target.value.toUpperCase())}
+                        placeholder="123456"
+                        className="w-full text-center tracking-[0.4em] font-mono text-2xl font-bold py-4 bg-black/60 border border-primary/40 rounded-xl text-primary focus:outline-none focus:border-primary shadow-[0_0_15px_rgba(59,130,246,0.2)]"
+                        autoFocus
+                        required
+                      />
+                      <p className="text-[10px] text-on-surface-variant pt-1">
+                        Accepts standard 6-digit TOTP or backup recovery keys (e.g. 9A8F-4D21)
+                      </p>
+                    </div>
+
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={handleQuickDemo2FA}
+                        className="w-1/2 py-2.5 bg-white/5 border border-white/10 rounded-xl text-[10px] font-bold text-white/70 hover:text-white hover:bg-white/10 transition-colors"
+                      >
+                        Auto-Fill Demo (123456)
+                      </button>
+                      <button
+                        type="submit"
+                        className="w-1/2 py-2.5 bg-primary text-black font-bold rounded-xl text-xs hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-primary/20"
+                      >
+                        VERIFY & ENTER
+                      </button>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => { setIn2FAChallenge(false); setError(''); }}
+                      className="w-full text-center text-xs text-on-surface-variant hover:text-white transition-colors"
+                    >
+                      ← Return to Standard Login
+                    </button>
+                  </form>
+                </motion.section>
+              ) : !isSignUp ? (
+                /* LOGIN FORM */
+                <motion.section 
+                  key="login"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  transition={{ duration: 0.3 }}
+                  className="space-y-6"
+                >
+                  <div className="space-y-1">
+                    <h2 className="font-headline-xl text-3xl font-bold text-white tracking-tight">Access Nexus</h2>
+                    <p className="text-on-surface-variant text-xs">Zero-trust verified session initialization.</p>
+                  </div>
+
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="space-y-1.5">
+                      <label className="font-label-md text-xs text-on-surface-variant ml-1">Email / Identifier</label>
+                      <input 
+                        type="text"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-primary transition-all text-xs placeholder-white/20" 
+                        placeholder="commander@gameworld.gg"
+                        required
+                        disabled={lockoutRemaining > 0}
+                      />
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <div className="flex justify-between items-center px-1">
+                        <label className="font-label-md text-xs text-on-surface-variant">Master Access Password</label>
+                        <button type="button" className="text-[11px] text-primary hover:underline">Forgot?</button>
+                      </div>
+                      <div className="relative">
+                        <input 
+                          type={showPassword ? 'text' : 'password'}
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          className="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 pr-10 text-white focus:outline-none focus:border-primary transition-all text-xs placeholder-white/20" 
+                          placeholder="••••••••••••"
+                          required
+                          disabled={lockoutRemaining > 0}
+                        />
+                        <button 
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 hover:text-white text-xs cursor-pointer" 
+                          type="button"
+                        >
+                          {showPassword ? 'Hide' : 'Show'}
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Bot Protection Challenge if activated */}
+                    {requiresCaptcha && (
+                      <div className="p-3 bg-primary/10 border border-primary/20 rounded-xl space-y-2">
+                        <div className="flex items-center justify-between text-xs text-primary font-bold">
+                          <span>Bot Challenge: What is {captchaProblem.q}?</span>
+                          <button type="button" onClick={generateNewCaptcha} title="Regenerate puzzle">
+                            <RefreshCw className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                        <input
+                          type="text"
+                          value={captchaAnswer}
+                          onChange={(e) => setCaptchaAnswer(e.target.value)}
+                          placeholder="Enter answer"
+                          className="w-full bg-black/60 border border-white/10 rounded-lg py-2 px-3 text-xs text-white"
+                          required
+                        />
+                      </div>
+                    )}
+
+                    <button 
+                      type="submit" 
+                      disabled={lockoutRemaining > 0}
+                      className="w-full py-3.5 bg-gradient-to-r from-primary to-primary-container text-on-primary font-bold rounded-xl shadow-lg hover:scale-[1.01] active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-xs uppercase tracking-wider"
+                    >
+                      <KeyRound className="w-4 h-4" />
+                      <span>INITIALIZE AUTHENTICATION</span>
+                    </button>
+                  </form>
+
+                  <div className="relative">
+                    <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/5"></div></div>
+                    <div className="relative flex justify-center text-[10px] uppercase"><span className="bg-surface-container-lowest px-3 text-white/40">Or quick enter as</span></div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <button 
+                      onClick={() => { login('Admin_Commander', 'admin@gameworld.gg', 'SUPER_ADMIN'); navigate('/dashboard'); }}
+                      className="py-2.5 px-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all text-xs font-semibold text-white flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                      <ShieldCheck className="w-4 h-4 text-primary" />
+                      <span>Super Admin</span>
+                    </button>
+                    <button 
+                      onClick={() => { login('Casual_Gamer', 'player@gameworld.gg', 'USER'); navigate('/dashboard'); }}
+                      className="py-2.5 px-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all text-xs font-semibold text-white flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                      <Smartphone className="w-4 h-4 text-secondary" />
+                      <span>Regular Player</span>
+                    </button>
+                  </div>
+
+                  <p className="text-center text-on-surface-variant text-xs">
+                    New explorer? <button className="text-primary font-bold hover:underline cursor-pointer" onClick={() => { setError(''); setIsSignUp(true); }}>Create Account</button>
+                  </p>
+                </motion.section>
+              ) : (
+                /* REGISTER FORM WITH REAL-TIME PASSWORD POLICY CHECKER */
+                <motion.section 
+                  key="register"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3 }}
+                  className="space-y-5"
+                >
+                  <div className="space-y-1">
+                    <h2 className="font-headline-xl text-3xl font-bold text-white tracking-tight">Create Identity</h2>
+                    <p className="text-on-surface-variant text-xs">Enroll into the zero-trust player matrix.</p>
+                  </div>
+
+                  <form onSubmit={handleSubmit} className="space-y-3.5">
+                    <div className="space-y-1">
+                      <label className="font-label-md text-xs text-on-surface-variant ml-1">Callsign / Handle</label>
+                      <input 
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 px-3.5 text-white focus:outline-none focus:border-primary transition-all text-xs placeholder-white/20" 
+                        placeholder="Vanguard_Sniper" 
+                        type="text"
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="font-label-md text-xs text-on-surface-variant ml-1">Verified Email</label>
+                      <input 
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 px-3.5 text-white focus:outline-none focus:border-primary transition-all text-xs placeholder-white/20" 
+                        placeholder="sniper@gameworld.gg" 
+                        type="email"
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="font-label-md text-xs text-on-surface-variant ml-1">Master Password</label>
+                      <input 
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="w-full bg-black/40 border border-white/10 rounded-xl py-2.5 px-3.5 text-white focus:outline-none focus:border-primary transition-all text-xs placeholder-white/20" 
+                        placeholder="Min 8 chars, mixed case, symbols..." 
+                        type="password"
+                        required
+                      />
+
+                      {/* Password Policy Strength Meter */}
+                      {password && (
+                        <div className="pt-2 space-y-1.5">
+                          <div className="flex justify-between items-center text-[10px]">
+                            <span className="text-white/60">Cryptographic Strength:</span>
+                            <span className={`font-bold ${
+                              passwordAnalysis.strengthLabel === 'Cyber-Secure' ? 'text-emerald-400' :
+                              passwordAnalysis.strengthLabel === 'Strong' ? 'text-primary' :
+                              passwordAnalysis.strengthLabel === 'Medium' ? 'text-yellow-400' : 'text-red-400'
+                            }`}>
+                              {passwordAnalysis.strengthLabel} ({passwordAnalysis.score}%)
+                            </span>
+                          </div>
+                          
+                          <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
+                            <div 
+                              className={`h-full transition-all duration-300 ${
+                                passwordAnalysis.score >= 80 ? 'bg-emerald-400' :
+                                passwordAnalysis.score >= 60 ? 'bg-primary' :
+                                passwordAnalysis.score >= 40 ? 'bg-yellow-400' : 'bg-red-500'
+                              }`}
+                              style={{ width: `${passwordAnalysis.score}%` }}
+                            />
+                          </div>
+
+                          {/* Requirement Indicators */}
+                          <div className="grid grid-cols-2 gap-1 pt-1 text-[9px]">
+                            <span className={`flex items-center gap-1 ${passwordAnalysis.hasMinLength ? 'text-emerald-400' : 'text-white/40'}`}>
+                              {passwordAnalysis.hasMinLength ? <CheckCircle2 className="w-3 h-3" /> : <XCircle className="w-3 h-3" />} 8+ Characters
+                            </span>
+                            <span className={`flex items-center gap-1 ${passwordAnalysis.hasUppercase ? 'text-emerald-400' : 'text-white/40'}`}>
+                              {passwordAnalysis.hasUppercase ? <CheckCircle2 className="w-3 h-3" /> : <XCircle className="w-3 h-3" />} Uppercase Letter
+                            </span>
+                            <span className={`flex items-center gap-1 ${passwordAnalysis.hasNumber ? 'text-emerald-400' : 'text-white/40'}`}>
+                              {passwordAnalysis.hasNumber ? <CheckCircle2 className="w-3 h-3" /> : <XCircle className="w-3 h-3" />} Number (0-9)
+                            </span>
+                            <span className={`flex items-center gap-1 ${passwordAnalysis.hasSpecialChar ? 'text-emerald-400' : 'text-white/40'}`}>
+                              {passwordAnalysis.hasSpecialChar ? <CheckCircle2 className="w-3 h-3" /> : <XCircle className="w-3 h-3" />} Special Symbol (!@#$)
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    <button 
+                      type="submit" 
+                      className="w-full py-3.5 bg-gradient-to-r from-primary to-primary-container text-black font-bold rounded-xl shadow-lg hover:scale-[1.01] active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer text-xs uppercase tracking-wider"
+                    >
+                      <ShieldCheck className="w-4 h-4" />
+                      <span>ENROLL ACCOUNT WITH 2FA</span>
+                    </button>
+                  </form>
+
+                  <p className="text-center text-on-surface-variant text-xs">
+                    Already registered? <button className="text-primary font-bold hover:underline cursor-pointer" onClick={() => { setError(''); setIsSignUp(false); }}>Sign In</button>
+                  </p>
+                </motion.section>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+};

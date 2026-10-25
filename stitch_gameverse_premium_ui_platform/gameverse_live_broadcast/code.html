@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GameVerse | Esports Broadcast Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#93000a",
+                        "on-secondary-fixed": "#23005c",
+                        "on-tertiary": "#003640",
+                        "on-secondary": "#3c0091",
+                        "on-primary-fixed-variant": "#004395",
+                        "primary-container": "#4d8eff",
+                        "on-secondary-container": "#c4abff",
+                        "tertiary-container": "#009eb9",
+                        "on-secondary-fixed-variant": "#5516be",
+                        "secondary-fixed": "#e9ddff",
+                        "background": "#131313",
+                        "surface-container-lowest": "#0e0e0e",
+                        "primary-fixed": "#d8e2ff",
+                        "inverse-primary": "#005ac2",
+                        "error": "#ffb4ab",
+                        "on-error-container": "#ffdad6",
+                        "on-background": "#e5e2e1",
+                        "tertiary-fixed": "#acedff",
+                        "on-surface": "#e5e2e1",
+                        "on-primary-fixed": "#001a42",
+                        "surface-dim": "#131313",
+                        "surface-container-low": "#1c1b1b",
+                        "secondary-fixed-dim": "#d0bcff",
+                        "surface-container-high": "#2a2a2a",
+                        "on-tertiary-fixed": "#001f26",
+                        "surface-variant": "#353534",
+                        "primary-fixed-dim": "#adc6ff",
+                        "tertiary-fixed-dim": "#4cd7f6",
+                        "surface-tint": "#adc6ff",
+                        "inverse-on-surface": "#313030",
+                        "surface-container": "#201f1f",
+                        "secondary-container": "#571bc1",
+                        "on-tertiary-fixed-variant": "#004e5c",
+                        "on-tertiary-container": "#002f38",
+                        "on-surface-variant": "#c2c6d6",
+                        "on-error": "#690005",
+                        "tertiary": "#4cd7f6",
+                        "outline": "#8c909f",
+                        "surface": "#131313",
+                        "on-primary-container": "#00285d",
+                        "surface-container-highest": "#353534",
+                        "primary": "#adc6ff",
+                        "surface-bright": "#3a3939",
+                        "outline-variant": "#424754",
+                        "secondary": "#d0bcff",
+                        "inverse-surface": "#e5e2e1",
+                        "on-primary": "#002e6a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1440px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "48px",
+                        "gutter": "24px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Space Grotesk"],
+                        "display-lg": ["Space Grotesk"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Space Grotesk"],
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-sm": ["Space Grotesk"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #050505;
+            color: #e5e2e1;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(32, 31, 31, 0.4);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .neon-glow {
+            box-shadow: 0 0 20px rgba(173, 198, 255, 0.15);
+        }
+        .neon-border-primary {
+            border: 1px solid rgba(173, 198, 255, 0.3);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #4d8eff;
+            border-radius: 10px;
+        }
+        @keyframes pulse-neon {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.02); }
+        }
+        .live-pulse {
+            animation: pulse-neon 2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md selection:bg-primary/30">
+<!-- Ambient Background -->
+<div class="fixed inset-0 z-0">
+
+</div>
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full z-50 bg-surface/40 backdrop-blur-3xl border-b border-white/10 shadow-xl">
+<div class="flex justify-between items-center px-margin-desktop py-4 max-w-container-max mx-auto">
+<div class="flex items-center gap-8">
+<span class="font-headline-sm text-headline-sm font-bold text-primary tracking-tighter">GameVerse</span>
+<nav class="hidden md:flex gap-6 items-center">
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md" href="#">Home</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md" href="#">Games</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md" href="#">Community</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-label-md text-label-md" href="#">Tournaments</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden lg:block">
+<input class="bg-surface-container-low border border-outline-variant/30 rounded-full py-2 px-10 text-label-md focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all w-64" placeholder="Search tournaments..." type="text"/>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-all cursor-pointer">notifications</button>
+<div class="h-8 w-px bg-white/10 mx-2"></div>
+<button class="bg-primary text-on-primary font-label-md text-label-md px-6 py-2 rounded-lg font-bold hover:scale-105 hover:brightness-110 active:scale-95 transition-all">Sign In</button>
+</div>
+</div>
+</header>
+<main class="relative z-10 pt-24 pb-12 px-margin-desktop max-w-[1800px] mx-auto min-h-screen">
+<!-- Dashboard Grid Layout -->
+<div class="grid grid-cols-12 gap-6 h-[calc(100vh-180px)]">
+<!-- Left Side: Live Viewer Chat -->
+<aside class="col-span-12 lg:col-span-3 flex flex-col h-full overflow-hidden">
+<div class="glass-card rounded-xl flex flex-col h-full border-white/5">
+<div class="p-4 border-b border-white/10 flex items-center justify-between">
+<h2 class="font-headline-sm text-[18px] font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">chat_bubble</span>
+                            LIVE CHAT
+                        </h2>
+<div class="flex items-center gap-2 px-3 py-1 bg-primary/10 rounded-full">
+<span class="w-2 h-2 bg-primary rounded-full live-pulse"></span>
+<span class="text-[12px] font-bold text-primary tracking-wider">42.8K</span>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-4 custom-scrollbar space-y-4" id="chat-container">
+<!-- Chat Messages -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px] text-tertiary" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="font-bold text-label-md text-tertiary">GameVerse_Mod</span>
+</div>
+<p class="text-body-md text-on-surface-variant bg-white/5 p-2 rounded-lg text-sm">Welcome to the Grand Finals! Remember to keep it friendly in the chat.</p>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px] text-secondary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-bold text-label-md text-secondary">ProNexus_Fan</span>
+</div>
+<p class="text-body-md text-on-surface-variant text-sm">Let's go Nexus!! That last triple kill was insane.</p>
+</div>
+<div class="flex flex-col gap-1 opacity-80">
+<div class="flex items-center gap-2">
+<span class="font-bold text-label-md text-primary">CyberHunter</span>
+</div>
+<p class="text-body-md text-on-surface-variant text-sm">Anyone else seeing that flank positioning? Masterclass.</p>
+</div>
+<!-- More simulated messages -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px] text-tertiary" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+<span class="font-bold text-label-md text-tertiary">EliteSlayer99</span>
+</div>
+<p class="text-body-md text-on-surface-variant text-sm">GG WP! What a game so far.</p>
+</div>
+</div>
+<div class="p-4 border-t border-white/10 bg-surface-container/50">
+<div class="relative">
+<input class="w-full bg-black/40 border border-outline-variant/30 rounded-lg py-3 px-4 text-label-md focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="Send a message..." type="text"/>
+<div class="absolute right-3 top-1/2 -translate-y-1/2 flex gap-2">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary text-xl">mood</button>
+<button class="material-symbols-outlined text-primary hover:scale-110 transition-all text-xl">send</button>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Center: Match Player & HUD -->
+<section class="col-span-12 lg:col-span-6 flex flex-col gap-6">
+<!-- Main Broadcast Player -->
+<div class="relative group aspect-video rounded-xl overflow-hidden glass-card neon-border-primary shadow-2xl">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover grayscale-[0.2] brightness-75" data-alt="A cinematic cinematic wide shot of a high-stakes esports arena broadcast. The frame shows a futuristic first-person shooter game in progress with neon visual effects, glowing projectiles, and dynamic particle systems. The lighting is dominated by deep indigo and electric cyan hues, reflecting a high-performance gaming environment. The composition is clean, centered, and evokes the intense energy of a professional tournament final." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNVqw2XHTjwuH7iCKbHk5QiDzrz97xcN91sGjYbd2itNpF4EQXgSUlq2Nc-y62jtdGhpKht5GIgZnxTMgC8-cMw1R6LVEs3eb2T6dtuJw2aW8AdIRE3JvHfsqKE-BO_6AuDRRkXAQX5FocyQr5X9iEdURzTJuKVP_i2J94Gqk4vV5IwluRM6Wk647HSGSMqc4H5-A-M8SuCIGeRTPIb4TLGU6ngjFJtG-gXQEEF5K9WoI1FbXo5vai2FGwQwhYlzyKmOAJ9fIpRgc"/>
+</div>
+<!-- Custom HUD Layer -->
+<div class="absolute inset-0 z-10 flex flex-col justify-between p-6 pointer-events-none">
+<!-- Top HUD: Score & Timer -->
+<div class="flex justify-center items-start">
+<div class="glass-card px-8 py-2 rounded-b-2xl border-t-0 flex items-center gap-12 pointer-events-auto">
+<div class="flex items-center gap-4">
+<img class="w-10 h-10 object-contain" data-alt="A professional esports team logo for 'Team Nexus'. Minimalist geometric design featuring a stylized 'N' inside a hexagonal frame, colored in glowing electric blue and silver, against a dark transparent background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLOGMOkE-8Q9sIr3_qKe8-wZ0gQMGhBJVuU7hWx1cemtg8-1QxEz7HNFM9Crj1Rb-qdo8mvgmpSFsHVqJIX_pBj-l9jnDLOlInN9yk9J-zdo1eBW2Jt69PIpJvZxcyVr2d3d09Jlp_QkLUpJhVAW6uBw2O0CdQfXAuk11H6yujX6nBxYIE0DGBMraVS9qScvRugeyZvNB228uWQPq4bOnlpfsmuv9zMSbL5itQvnk03cHQ-ftN1GZfa0XWICvMxwCibWjFtsmxHvE"/>
+<div class="text-right">
+<p class="font-headline-sm text-sm text-primary tracking-widest font-bold">NEXUS</p>
+<p class="text-headline-lg font-extrabold text-white">12</p>
+</div>
+</div>
+<div class="flex flex-col items-center">
+<div class="bg-primary/20 text-primary px-3 py-0.5 rounded text-[10px] font-bold tracking-[0.2em] mb-1">ROUND 15</div>
+<div class="text-display-lg text-[40px] font-headline-xl text-white tracking-tight leading-none">02:44</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="text-left">
+<p class="font-headline-sm text-sm text-secondary tracking-widest font-bold">VORTEX</p>
+<p class="text-headline-lg font-extrabold text-white">09</p>
+</div>
+<img class="w-10 h-10 object-contain" data-alt="A professional esports team logo for 'Vortex Gaming'. A dynamic circular icon representing a swirling energy vortex in vibrant purple and neon pink colors, sharp minimalist lines, against a dark transparent background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8byv6lF3yFv-dz2CMvoA9xq7h3gALab2Ei59tCBA7qF4K7hhKow2pfLxC5B6fts3i9wl_0ry48Wg1LCPfRNU0ZGTGaTDBnUH6R-W0BeIGTraydaHdPwEr9stH0PlDsjtf_ndaF23vHO1tmTT0y6seFG4CcBhm5xlc1BKi0gEZ5H7jQ3h5wqZ63YH0_hMurHFdEdqBLiPlbjo1870YVaiyitgEDh7SgxIpcyphbrppuczMxrbMq_NZ3K6lfeMZ8qdeQZYVFicx0IU"/>
+</div>
+</div>
+</div>
+<!-- Bottom HUD: Active Player Status -->
+<div class="flex justify-between items-end">
+<div class="glass-card p-4 rounded-xl border-l-4 border-l-primary flex gap-4 pointer-events-auto">
+<div class="w-12 h-12 bg-surface-container rounded-lg overflow-hidden border border-white/10">
+<img class="w-full h-full object-cover" data-alt="A close-up portrait of a professional esports player wearing a sleek black gaming jersey with neon blue accents. The lighting is dramatic studio lighting with blue and purple rim lights, casting a hero-like aura. High-fidelity photography, gaming culture aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvCgQrPUx5YS3q0vVhfZ7uwX5psuhl6fukBEOyobjRxhLFel4Ss9ZQlS6VdhAnNhKNLQtg5f4j6rGiJJN_g2YrqjdAr-cYUqudG15BouNUvkNJKpf2Z6RPMjvag7HsX4458q5ltW1N1IOu3rFNsXXqYkTRSGmwhQ5k6UeNKp4gPGwaWt-lJbXKLImhpxHQtwM4cqcEIVbmHXs1B0lGeP3QANTMRzCPsHo7mUkC52aITrhWDUzbR62aJ4rGBBgT0g9bbozzlc9LPd0"/>
+</div>
+<div>
+<p class="font-label-md text-primary text-[10px] tracking-widest uppercase">Spectating</p>
+<p class="font-headline-sm text-lg font-bold text-white">HYPER_ION</p>
+<div class="flex items-center gap-2 mt-1">
+<div class="w-24 h-1.5 bg-white/10 rounded-full overflow-hidden">
+<div class="w-3/4 h-full bg-primary shadow-[0_0_8px_rgba(173,198,255,0.8)]"></div>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant">HP 75</span>
+</div>
+</div>
+</div>
+<div class="flex gap-2 pointer-events-auto">
+<button class="w-12 h-12 glass-center rounded-full glass-card flex items-center justify-center hover:bg-primary/20 transition-all">
+<span class="material-symbols-outlined text-white">settings</span>
+</button>
+<button class="w-12 h-12 glass-center rounded-full glass-card flex items-center justify-center hover:bg-primary/20 transition-all">
+<span class="material-symbols-outlined text-white">fullscreen</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Interactive Controls Overlay (Hidden until hover) -->
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
+<button class="w-20 h-20 bg-primary rounded-full flex items-center justify-center shadow-2xl scale-90 group-hover:scale-100 transition-transform">
+<span class="material-symbols-outlined text-on-primary text-4xl" style="font-variation-settings: 'FILL' 1;">pause</span>
+</button>
+</div>
+</div>
+<!-- Match Timeline -->
+<div class="glass-card rounded-xl p-6 flex-1">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-headline-sm text-[16px] font-bold text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">timeline</span>
+                            MATCH EVENTS
+                        </h3>
+<div class="flex gap-4">
+<span class="text-[12px] text-on-surface-variant font-medium">BOMBS PLANTED: 4</span>
+<span class="text-[12px] text-on-surface-variant font-medium">FIRST BLOODS: 7</span>
+</div>
+</div>
+<div class="relative h-24 flex items-center px-4">
+<div class="absolute left-0 right-0 h-1 bg-white/5 rounded-full"></div>
+<!-- Event Nodes -->
+<div class="relative w-full flex justify-between">
+<div class="group relative">
+<div class="w-4 h-4 rounded-full bg-primary neon-glow ring-4 ring-primary/20 cursor-pointer transition-all hover:scale-125"></div>
+<div class="absolute bottom-6 left-1/2 -translate-x-1/2 glass-card p-2 rounded text-[10px] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">Nexus Wipe (04:12)</div>
+</div>
+<div class="group relative">
+<div class="w-3 h-3 rounded-full bg-white/20 cursor-pointer"></div>
+</div>
+<div class="group relative">
+<div class="w-4 h-4 rounded-full bg-error ring-4 ring-error/20 cursor-pointer transition-all hover:scale-125"></div>
+<div class="absolute bottom-6 left-1/2 -translate-x-1/2 glass-card p-2 rounded text-[10px] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">Vortex Ace (12:45)</div>
+</div>
+<div class="group relative">
+<div class="w-4 h-4 rounded-full bg-tertiary ring-4 ring-tertiary/20 cursor-pointer transition-all hover:scale-125"></div>
+<div class="absolute bottom-6 left-1/2 -translate-x-1/2 glass-card p-2 rounded text-[10px] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">Objective Taken (18:30)</div>
+</div>
+<div class="group relative">
+<div class="w-4 h-4 rounded-full bg-primary animate-pulse cursor-pointer"></div>
+<div class="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-primary uppercase">Live</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Side: Stats & Lineups -->
+<aside class="col-span-12 lg:col-span-3 flex flex-col h-full gap-6">
+<!-- Team Lineups -->
+<div class="glass-card rounded-xl p-5 border-white/5 flex flex-col gap-4">
+<h3 class="font-headline-sm text-[16px] font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">groups</span>
+                        LINEUPS
+                    </h3>
+<div class="space-y-4">
+<!-- Team Nexus -->
+<div class="space-y-2">
+<div class="flex items-center justify-between bg-primary/10 p-2 rounded border border-primary/20">
+<span class="text-[12px] font-bold text-primary">TEAM NEXUS</span>
+<span class="text-[10px] font-bold px-2 py-0.5 bg-primary/20 text-primary rounded">DEFENDING</span>
+</div>
+<div class="grid grid-cols-5 gap-2">
+<div class="aspect-square bg-surface-container rounded border border-white/5 hover:border-primary/50 transition-all cursor-pointer">
+<img class="w-full h-full object-cover rounded" data-alt="Portrait of professional esports athlete 'Hyper_Ion' in a high-tech gaming jersey. Cool tone studio lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfTSD9zBcbGizo-tLvUWlE0fVYGoAQSEGtVOPaftIXwzwN16x7I-rlS2f4oPIH8ZOYvoLiWRZ1u0gmp6wLl6f9RCkm-sCd7mbZoLq7uoa7dtYKCqF2X6b_lkW85YZpqTYLutXvMMlXPtfKZ47vEDOWZxFsn9V4NqzHjtIIxDmYS82C_VASq4yZFmwh3MRI2kYy9bnaQY9Jflgkk9MxnPZDboszln7LcD7IF5x4TsKwBRpUyRB_nRrRC0srDUFB2UEQPdLmVI07RFI"/>
+</div>
+<div class="aspect-square bg-surface-container rounded border border-white/5 opacity-80">
+<img class="w-full h-full object-cover rounded" data-alt="Portrait of professional esports athlete 'Zero_G' in a high-tech gaming jersey. Cool tone studio lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMP0QvTu2959RgIfQZKtwB4rXW9vPE_PEq5kP8ObpxJLXKL8OjZlNfBjkJvBfodA4ppvReQg_wLfVNoUgI1aA3kLK3iPlvYESntc_eP4zR4xw4nr0XnsKC0ha6KP-oVWZjmDHcb9lfgFngj_ozEOTd3fiuqqlbQVhb9wF-oJa_e1e_oqBWSENRiQCRZVv1gYXvRcLsJ_z986lzhfkjVrpfbKVbfFNAlErBEYeiLOZjP-CtmV7sm2mfR8qjy7dC6nrMKitFVyEEcR4"/>
+</div>
+<div class="aspect-square bg-surface-container rounded border border-white/5 opacity-80">
+<img class="w-full h-full object-cover rounded" data-alt="Portrait of professional esports athlete 'Mistik' in a high-tech gaming jersey. Cool tone studio lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCsgno1tyo2RjCtoSe1cfqM3UojC82liHofOLUzjKqHitUqAPubTd9kK7fPb49Y3DtfZRd47X26EPW7HBFS4iv2yZUVAGkOxhz76_oUZmyt-YZDWJRAe7l1VQ2EuC-Il8d1-Xl1Ymr7NKnGR3vxTlUqx8WCEoPp_nmm8RsDkcrsA7WCjsyvpgX7WHnWCk-4Wtdk0N1F5XTKCQl_G1FHgWvKA54DNipDkb3d-webV3eV4J61GQ5tpjY9IaMpawtLu_kqOsFYNEYsf4"/>
+</div>
+<div class="aspect-square bg-surface-container rounded border border-white/5 opacity-80">
+<img class="w-full h-full object-cover rounded" data-alt="Portrait of professional esports athlete 'Flux' in a high-tech gaming jersey. Cool tone studio lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCD0qFlGQ9JvkhSKwg39OpjEb64OyzLAx7UWPKo2D4gubbE3zEVFEZeMGvSCUDx2h5-GpRTUqlDz1toO9_WxAepvm4FzbNGMZn8hbQ5J8yXQQEOx0ze-VpGmu4SudgUzWqLPRe5c2dZQ_S_eN7GybcwzOBoipXjKX_Hiy2tJXTGDf575HtX1DGKEpXX8pXRxc12wZh7GUI5KGcQdUbYgSBX1P5Gvrz8ndesz5MmKyLuPi7tzySABlvIaskXTRKe_soc4GN3ih9RbsY"/>
+</div>
+<div class="aspect-square bg-surface-container rounded border border-white/5 relative overflow-hidden">
+<div class="absolute inset-0 bg-error/40 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-sm">skull</span>
+</div>
+<img class="w-full h-full object-cover rounded" data-alt="Portrait of professional esports athlete 'Koda' in a high-tech gaming jersey. Cool tone studio lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_yMMq8KL2EcOH_YAluFanLZjjCys8nxX9P8HSvrbco5N7HkxdLb3a3-vxMNMaeX9oRFltk-r3IBadHA9Rz_163FiGegIjbHdLgfgmRj5b4eOHhb1VhoVrkOLB2MBr1jqzOOpWu4TnPZgRt_wRpPBf29B5JRvPi3SBbyio51qHjJ3u18CDYgmjA33zVTjRt09E0sqbIQcmONN2IRSADGyyumTqEL0tGLt3Lyho2ES-d_ta7P87QxbMBsCQdTCb_x6_5DS6sPGHQBs"/>
+</div>
+</div>
+</div>
+<!-- Team Vortex -->
+<div class="space-y-2">
+<div class="flex items-center justify-between bg-secondary/10 p-2 rounded border border-secondary/20">
+<span class="text-[12px] font-bold text-secondary">TEAM VORTEX</span>
+<span class="text-[10px] font-bold px-2 py-0.5 bg-secondary/20 text-secondary rounded">ATTACKING</span>
+</div>
+<div class="grid grid-cols-5 gap-2">
+<div class="aspect-square bg-surface-container rounded border border-white/5"></div>
+<div class="aspect-square bg-surface-container rounded border border-white/5"></div>
+<div class="aspect-square bg-surface-container rounded border border-white/5"></div>
+<div class="aspect-square bg-surface-container rounded border border-white/5"></div>
+<div class="aspect-square bg-surface-container rounded border border-white/5"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Live Performance Stats -->
+<div class="glass-card rounded-xl p-5 border-white/5 flex-1 flex flex-col overflow-hidden">
+<h3 class="font-headline-sm text-[16px] font-bold flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-tertiary">analytics</span>
+                        LIVE ANALYTICS
+                    </h3>
+<div class="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-4">
+<div class="bg-white/5 p-4 rounded-lg">
+<div class="flex justify-between items-center mb-2">
+<span class="text-xs font-bold text-on-surface">MAP CONTROL</span>
+<span class="text-xs text-primary">Nexus 62%</span>
+</div>
+<div class="w-full h-2 bg-white/10 rounded-full overflow-hidden flex">
+<div class="h-full bg-primary" style="width: 62%;"></div>
+<div class="h-full bg-secondary" style="width: 38%;"></div>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex items-center justify-between text-[11px] font-bold text-on-surface-variant tracking-wider">
+<span>PLAYER</span>
+<span>K/D/A</span>
+<span>ADR</span>
+</div>
+<div class="flex items-center justify-between text-xs py-2 border-b border-white/5">
+<span class="text-primary font-bold">Hyper_Ion</span>
+<span class="font-mono">18 / 4 / 7</span>
+<span class="font-mono">152.4</span>
+</div>
+<div class="flex items-center justify-between text-xs py-2 border-b border-white/5">
+<span class="text-secondary font-bold">V-Slay</span>
+<span class="font-mono">14 / 9 / 2</span>
+<span class="font-mono">118.9</span>
+</div>
+<div class="flex items-center justify-between text-xs py-2 border-b border-white/5">
+<span class="text-primary font-bold">Zero_G</span>
+<span class="font-mono">12 / 8 / 11</span>
+<span class="font-mono">98.2</span>
+</div>
+</div>
+<!-- Win Probability Chart (Simplified) -->
+<div class="mt-4">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase">Win Probability</span>
+<div class="h-16 flex items-end gap-1 mt-2">
+<div class="w-full bg-primary/30 h-[40%] rounded-t-sm"></div>
+<div class="w-full bg-primary/40 h-[50%] rounded-t-sm"></div>
+<div class="w-full bg-primary/50 h-[45%] rounded-t-sm"></div>
+<div class="w-full bg-primary/60 h-[70%] rounded-t-sm"></div>
+<div class="w-full bg-primary/70 h-[85%] rounded-t-sm"></div>
+<div class="w-full bg-primary/80 h-[92%] rounded-t-sm animate-pulse"></div>
+</div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+<!-- Tournament Bracket Mini-Update -->
+<div class="mt-10 grid grid-cols-1 md:grid-cols-4 gap-6">
+<div class="glass-card rounded-xl p-4 flex flex-col items-center border-l-4 border-l-primary/50">
+<span class="text-[10px] font-bold text-on-surface-variant mb-1">QUARTER FINALS</span>
+<div class="flex items-center gap-3">
+<span class="text-sm font-bold">TITANS</span>
+<span class="text-primary font-bold">2 - 0</span>
+<span class="text-sm font-bold text-on-surface-variant">DRAGONS</span>
+</div>
+</div>
+<div class="glass-card rounded-xl p-4 flex flex-col items-center border-l-4 border-l-primary">
+<span class="text-[10px] font-bold text-primary mb-1">CURRENT MATCH</span>
+<div class="flex items-center gap-3">
+<span class="text-sm font-bold">NEXUS</span>
+<span class="text-primary font-bold animate-pulse">12 - 9</span>
+<span class="text-sm font-bold">VORTEX</span>
+</div>
+</div>
+<div class="glass-card rounded-xl p-4 flex flex-col items-center opacity-60">
+<span class="text-[10px] font-bold text-on-surface-variant mb-1">SEMI FINALS</span>
+<div class="flex items-center gap-3">
+<span class="text-sm font-bold">TITANS</span>
+<span class="text-on-surface-variant text-xs">VS</span>
+<span class="text-sm font-bold italic">TBD</span>
+</div>
+</div>
+<div class="glass-card rounded-xl p-4 flex flex-col items-center opacity-40">
+<span class="text-[10px] font-bold text-tertiary mb-1">GRAND FINAL</span>
+<span class="material-symbols-outlined text-tertiary">military_tech</span>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="relative z-10 w-full bg-background border-t border-outline-variant/20 pt-16 pb-8">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-desktop max-w-container-max mx-auto">
+<div class="flex flex-col gap-4">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface">GameVerse</span>
+<p class="text-body-md text-on-surface-variant text-sm max-w-xs">The premium nexus for next-gen AAA gaming and high-performance esports experiences.</p>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-primary mb-4 uppercase tracking-widest">Platform</h4>
+<ul class="space-y-2">
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-sm" href="#">Games</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-sm" href="#">Leaderboards</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-sm" href="#">Tournaments</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-primary mb-4 uppercase tracking-widest">Community</h4>
+<ul class="space-y-2">
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-sm" href="#">Discord</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-sm" href="#">YouTube</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-sm" href="#">Contact Support</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-primary mb-4 uppercase tracking-widest">Legal</h4>
+<ul class="space-y-2">
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-sm" href="#">Terms of Service</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-sm" href="#">Privacy Policy</a></li>
+</ul>
+</div>
+</div>
+<div class="mt-16 pt-8 border-t border-white/5 px-margin-desktop max-w-container-max mx-auto text-center">
+<p class="text-label-sm text-label-sm text-on-surface-variant opacity-60">© 2024 GameVerse Nexus. All rights reserved. Built for Elite Gaming.</p>
+</div>
+</footer>
+<script>
+        // Simple interactive chat simulation
+        const chatContainer = document.getElementById('chat-container');
+        const userNames = ['Phantom_01', 'NeonRider', 'SkillCheck', 'FragMaster'];
+        const messages = [
+            "What a clutch!",
+            "Did you see that shot?",
+            "Nexus is playing out of their minds right now.",
+            "That utility usage was perfect.",
+            "Bracket looks spicy after this game.",
+            "POGGERS!!"
+        ];
+
+        function addMessage() {
+            const div = document.createElement('div');
+            div.className = 'flex flex-col gap-1 transition-all opacity-0 translate-y-2';
+            const user = userNames[Math.floor(Math.random() * userNames.length)];
+            const msg = messages[Math.floor(Math.random() * messages.length)];
+            
+            div.innerHTML = `
+                <div class="flex items-center gap-2">
+                    <span class="font-bold text-label-md text-primary">${user}</span>
+                </div>
+                <p class="text-body-md text-on-surface-variant text-sm">${msg}</p>
+            `;
+            
+            chatContainer.appendChild(div);
+            setTimeout(() => {
+                div.classList.remove('opacity-0', 'translate-y-2');
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 100);
+
+            if (chatContainer.children.length > 20) {
+                chatContainer.removeChild(chatContainer.firstChild);
+            }
+        }
+
+        setInterval(addMessage, 4500);
+    </script>
+</body></html>

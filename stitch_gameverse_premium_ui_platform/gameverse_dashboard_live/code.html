@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GameVerse | Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary": "#3c0091",
+                    "on-error": "#690005",
+                    "on-primary-fixed-variant": "#004395",
+                    "inverse-primary": "#005ac2",
+                    "secondary": "#d0bcff",
+                    "surface-variant": "#353534",
+                    "secondary-fixed-dim": "#d0bcff",
+                    "tertiary-container": "#009eb9",
+                    "surface-dim": "#131313",
+                    "primary": "#adc6ff",
+                    "on-secondary-fixed-variant": "#5516be",
+                    "surface-container-low": "#1c1b1b",
+                    "surface-tint": "#adc6ff",
+                    "tertiary-fixed-dim": "#4cd7f6",
+                    "on-tertiary": "#003640",
+                    "tertiary": "#4cd7f6",
+                    "on-primary-fixed": "#001a42",
+                    "on-tertiary-container": "#002f38",
+                    "surface-container-lowest": "#0e0e0e",
+                    "outline": "#8c909f",
+                    "primary-container": "#4d8eff",
+                    "on-background": "#e5e2e1",
+                    "on-secondary-container": "#c4abff",
+                    "inverse-surface": "#e5e2e1",
+                    "primary-fixed-dim": "#adc6ff",
+                    "on-surface": "#e5e2e1",
+                    "error-container": "#93000a",
+                    "error": "#ffb4ab",
+                    "background": "#131313",
+                    "secondary-fixed": "#e9ddff",
+                    "on-tertiary-fixed-variant": "#004e5c",
+                    "surface-bright": "#3a3939",
+                    "secondary-container": "#571bc1",
+                    "surface": "#131313",
+                    "outline-variant": "#424754",
+                    "surface-container": "#201f1f",
+                    "inverse-on-surface": "#313030",
+                    "tertiary-fixed": "#acedff",
+                    "on-surface-variant": "#c2c6d6",
+                    "on-error-container": "#ffdad6",
+                    "surface-container-highest": "#353534",
+                    "on-tertiary-fixed": "#001f26",
+                    "on-primary-container": "#00285d",
+                    "surface-container-high": "#2a2a2a",
+                    "on-secondary-fixed": "#23005c",
+                    "primary-fixed": "#d8e2ff",
+                    "on-primary": "#002e6a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max": "1440px",
+                    "unit": "4px",
+                    "margin-mobile": "16px",
+                    "gutter": "24px",
+                    "margin-desktop": "48px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display-lg-mobile": ["Space Grotesk"],
+                    "headline-xl": ["Space Grotesk"],
+                    "headline-lg": ["Space Grotesk"],
+                    "display-lg": ["Space Grotesk"],
+                    "headline-sm": ["Space Grotesk"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "1", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-lg-mobile": ["40px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "headline-xl": ["40px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #050505;
+            color: #e5e2e1;
+            overflow-x: hidden;
+        }
+
+        .glass-panel {
+            backdrop-filter: blur(24px);
+            background: rgba(20, 20, 20, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-panel-active {
+            border: 1px solid rgba(173, 198, 255, 0.3);
+            box-shadow: 0 0 30px rgba(173, 198, 255, 0.15);
+        }
+
+        .neon-glow {
+            box-shadow: 0 0 20px rgba(173, 198, 255, 0.2);
+        }
+
+        .scanning-line {
+            height: 0.5px;
+            background: rgba(255, 255, 255, 0.05);
+            width: 100%;
+        }
+
+        .pulse-glow {
+            animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 1; filter: brightness(1); }
+            50% { opacity: 0.7; filter: brightness(1.3); }
+        }
+
+        .queue-overlay {
+            display: none;
+            backdrop-filter: blur(40px);
+            background: rgba(0, 0, 0, 0.85);
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #353534; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #424754; }
+    </style>
+</head>
+<body class="font-body-md text-body-md">
+<!-- TopNavBar Navigation Shell -->
+<nav class="fixed top-0 w-full z-50 bg-surface/40 dark:bg-surface-container/40 backdrop-blur-3xl border-b border-white/10 shadow-xl">
+<div class="flex justify-between items-center px-margin-desktop py-4 max-w-container-max mx-auto h-16">
+<div class="flex items-center gap-8">
+<span class="font-headline-sm text-headline-sm font-bold text-primary tracking-tighter cursor-pointer active:scale-95">GameVerse</span>
+<div class="hidden md:flex gap-6">
+<a class="font-label-md text-label-md text-primary font-bold border-b-2 border-primary pb-1" href="#">Home</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors duration-300" href="#">Games</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors duration-300" href="#">Community</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors duration-300" href="#">Leaderboards</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 px-3 py-1 bg-surface-container rounded-full border border-white/5">
+<span class="w-2 h-2 rounded-full bg-[#4ade80] animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Servers: Optimal</span>
+<span class="font-label-sm text-label-sm text-primary/80">24ms</span>
+</div>
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:scale-105 transition-all">search</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:scale-105 transition-all relative">
+                        notifications
+                        <span class="absolute -top-1 -right-1 w-2 h-2 bg-error rounded-full"></span>
+</span>
+</div>
+</div>
+</div>
+</nav>
+<!-- SideNavBar Shell -->
+<aside class="fixed left-0 top-0 h-full w-64 z-40 bg-surface-container-low dark:bg-surface-container-low/60 backdrop-blur-xl border-r border-white/5 shadow-2xl flex flex-col pt-24 pb-8 px-4 gap-4 hidden md:flex">
+<div class="flex items-center gap-3 px-2 mb-6">
+<div class="w-12 h-12 rounded-xl overflow-hidden border border-primary/30">
+<img class="w-full h-full object-cover" data-alt="A futuristic portrait of a high-tech gamer profile avatar with glowing neon cybernetic highlights and a sleek helmet, set against a dark, minimalist tech background with soft primary blue ambient lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUvU8RfYtgSgPMl3XAwHcGp5Fev_FaawX1TirhHEwQjPGzQRUmtTh4dzHCZVXtdzTMfkw41U28YGU3wN9To_4tOuGDzdmncA2FwM_W5EYmk4PbLEfIVCaYRKyb2HObXwPbftWsm3J_9dt6553SWDM5T_ycFqJiSb6suxrKiNFqGQwCF1xOO6b4DCLLLgH2dYFmZQ9L0Xu2XHr2O_Jiu-3gdXCzpB4XNQ5lWSbybWBUy0C5fLo3A0qzCdqIYBrPZpYYd3ZMHVaYinY"/>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Pro Gamer</p>
+<p class="font-label-sm text-label-sm text-primary">Level 42 Elite</p>
+</div>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-4 py-3 bg-primary/10 text-primary border-r-4 border-primary transition-all duration-200 cursor-pointer active:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-weight="fill">person</span>
+<span class="font-label-md text-label-md">Profile</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-white/5 transition-all duration-200 cursor-pointer active:translate-x-1" href="#">
+<span class="material-symbols-outlined">military_tech</span>
+<span class="font-label-md text-label-md">Achievements</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-white/5 transition-all duration-200 cursor-pointer active:translate-x-1" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Friends</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-white/5 transition-all duration-200 cursor-pointer active:translate-x-1" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-label-md text-label-md">History</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-white/5 transition-all duration-200 cursor-pointer active:translate-x-1" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto flex flex-col gap-1">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-white/5 transition-all duration-200 cursor-pointer" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-white/10 text-error transition-all duration-200 cursor-pointer" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md text-label-md">Sign Out</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:pl-64 pt-20 min-h-screen">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-8">
+<!-- Header & Real-time Stats -->
+<header class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
+<div>
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-2">Nexus Dashboard</h1>
+<p class="text-on-surface-variant font-body-lg">Welcome back, Commander. Reality is ready for synchronization.</p>
+</div>
+<!-- Stats Bento Row -->
+<div class="grid grid-cols-3 gap-4 w-full md:w-auto">
+<div class="glass-panel p-4 rounded-xl flex flex-col items-center justify-center min-w-[120px]">
+<span class="font-label-sm text-label-sm text-primary mb-1 uppercase tracking-widest">ELO Rating</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">1420</span>
+<span class="font-label-sm text-label-sm text-[#4ade80]">+12 today</span>
+</div>
+<div class="glass-panel p-4 rounded-xl flex flex-col items-center justify-center min-w-[120px]">
+<span class="font-label-sm text-label-sm text-secondary mb-1 uppercase tracking-widest">Career Wins</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">842</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Win Rate: 68%</span>
+</div>
+<div class="glass-panel p-4 rounded-xl flex flex-col items-center justify-center min-w-[120px]">
+<span class="font-label-sm text-label-sm text-tertiary mb-1 uppercase tracking-widest">Global Rank</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">#421</span>
+<span class="font-label-sm text-label-sm text-primary">Top 1%</span>
+</div>
+</div>
+</header>
+<!-- Hero/Main Action Area -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-gutter mb-12">
+<!-- Featured Game Card -->
+<div class="lg:col-span-2 relative group overflow-hidden rounded-3xl h-[400px] border border-white/10">
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent z-10"></div>
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A highly detailed cinematic scene from a AAA sci-fi shooter game, featuring a massive orbital station floating above a vibrant blue planet. In the foreground, a sleek, glowing holographic interface floats above a character's arm. The lighting is cinematic, with rich blues, deep blacks, and brilliant neon primary accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEJhXuwaqv6rGhuWpRsJthvHcupNZhLw_WKYpOzW5pHMcu7Dk9IcvkbajqEF0V74PubZyib6ruXVU45Aun2At0CIS31Nl62HeK9M53Wi6AB6jD5YEk15aXbbhTos-IFsYL3sT_ZSOQHHDyhU0UCogTerZ-KLdl0-4L4welVPGEk3y3146JiO3Gsm7ESoNUTInacvEthBIqBZlkUQz5uy1JqR1m268-KMSVRuAol35qQMJdqvdR8L60Yu0Pz7CTM0VH9OWjf8sPU88"/>
+<div class="absolute bottom-0 left-0 p-10 z-20 w-full">
+<div class="flex items-center gap-2 mb-3">
+<span class="bg-primary/20 text-primary px-3 py-1 rounded-full text-label-sm font-label-sm backdrop-blur-md">LIVE EVENT</span>
+<span class="text-on-surface-variant text-label-sm font-label-sm">Ends in 02:45:12</span>
+</div>
+<h2 class="font-headline-xl text-headline-xl mb-4">CyberStrike: Zero Protocol</h2>
+<div class="flex gap-4">
+<button class="px-8 py-4 bg-primary text-on-primary rounded-xl font-label-md text-label-md flex items-center gap-2 hover:scale-105 transition-all neon-glow" onclick="startMatchmaking()">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                                QUICK PLAY
+                            </button>
+<button class="px-8 py-4 glass-panel text-on-surface rounded-xl font-label-md text-label-md flex items-center gap-2 hover:bg-white/10 transition-all">
+<span class="material-symbols-outlined">hub</span>
+                                LOBBY SELECT
+                            </button>
+</div>
+</div>
+</div>
+<!-- Secondary Bento Column -->
+<div class="flex flex-col gap-gutter">
+<!-- Progress Card -->
+<div class="glass-panel p-6 rounded-3xl flex-1 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4">
+<span class="material-symbols-outlined text-primary/40 text-4xl">military_tech</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm mb-6">Battle Pass Progress</h3>
+<div class="mb-2 flex justify-between text-label-sm font-label-sm">
+<span class="text-on-surface">Level 32 / 50</span>
+<span class="text-primary">XP 8,400/10,000</span>
+</div>
+<div class="w-full h-3 bg-surface-container rounded-full overflow-hidden mb-6">
+<div class="h-full bg-primary pulse-glow w-[84%] shadow-[0_0_10px_rgba(173,198,255,0.5)]"></div>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 glass-panel rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface">diamond</span>
+</div>
+<div>
+<p class="font-label-md text-label-md">Next Reward</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Chromium Edge Skin</p>
+</div>
+</div>
+</div>
+<!-- Friends Activity -->
+<div class="glass-panel p-6 rounded-3xl flex-1">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-sm text-headline-sm">Active Squad</h3>
+<span class="text-primary text-label-sm font-label-sm cursor-pointer hover:underline">View All</span>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full border border-[#4ade80]/50 relative">
+<img class="w-full h-full rounded-full object-cover" data-alt="Close-up avatar of a digital character with a chrome visor and neon green lights, minimalist and high-tech." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1ZVr1N0ZM1fXO4QT0aX636etkMx2jFAoEK6DKzEKLP_7MiGx6IxiYE5iKcs2SAwf7wzNrvtgUAbmL64Lzns9lB52opHJiCdqbqorek58E9q-OvgbqiMdBTP-fhbQhCtPi2b123qWtos-A5Gx_TGKwUqLHw3i_QtQ3a5N2oZK2b7EZDF9gi5JEi4AmtkdGuse6qOonfrGCt6_5CKf9R43Rdob6asMPoHwMyJEbI_aQVBO_MuSWv5OB6kX1HL9LdWWiWwcyyaTGX-E"/>
+<span class="absolute bottom-0 right-0 w-3 h-3 bg-[#4ade80] border-2 border-background rounded-full"></span>
+</div>
+<div>
+<p class="font-label-md text-label-md">Viper_09</p>
+<p class="font-label-sm text-label-sm text-[#4ade80]">In Lobby</p>
+</div>
+</div>
+<button class="p-2 glass-panel rounded-lg hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">add</span>
+</button>
+</div>
+<div class="scanning-line"></div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full border border-primary/50 relative">
+<img class="w-full h-full rounded-full object-cover" data-alt="Futuristic gamer avatar with a sleek interface projected onto the face, cool blue color palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoQc8g2ShjQ3gQDzMogn3naT8bX21tFTIhpNriCwMeyMttixFSseeixDRnfMjEHG5JXnZ_8u6WzX0rW-bxd2L8I4c-1e92NPQYEiUxnveQjtrb_6uQPzM033FDJD6NGJfJSuky-xzO2j9DBUruPS8PEzy3LXMpatE8HocV1OcZTcXX2G7eaGDQ2qDipVGYSXYzcPuo9xkgwrTttHURh0jd1jVJgixy8M3quSZkxfaCzcL-IKCmtqbG-d3FMENjoV1C_xcQHMdKBTs"/>
+<span class="absolute bottom-0 right-0 w-3 h-3 bg-primary border-2 border-background rounded-full"></span>
+</div>
+<div>
+<p class="font-label-md text-label-md">Nexus_King</p>
+<p class="font-label-sm text-label-sm text-primary">Playing Strike</p>
+</div>
+</div>
+<button class="p-2 glass-panel rounded-lg hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">chat</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- News/Events Carousel Area -->
+<section class="grid grid-cols-1 md:grid-cols-4 gap-gutter">
+<div class="glass-panel p-6 rounded-3xl hover:glass-panel-active transition-all cursor-pointer group">
+<div class="h-32 mb-4 rounded-xl overflow-hidden relative">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform" data-alt="Abstract cybernetic cityscape with vertical neon lights and data streams, high contrast dark mode aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCj63a8ILCwv69WfL04LaaxUkWjeJtmt7lw2e7N3MLTRh-D3veEZIm_F-Co9E6Y2KRapzHMBEmKhsmZOqzEq0q91-Y8wXyYmWIu0vGBLoM-Hzpyj4UCHIE1V3sgL3ad0HVvbaK5ovR0kWTsn2OE0yF4_rCquHnUSTliX4Us8oqCM5hXAunLqv6ePAB_zsdmq_omJDyCQBl0Z9axaO9eeT1_w0O0RavAt2_RpDFBAkOiDTyNi8J_eiEn5QtWtJtbmi_G1NH8hS679uo"/>
+</div>
+<span class="font-label-sm text-label-sm text-secondary mb-2 block">PATCH NOTES</span>
+<h4 class="font-label-md text-label-md mb-2">V2.4 Balancing Updates</h4>
+<p class="text-label-sm text-on-surface-variant">Full list of weapon tuning and netcode fixes.</p>
+</div>
+<div class="glass-panel p-6 rounded-3xl hover:glass-panel-active transition-all cursor-pointer group">
+<div class="h-32 mb-4 rounded-xl overflow-hidden relative">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform" data-alt="Futuristic gaming tournament stage with giant holographic displays and intense arena lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlkSxNlsE7pW6QVLYFIeQaOP-NZypS7LtEXEc1dv8Hi7sLf-hxS82aNfa2wew7ZiUCCxpfpKhS-JCYEoRFiymMncHaISC2X7X2RzsRAWD8FG5OIAjJxfuR9DxYYqKFIjyUfZUQRMhwaPIbhVakLx-J0eAR-AvsoEU0canyuFp0PFqmPuKO4NWDH4_kmjgv9LQyoxjIpxbAmFCzf4Q-3Sv2-TUN8ormJJD5QCIL1ro45Mkt2W3hEOPufDsDLapcFz21QiyP1mLlqsw"/>
+</div>
+<span class="font-label-sm text-label-sm text-tertiary mb-2 block">TOURNAMENTS</span>
+<h4 class="font-label-md text-label-md mb-2">Weekend Finals</h4>
+<p class="text-label-sm text-on-surface-variant">Sign up for the Nexus Open. $50k prize pool.</p>
+</div>
+<div class="glass-panel p-6 rounded-3xl hover:glass-panel-active transition-all cursor-pointer group">
+<div class="h-32 mb-4 rounded-xl overflow-hidden relative">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform" data-alt="Digital concept art of a futuristic armor skin with glowing energy lines and metallic textures." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-zpAvyvbn-GnTz_F2nD1D_FwzbViRHvTf4hRbEbWuPRojjltv6CQp6-GAWbKlPBHlVV2C1I9SoCNzmRlSkwZBvhDrPsrUtFDbzgBiBU19cJW2mZOqD2NnPoHoTO9kxBPpPphEOtS7zM5jP22z7hWylJnQrEvBYE1XHR5M3Ioajcllmkhnn1pDNHhb0KyeAraDkEtH3PJTWqX4PKkTxCvHl139C4jh8CmXAGIZ0t2yRCb7JCAS5dRxkZ4o1tGC4rvRJKIul7QkK8k"/>
+</div>
+<span class="font-label-sm text-label-sm text-primary mb-2 block">MARKETPLACE</span>
+<h4 class="font-label-md text-label-md mb-2">New: Phantom Set</h4>
+<p class="text-label-sm text-on-surface-variant">Limited time legendary armor set available.</p>
+</div>
+<div class="glass-panel p-6 rounded-3xl bg-primary/5 border-primary/20 flex flex-col justify-center items-center text-center">
+<span class="material-symbols-outlined text-primary text-4xl mb-4">star</span>
+<h4 class="font-headline-sm text-headline-sm mb-2">Join Nexus+</h4>
+<p class="text-label-sm text-on-surface-variant mb-6">Unlock exclusive rewards and early access.</p>
+<button class="w-full py-3 bg-surface-container border border-primary/30 rounded-xl text-primary font-label-md text-label-md hover:bg-primary hover:text-on-primary transition-all">LEARN MORE</button>
+</div>
+</section>
+</div>
+</main>
+<!-- Footer Shell -->
+<footer class="w-full relative bottom-0 border-t border-outline-variant/20 bg-background md:pl-64">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-desktop py-16 max-w-container-max mx-auto">
+<div class="md:col-span-1">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface block mb-4">GameVerse</span>
+<p class="text-on-surface-variant font-body-md">The ultimate nexus for the next generation of competitive gaming. Precision, Performance, Power.</p>
+</div>
+<div class="flex flex-col gap-3">
+<p class="font-label-md text-label-md text-primary">Platform</p>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm" href="#">Discord</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm" href="#">YouTube</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm" href="#">Contact Support</a>
+</div>
+<div class="flex flex-col gap-3">
+<p class="font-label-md text-label-md text-primary">Legal</p>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm" href="#">Terms of Service</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm" href="#">Privacy Policy</a>
+</div>
+<div class="md:col-span-1">
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-4">Stay connected to the Nexus.</p>
+<div class="flex gap-2">
+<input class="bg-surface-container border border-outline-variant/30 rounded-lg px-4 py-2 text-sm w-full focus:border-primary outline-none transition-all" placeholder="Enter email" type="email"/>
+<button class="bg-primary text-on-primary p-2 rounded-lg"><span class="material-symbols-outlined">send</span></button>
+</div>
+</div>
+</div>
+<div class="px-margin-desktop py-8 border-t border-white/5 text-center">
+<p class="text-on-surface-variant font-label-sm text-label-sm opacity-50">© 2024 GameVerse Nexus. All rights reserved.</p>
+</div>
+</footer>
+<!-- Real-time Matchmaking Overlay -->
+<div class="queue-overlay fixed inset-0 z-[100] flex items-center justify-center" id="matchmaking-overlay">
+<div class="glass-panel p-12 rounded-[40px] max-w-md w-full text-center relative overflow-hidden border-2 border-primary/30">
+<div class="absolute inset-0 opacity-20 pointer-events-none">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent animate-[shimmer_2s_infinite]"></div>
+</div>
+<div class="relative z-10">
+<div class="mb-8 relative inline-block">
+<div class="w-32 h-32 rounded-full border-4 border-primary/20 flex items-center justify-center">
+<div class="w-24 h-24 rounded-full border-4 border-t-primary border-transparent animate-spin"></div>
+</div>
+<span class="material-symbols-outlined absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl text-primary animate-pulse">radar</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg mb-2">Searching for Nexus...</h2>
+<p class="text-on-surface-variant font-body-md mb-8">Matching you with elite players based on your 1420 ELO rating.</p>
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-center bg-white/5 p-4 rounded-2xl border border-white/10">
+<div class="text-left">
+<p class="text-label-sm text-on-surface-variant">Estimated Time</p>
+<p class="font-label-md text-on-surface">0:45s</p>
+</div>
+<div class="text-right">
+<p class="text-label-sm text-on-surface-variant">Latency</p>
+<p class="font-label-md text-[#4ade80]">24ms</p>
+</div>
+</div>
+<button class="w-full py-4 text-on-surface-variant hover:text-error transition-colors font-label-md text-label-md" onclick="stopMatchmaking()">
+                        CANCEL QUEUE
+                    </button>
+</div>
+</div>
+</div>
+</div>
+<script>
+        function startMatchmaking() {
+            document.getElementById('matchmaking-overlay').style.display = 'flex';
+            // Simulate queue finding a match
+            setTimeout(() => {
+                const title = document.querySelector('#matchmaking-overlay h2');
+                const sub = document.querySelector('#matchmaking-overlay p');
+                title.innerText = "Match Found!";
+                title.classList.add('text-[#4ade80]');
+                sub.innerText = "Preparing tactical synchronization...";
+            }, 3000);
+        }
+
+        function stopMatchmaking() {
+            document.getElementById('matchmaking-overlay').style.display = 'none';
+        }
+
+        // Simple parallax on mouse move for background feel
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+            document.body.style.backgroundPosition = `${moveX}px ${moveY}px`;
+        });
+    </script>
+</body></html>

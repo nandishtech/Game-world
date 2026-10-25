@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>LUDO ROYAL - Shop</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&amp;family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-container": "#f39461",
+                    "outline": "#8f909d",
+                    "tertiary-fixed": "#ffdbcb",
+                    "on-secondary": "#002e6a",
+                    "outline-variant": "#444651",
+                    "ludo-blue": "#3B82F6",
+                    "secondary-fixed-dim": "#adc6ff",
+                    "surface-container-high": "#222a3d",
+                    "surface-container-low": "#131b2e",
+                    "error-container": "#93000a",
+                    "on-tertiary-fixed": "#341100",
+                    "on-tertiary": "#552000",
+                    "error": "#ffb4ab",
+                    "surface-container": "#171f33",
+                    "ludo-yellow": "#F59E0B",
+                    "on-background": "#dae2fd",
+                    "on-surface-variant": "#c5c5d3",
+                    "on-secondary-container": "#e6ecff",
+                    "surface-dim": "#0b1326",
+                    "tertiary-container": "#6e2c00",
+                    "on-error-container": "#ffdad6",
+                    "neon-glow": "rgba(59, 130, 246, 0.5)",
+                    "secondary": "#adc6ff",
+                    "secondary-container": "#0566d9",
+                    "surface-variant": "#2d3449",
+                    "tertiary": "#ffb691",
+                    "inverse-on-surface": "#283044",
+                    "surface-container-highest": "#2d3449",
+                    "secondary-fixed": "#d8e2ff",
+                    "ludo-green": "#10B981",
+                    "on-primary": "#05297a",
+                    "on-secondary-fixed-variant": "#004395",
+                    "surface-bright": "#31394d",
+                    "tertiary-fixed-dim": "#ffb691",
+                    "primary-fixed": "#dce1ff",
+                    "background": "#0b1326",
+                    "primary-container": "#1e3a8a",
+                    "surface-tint": "#b6c4ff",
+                    "on-surface": "#dae2fd",
+                    "on-error": "#690005",
+                    "primary": "#b6c4ff",
+                    "on-primary-fixed-variant": "#264191",
+                    "ludo-red": "#EF4444",
+                    "on-tertiary-fixed-variant": "#773205",
+                    "on-primary-container": "#90a8ff",
+                    "inverse-surface": "#dae2fd",
+                    "on-primary-fixed": "#00164e",
+                    "surface-glass": "rgba(255, 255, 255, 0.05)",
+                    "inverse-primary": "#4059aa",
+                    "primary-fixed-dim": "#b6c4ff",
+                    "surface-container-lowest": "#060e20",
+                    "on-secondary-fixed": "#001a42",
+                    "surface": "#0b1326"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xl": "32px",
+                    "sm": "8px",
+                    "margin-desktop": "40px",
+                    "gutter": "16px",
+                    "lg": "24px",
+                    "3xl": "64px",
+                    "base": "8px",
+                    "xs": "4px",
+                    "margin-mobile": "20px",
+                    "2xl": "48px",
+                    "md": "16px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "headline-lg": ["Montserrat"],
+                    "title-md": ["Inter"],
+                    "display-lg": ["Montserrat"],
+                    "headline-lg-mobile": ["Montserrat"],
+                    "label-caps": ["Inter"],
+                    "stat-value": ["Montserrat"]
+            },
+            "fontSize": {
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "stat-value": ["18px", {"lineHeight": "24px", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0b1326;
+            color: #dae2fd;
+            -webkit-font-smoothing: antialiased;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: inset 2px 2px 4px rgba(255,255,255,0.05), inset -2px -2px 4px rgba(0,0,0,0.2);
+        }
+        .neon-border-primary {
+            border: 1.5px solid #3B82F6;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+        }
+        .category-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        .gold-gradient {
+            background: linear-gradient(135deg, #F59E0B 0%, #B45309 100%);
+        }
+        .diamond-gradient {
+            background: linear-gradient(135deg, #b6c4ff 0%, #3B82F6 100%);
+        }
+        .purchase-btn-gradient {
+            background: linear-gradient(135deg, #10B981 0%, #065f46 100%);
+        }
+        @keyframes subtle-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        .float-animation {
+            animation: subtle-float 4s ease-in-out infinite;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="font-body-lg text-on-background min-h-screen pb-24">
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16 bg-surface-glass backdrop-blur-xl border-b border-white/10 bg-surface-container-low/80 shadow-md shadow-neon-glow/20">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full border-2 border-primary overflow-hidden cursor-pointer" onclick="location.href='profile.html'">
+<img class="w-full h-full object-cover" data-alt="A premium 3D avatar profile picture of a stylized king character with a glowing blue crown, set against a dark atmospheric background with neon blue lighting and luxurious metallic textures." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdFRFFZ2WARmASA3c9fhsUT_KGSXNqUCrFOCWRXFQEOTDK0HatpSqMNp9rrElkGW5BaKAgZV1hXlD3NXqFDJidG5Tze8DvNyxG-eBxsaOKXDegeekKPEaKEistZ6RkujFi_6JBtCrxobwTBfEuILn62eOZzPsKtf_uKErXzkhQUFOvmYCHNv_SCdsFlJ7Mj8CeVN8J8ar9_r-dM0RsAenfWJObPdSciP8ojXtOOIqPRXTjJ4sDzp9e"/>
+</div>
+<div><a class="block text-[10px] text-on-surface-variant/60 hover:text-primary uppercase tracking-widest" href="ludo-home.html">&larr; Ludo Royal Home</a><h1 class="font-headline-lg-mobile text-headline-lg-mobile font-extrabold text-ludo-yellow tracking-tight">SHOP</h1></div>
+</div>
+<div class="flex items-center gap-2 bg-primary-container/30 px-3 py-1.5 rounded-full border border-white/10">
+<span class="material-symbols-outlined text-ludo-yellow text-xl" style="font-variation-settings: 'FILL' 1;">monetization_on</span>
+<span class="font-stat-value text-stat-value text-primary">12.5k</span>
+</div>
+</header>
+<main class="pt-20 px-margin-mobile">
+<!-- Categories -->
+<nav class="flex overflow-x-auto gap-3 py-4 category-scroll">
+<button class="shop-cat-btn flex-shrink-0 px-6 py-2 rounded-full bg-primary-container text-on-primary-container font-bold border border-primary/30">
+                Dice
+            </button>
+<button class="shop-cat-btn flex-shrink-0 px-6 py-2 rounded-full bg-surface-container text-on-surface-variant font-semibold hover:bg-surface-bright/20 transition-colors">
+                Boards
+            </button>
+<button class="shop-cat-btn flex-shrink-0 px-6 py-2 rounded-full bg-surface-container text-on-surface-variant font-semibold hover:bg-surface-bright/20 transition-colors">
+                Tokens
+            </button>
+<button class="shop-cat-btn flex-shrink-0 px-6 py-2 rounded-full bg-surface-container text-on-surface-variant font-semibold hover:bg-surface-bright/20 transition-colors">
+                Emotes
+            </button>
+<button class="shop-cat-btn flex-shrink-0 px-6 py-2 rounded-full bg-surface-container text-on-surface-variant font-semibold hover:bg-surface-bright/20 transition-colors">
+                Currency
+            </button>
+</nav>
+<!-- Featured Bundle (Bento-style large card) -->
+<section class="mt-4">
+<div class="relative overflow-hidden rounded-2xl gold-gradient p-6 min-h-[180px] shadow-2xl flex flex-col justify-between group cursor-pointer transition-transform duration-300 active:scale-95">
+
+<div class="relative z-10">
+<span class="bg-black/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-white">Featured Bundle</span>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-white mt-2 leading-tight">KING'S TREASURY<br/>DIAMOND SET</h2>
+</div>
+<div class="relative z-10 flex justify-between items-end">
+<p class="text-white/80 font-medium">3 Dice + Board + 50k Coins</p>
+<div class="bg-white text-black px-5 py-2 rounded-xl font-bold shadow-lg">
+                        $19.99
+                    </div>
+</div>
+<div class="absolute -right-8 -top-8 w-48 h-48 opacity-30 float-animation">
+<img class="w-full h-full object-contain" data-alt="High-fidelity 3D render of a golden Ludo dice and a stack of glowing diamond coins, featuring sharp reflections, premium metallic materials, and a sense of royal luxury. The lighting is dramatic and focused, highlighting the intricate details of the gems." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZ6sAHlT5T_RpvS5mRglSGXLUg_w4ThXebmL_PSZFKDX4Zjyq639sk8bUM4T41lgg1teMY5djOqdX0jKMuJ1fJU7rJK7ZAjNY-JQHSg5VeNr8nUZ4j-lQEDEOwjYt2nGQjhgveAc01y3T-UNEBW99FULryWk6iEpx31hFSIU1nCxf_emIKm_DmVcKssH8FLfQ72AXJFY7k7WZTESc5GXYuSXgMOWuqo99tzUqo8O0GXDr_x1SE9bu3"/>
+</div>
+</div>
+</section>
+<!-- Items Grid -->
+<section class="mt-8">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-title-md text-title-md text-on-surface">Premium Dice Skins</h3>
+<span class="text-primary font-label-caps uppercase cursor-pointer">View All</span>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<!-- Fire Dice -->
+<div class="glass-card rounded-2xl p-4 flex flex-col items-center text-center group cursor-pointer" onclick="openPurchaseModal('Fire Dice', '1,200', 'FIRE_DICE_IMG')">
+<div class="w-full aspect-square relative mb-4 rounded-xl bg-surface-container-high/50 flex items-center justify-center overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-ludo-red/20 to-transparent"></div>
+<img class="w-24 h-24 object-contain group-hover:scale-110 transition-transform duration-500" data-alt="A magical 3D dice forged from molten lava and volcanic rock. Emitting a fierce orange and red glow with realistic heat haze and embers floating around it. High contrast, dark background, premium game asset style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7nEEHeK52TiY-ghZ41W8wC3MfmdKGIsg4ZEZsXvxPI1ry5YY2jBpQ62LnbPeFKc9nU2TYr96RwuXuknctLtY7EQ3ka4bs_sfAonuwUtxGtIZs8KvFmc1S8AqcLGPEci_y-nTLNMcXGuqi21Jf_V813ejtvDadPuQvNRphUezchcswLk1EJIQ5NLLX7QTgzGt78-cKFxJWQEskWQeDf9CKsLMMeqoO3N4mya1WF19Q7uSsrkPS3FzE"/>
+</div>
+<span class="font-label-caps text-ludo-red mb-1">RARE</span>
+<h4 class="font-bold text-white mb-2">Fire Dice</h4>
+<div class="flex items-center gap-1.5 py-1.5 px-4 rounded-full bg-surface-container-highest">
+<span class="material-symbols-outlined text-sm text-ludo-yellow">monetization_on</span>
+<span class="font-bold text-sm">1,200</span>
+</div>
+</div>
+<!-- Ice Dice -->
+<div class="glass-card rounded-2xl p-4 flex flex-col items-center text-center group cursor-pointer" onclick="openPurchaseModal('Frostbite Dice', '1,500', 'ICE_DICE_IMG')">
+<div class="w-full aspect-square relative mb-4 rounded-xl bg-surface-container-high/50 flex items-center justify-center overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-ludo-blue/20 to-transparent"></div>
+<img class="w-24 h-24 object-contain group-hover:scale-110 transition-transform duration-500" data-alt="An ethereal 3D dice carved from enchanted arctic ice. The surface is translucent with crystalline structures inside, glowing with a soft blue neon light and surrounded by a faint frozen mist. Ultra-high definition texture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtw6j7X0KUrZ3vL7aEL_5MyUUwjqd_lefdU5_pORNxF7gbZHn-6EWmC-RZ-MITk-lm0LHXrrFLc2ouJO-X_udz8W2MBOBYHEquKcaJGzLivJV6MQeBthY4DHfPWdWas0nR2--n8sW6hiMZ-XKgb9yvc0PL2QdaR6HYRurLf2gsowcW_9v55dZ8_1ykbeu_A68XwEOTq3o2mgYKrMKQqVF9f5_nQV4rwRQPlF-MuOMjjNu8mRV_9P6I"/>
+</div>
+<span class="font-label-caps text-ludo-blue mb-1">EPIC</span>
+<h4 class="font-bold text-white mb-2">Frostbite Dice</h4>
+<div class="flex items-center gap-1.5 py-1.5 px-4 rounded-full bg-surface-container-highest">
+<span class="material-symbols-outlined text-sm text-ludo-yellow">monetization_on</span>
+<span class="font-bold text-sm">1,500</span>
+</div>
+</div>
+<!-- Galaxy Dice -->
+<div class="glass-card rounded-2xl p-4 flex flex-col items-center text-center group cursor-pointer col-span-2 relative overflow-hidden" onclick="openPurchaseModal('Nebula Dice', '5,000', 'GALAXY_DICE_IMG')">
+<div class="absolute top-4 right-4 z-10 bg-on-tertiary-container text-white px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase">Limited</div>
+<div class="flex w-full gap-6 items-center">
+<div class="w-32 h-32 relative rounded-xl bg-surface-container-high/50 flex items-center justify-center overflow-hidden">
+
+<img class="w-24 h-24 object-contain z-10 group-hover:scale-110 transition-transform duration-500" data-alt="A breathtaking legendary dice representing a miniature galaxy. Its surface is a swirling vortex of deep purples, cosmic blues, and glittering stars. A subtle nebula cloud floats within its translucent core. High-end digital collectible aesthetics." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAInlTTr5HVguyOW4e5vhi6oRYtieFrYVVm7gqHTRfvV743TrXVaKk5yG-HZbNklvbWl_K_6UK5ZtnApNyJ7XWJdqfGSTlpiB9Z2DUjJ8Z7aP8vEZj5KMRDvsMDjgsxQ68HlilE7rl-_oX6n9Exu66AEyUChGd4gbG-ToHMi0Z5Ft8s9BcFKWi9oPY_OQR_EvJjvyNA-nkXNyN09xMoDftsC-3ZLVQX6hq8MKrpcuQe49drN5CsTvyc"/>
+</div>
+<div class="flex-1 text-left">
+<span class="font-label-caps text-tertiary mb-1">LEGENDARY</span>
+<h4 class="font-headline-lg-mobile text-white mb-2">Nebula Dice</h4>
+<p class="text-on-surface-variant text-sm mb-3">Custom animation on every roll.</p>
+<div class="inline-flex items-center gap-1.5 py-1.5 px-4 rounded-full bg-primary-container/40 border border-primary/20">
+<span class="material-symbols-outlined text-sm text-ludo-yellow">monetization_on</span>
+<span class="font-bold text-sm">5,000</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Boards Section -->
+<section class="mt-10 mb-8">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-title-md text-title-md text-on-surface">Animated Boards</h3>
+<span class="text-primary font-label-caps uppercase cursor-pointer">View All</span>
+</div>
+<div class="relative w-full aspect-video rounded-2xl overflow-hidden glass-card group cursor-pointer" onclick="openPurchaseModal('Cyber Ludo Board', '3,500', 'BOARD_IMG')">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A futuristic Cyberpunk-themed Ludo board set in a rainy neon city. The board tiles are glowing light panels with digital scan lines. Neon blue and magenta light reflects off the wet metallic surface. Cinematic wide shot with shallow depth of field." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAK01I-hzEfCxb9irRrzUOGYu6OTCHTxGtUp57RkE_q9XVzcAX9enZR1IHwR25Zpi_bvOiiwzcCbv0r6pn7PeTWhptmTosNdBx3r138lz1KCme24WXRCya1UUMGCR8wk4vpn14TOu4E04yjx9Qz7hMAXFLdoAJZpMVJ08lR-9iSYuYnQWSILeof_3I8u71PjtvzV3b7cckPiUT-4xGcJKPkOD_AaI57rjfybv9ZZ5-97wLD7t679Y2w"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+<div class="absolute bottom-4 left-4">
+<h4 class="font-bold text-white text-lg">Cyber Ludo City</h4>
+<p class="text-white/60 text-xs">Dynamic lighting &amp; sound effects</p>
+</div>
+<div class="absolute bottom-4 right-4 flex items-center gap-1.5 py-1.5 px-4 rounded-full bg-ludo-yellow text-black font-bold shadow-lg">
+<span class="material-symbols-outlined text-sm">monetization_on</span>
+<span>3,500</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-4 pb-safe h-20 bg-surface-glass backdrop-blur-xl border-t border-white/10 bg-surface-container-low/90 shadow-[0_-4px_20px_rgba(59,130,246,0.3)]">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all" href="ludo-home.html">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-caps text-label-caps">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary font-bold bg-primary-container/30 rounded-full py-1 px-4" href="ludo-shop.html">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="font-label-caps text-label-caps">Shop</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all" href="ludo-gameplay.html">
+<span class="material-symbols-outlined">extension</span>
+<span class="font-label-caps text-label-caps">Play</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all" href="ludo-leaderboards.html">
+<span class="material-symbols-outlined">emoji_events</span>
+<span class="font-label-caps text-label-caps">Events</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all" href="profile.html">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-caps text-label-caps">Profile</span>
+</a>
+</nav>
+<!-- Purchase Modal -->
+<div class="fixed inset-0 z-[100] hidden flex items-center justify-center px-margin-mobile" id="purchaseModal">
+<div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closePurchaseModal()"></div>
+<div class="relative w-full max-w-sm glass-card rounded-3xl p-8 shadow-2xl scale-90 transition-transform duration-300" id="modalContainer">
+<div class="flex flex-col items-center">
+<div class="w-32 h-32 mb-6 relative flex items-center justify-center rounded-2xl bg-surface-container-highest/50">
+<img class="w-24 h-24 object-contain float-animation" data-alt="A detailed digital 3D model of a premium game item icon, floating against a clean dark background with subtle blue volumetric lighting and high-quality material shaders showing reflections and texture." id="modalImage" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFjo3DToueFHJNP_cxxqy0kBxfybKeqKNJMipMeEc5QLc4p-yHzOI8yIRJwksPlonMe8yWew41R7lM4dfPA1u280i9y3QGT-ZsaCQO82F6coAsTiHb_I3kh9bmJb4zU2Lny2g25a8bhsFFBorIzVXNs9FIBtcA7hRufaEypJZNtDwRIxHiq87zDUJLXDDCgngBAB3souuC8unlKnbW570j1YDG3OSM9vZNiavM-PZZvzdHMvdsDtCa"/>
+</div>
+<h3 class="font-headline-lg-mobile text-white mb-2" id="modalTitle">Item Name</h3>
+<p class="text-on-surface-variant text-center text-sm mb-6 px-4">Are you sure you want to add this collectible to your inventory?</p>
+<div class="flex items-center gap-2 mb-8 bg-black/30 px-6 py-3 rounded-2xl">
+<span class="text-on-surface-variant font-medium">Price:</span>
+<span class="material-symbols-outlined text-ludo-yellow">monetization_on</span>
+<span class="font-stat-value text-white" id="modalPrice">0</span>
+</div>
+<div class="flex w-full gap-4">
+<button class="flex-1 py-4 rounded-xl font-bold bg-surface-variant text-white active:scale-95 transition-all" onclick="closePurchaseModal()">Cancel</button>
+<button class="flex-1 py-4 rounded-xl font-bold purchase-btn-gradient text-white shadow-[0_4px_20px_rgba(16,185,129,0.4)] active:scale-95 transition-all" onclick="confirmPurchase()">Confirm</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+        function openPurchaseModal(title, price, imgId) {
+            const modal = document.getElementById('purchaseModal');
+            const container = document.getElementById('modalContainer');
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalPrice').innerText = price;
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                container.classList.remove('scale-90');
+                container.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closePurchaseModal() {
+            const modal = document.getElementById('purchaseModal');
+            const container = document.getElementById('modalContainer');
+            container.classList.add('scale-90');
+            container.classList.remove('scale-100');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 200);
+        }
+
+        function confirmPurchase() {
+            // Simplified feedback
+            GV.toast('Purchase successful! Your inventory has been updated.');
+            closePurchaseModal();
+        }
+
+        // Active state interaction simulation
+        document.querySelectorAll('.active\\:scale-95').forEach(el => {
+            el.addEventListener('mousedown', () => el.classList.add('scale-95'));
+            el.addEventListener('mouseup', () => el.classList.remove('scale-95'));
+        });
+
+        // Category filter tabs
+        const catBtns = document.querySelectorAll('.shop-cat-btn');
+        catBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                catBtns.forEach(b => {
+                    b.classList.remove('bg-primary-container', 'text-on-primary-container', 'border', 'border-primary/30');
+                    b.classList.add('bg-surface-container', 'text-on-surface-variant');
+                });
+                btn.classList.add('bg-primary-container', 'text-on-primary-container', 'border', 'border-primary/30');
+                btn.classList.remove('bg-surface-container', 'text-on-surface-variant');
+                GV.toast('Showing ' + btn.textContent.trim());
+            });
+        });
+    </script>
+<script src="app.js"></script>
+</body></html>

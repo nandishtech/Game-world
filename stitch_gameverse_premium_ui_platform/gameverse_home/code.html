@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GameVerse | The Ultimate Gaming Nexus</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&amp;family=Inter:wght@300..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#1c1b1b",
+                    "on-primary-fixed": "#001a42",
+                    "outline": "#8c909f",
+                    "tertiary-container": "#009eb9",
+                    "on-secondary": "#3c0091",
+                    "tertiary-fixed": "#acedff",
+                    "primary-fixed-dim": "#adc6ff",
+                    "surface-tint": "#adc6ff",
+                    "on-tertiary": "#003640",
+                    "on-tertiary-container": "#002f38",
+                    "secondary-container": "#571bc1",
+                    "surface-bright": "#3a3939",
+                    "surface-container-high": "#2a2a2a",
+                    "on-primary": "#002e6a",
+                    "on-error-container": "#ffdad6",
+                    "on-primary-container": "#00285d",
+                    "primary": "#adc6ff",
+                    "surface-container-lowest": "#0e0e0e",
+                    "surface-container": "#201f1f",
+                    "on-primary-fixed-variant": "#004395",
+                    "inverse-primary": "#005ac2",
+                    "on-surface": "#e5e2e1",
+                    "outline-variant": "#424754",
+                    "error": "#ffb4ab",
+                    "on-secondary-fixed-variant": "#5516be",
+                    "on-tertiary-fixed-variant": "#004e5c",
+                    "error-container": "#93000a",
+                    "secondary": "#d0bcff",
+                    "inverse-surface": "#e5e2e1",
+                    "secondary-fixed-dim": "#d0bcff",
+                    "surface-container-highest": "#353534",
+                    "on-secondary-fixed": "#23005c",
+                    "on-background": "#e5e2e1",
+                    "background": "#131313",
+                    "on-error": "#690005",
+                    "surface-dim": "#131313",
+                    "primary-container": "#4d8eff",
+                    "surface-variant": "#353534",
+                    "tertiary": "#4cd7f6",
+                    "on-secondary-container": "#c4abff",
+                    "primary-fixed": "#d8e2ff",
+                    "secondary-fixed": "#e9ddff",
+                    "tertiary-fixed-dim": "#4cd7f6",
+                    "on-surface-variant": "#c2c6d6",
+                    "on-tertiary-fixed": "#001f26",
+                    "surface": "#131313",
+                    "inverse-on-surface": "#313030"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "margin-desktop": "48px",
+                    "unit": "4px",
+                    "gutter": "24px",
+                    "container-max": "1440px"
+            },
+            "fontFamily": {
+                    "headline-sm": ["Space Grotesk"],
+                    "body-md": ["Inter"],
+                    "headline-lg": ["Space Grotesk"],
+                    "label-sm": ["Inter"],
+                    "headline-xl": ["Space Grotesk"],
+                    "display-lg": ["Space Grotesk"],
+                    "label-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "display-lg-mobile": ["Space Grotesk"]
+            },
+            "fontSize": {
+                    "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "1", "fontWeight": "500"}],
+                    "headline-xl": ["40px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-lg-mobile": ["40px", {"lineHeight": "1.2", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #050505;
+            color: #e5e2e1;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(28, 27, 27, 0.4);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .neon-glow:hover {
+            box-shadow: 0 0 30px rgba(173, 198, 255, 0.3);
+            border-color: rgba(173, 198, 255, 0.5);
+        }
+        .neon-button {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(90deg, #4d8eff, #adc6ff);
+        }
+        .neon-button::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .neon-button:hover::after {
+            opacity: 1;
+        }
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        .scanline {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/40 dark:bg-surface-container/40 backdrop-blur-3xl border-b border-white/10 shadow-xl">
+<div class="flex justify-between items-center px-margin-desktop py-4 max-w-container-max mx-auto">
+<div class="font-headline-sm text-headline-sm font-bold text-primary tracking-tighter cursor-pointer active:scale-95">
+                GameVerse
+            </div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-label-md text-label-md transition-all duration-200" href="#">Home</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md" href="#">Games</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md" href="#">Community</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md" href="#">Leaderboards</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md" href="#">Tournaments</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md" href="#">About</a>
+</nav>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-on-surface-variant">
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-all duration-200" style="font-variation-settings: 'FILL' 0;">search</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-all duration-200" style="font-variation-settings: 'FILL' 0;">notifications</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary font-label-md text-label-md transition-all duration-200">Sign In</button>
+<button class="bg-primary text-on-primary font-label-md text-label-md px-6 py-2 rounded-lg hover:scale-105 hover:brightness-110 transition-all duration-200">Sign Up</button>
+</div>
+</div>
+</div>
+</header>
+<main>
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-center overflow-hidden pt-20">
+<div class="absolute inset-0 z-0">
+<div class="w-full h-full bg-cover bg-center opacity-40 mix-blend-screen" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCc8zBA0Rx2DwNQlcbCFaJaRvu6-03Yj4rkvGIK3GlRW7QB9p4GlVrcF1wgNm5G-HOCQBT7cymYWQrs9uqG4yKCOzzVBrp0XdJ8VbKmy4UFxpyNf2tilXWZ7Sg2KMDr2ePCLaesVB50rW_ukJcyKdeOYqwMYdm2fqeuVHFxIVxxbxuDSJ0KxTLkphogNTj0as9uWOiGPbnDZkfg_s8t6NRR712gB5nuGrRwKvCl11wluYhbYL6UOzuAHs59j_8P8HsukuEyyT_GGrs')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent"></div>
+</div>
+<div class="relative z-10 max-w-container-max mx-auto px-margin-desktop w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+<div class="space-y-8">
+<h1 class="font-display-lg text-display-lg lg:text-display-lg-mobile leading-tight text-white">
+                        Play Together.<br/>
+                        Compete Together.<br/>
+<span class="text-primary">Become Legends.</span>
+</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl">
+                        Join millions of players in the ultimate Cyber-Nexus of competitive and social gaming. Experience low-latency multiplayer matches, global tournaments, and an vibrant community.
+                    </p>
+<div class="flex flex-wrap gap-4 pt-4">
+<button class="neon-button px-8 py-4 rounded-xl font-headline-sm text-headline-sm text-on-primary shadow-[0_0_20px_rgba(77,142,255,0.4)] hover:scale-105 transition-transform">
+                            Play Now
+                        </button>
+<button class="glass-card px-8 py-4 rounded-xl font-headline-sm text-headline-sm text-white hover:bg-white/10 transition-all">
+                            Explore Games
+                        </button>
+</div>
+<div class="flex items-center gap-6 pt-8">
+<div class="flex -space-x-4">
+<div class="w-10 h-10 rounded-full border-2 border-[#050505] bg-surface-container" data-alt="Close up portrait of a young gamer with neon blue backlighting, cyberpunk aesthetic, high detail photography." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBrolinmmSzbDwHKfIyGF_taMZuXrSEXDhkkUnTwVeymoNLMhFPC4mB2TnVJTzGmSJCNfKlkUKNZEzKvf__gB65uew5l8pSlfyw_4CfhVH4W8Icp5A2f-NWLwjiZTHsUAf7IYcMs_WwGlky-SaLL_HOrXh57ytPNTWLlVu8YrE6IWvSAubtUFljMEGCBr-ESdWx3rJOWJRQfNbY7ouNYcw6yMA3nTlkSBy-fyDvDjPv544GvJ75d52iIYslfZe-yXKiGeHX9FZkgtQ')"></div>
+<div class="w-10 h-10 rounded-full border-2 border-[#050505] bg-surface-container" data-alt="Portrait of a female competitive player wearing high-tech headphones, soft purple ambient lighting, cinematic style." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAgtk9TEHZSc3Tja1X58fwe1CaiLIDcmsBw6GDPVoji7dk_uIOkFUTK8xlmBvmd6kXzrB_p14I0izOKJkIAOen05DmOFyQazPXHMufzB9xWNaXKTooVINMOUIO6N6neiTg0cQ66jNG4qtRfMw8YTUyiHxjtJYQSX3hwUlYGJ3sME2w5kCNNMWjvCVezakgV6iBYjBEy73jv6RgNW1yQAd2xoFCg-eR8s1zxhrqtqL3JmOInb1eYFdceIWWPJX_VlOZO6wWBrkPIUWs')"></div>
+<div class="w-10 h-10 rounded-full border-2 border-[#050505] bg-surface-container" data-alt="Cyberpunk styled avatar of a professional gamer, digital painting style, vibrant neon accents on a dark background." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBdbsgMFG9UUSYIMHWf0VCcLYLZfxygGaeDMmXq-opFuICCblQYkJA_IPSZ_EYAuH9wSZ1wvyIMWWTxYpa6wS9wbnaXFdgxYAkfqOCtHjXrP0vKCmIOztiEcnr6U97dPwOt2t9NB_-_A_Ufyy74945xKTHjbbTB1HMAF4UVplPk0UM-Fu-xNx9qLAUq_MpeTj_DuuBxjG1a2w9eWMcMK8yl6BTznKDocUDuoIBFE_iEYTkvU8DLgrIsJSpCYYcgo4iuv_55q5KwVGA')"></div>
+</div>
+<p class="text-label-md text-on-surface-variant">Joined by <span class="text-primary font-bold">12,450+</span> players this hour</p>
+</div>
+</div>
+<div class="hidden lg:flex justify-center items-center relative">
+<!-- Floating XP/Badge Elements contextually around the controller -->
+<div class="absolute w-full h-full animate-pulse opacity-50 bg-[radial-gradient(circle,#adc6ff_0%,transparent_70%)] blur-[100px]"></div>
+<img alt="GameVerse Controller" class="w-4/5 floating relative z-10 drop-shadow-[0_0_50px_rgba(173,198,255,0.3)]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVhz7lk_dEBBD4xadZTkKu6LGxJLPpOmVvmk9_0Jg2Ed7Pg2_CumYjNIzCfhIEkecXtcHEs70sccZC_riAso-Uu9HphZox0aH6LHgd28lfG_D-oqLcvOMSdZaHiAsTNCmrzolfpSE6MbK5epRCYbMzQpUCCZjV-HaGpxp6jlCpNRtNXr90aJudmRaVhGHBzFcceagd3V9lDbN8HXyZTXh0E6JNm5nuIfKX5bucdprAoDP4qOA0WyaNG_jGEwg7Oiw4rFA6eW0qpLU"/>
+</div>
+</div>
+</section>
+<!-- Live Stats -->
+<section class="py-12 bg-surface-container-lowest relative z-10 border-y border-white/5">
+<div class="max-w-container-max mx-auto px-margin-desktop grid grid-cols-2 md:grid-cols-4 gap-8">
+<div class="text-center group">
+<div class="text-headline-xl font-headline-xl text-primary mb-1">2.4M</div>
+<div class="text-label-md text-on-surface-variant group-hover:text-primary transition-colors">Registered Users</div>
+</div>
+<div class="text-center group">
+<div class="text-headline-xl font-headline-xl text-secondary mb-1">45.2K</div>
+<div class="text-label-md text-on-surface-variant group-hover:text-secondary transition-colors">Players Online</div>
+</div>
+<div class="text-center group">
+<div class="text-headline-xl font-headline-xl text-tertiary mb-1">150+</div>
+<div class="text-label-md text-on-surface-variant group-hover:text-tertiary transition-colors">Global Tournaments</div>
+</div>
+<div class="text-center group">
+<div class="text-headline-xl font-headline-xl text-primary mb-1">8.9M</div>
+<div class="text-label-md text-on-surface-variant group-hover:text-primary transition-colors">Matches Played</div>
+</div>
+</div>
+</section>
+<!-- Featured Games Grid -->
+<section class="py-24 max-w-container-max mx-auto px-margin-desktop">
+<div class="flex justify-between items-end mb-12">
+<div>
+<h2 class="font-headline-xl text-headline-xl text-white mb-4">Featured Games</h2>
+<p class="text-on-surface-variant">Step into the arena and challenge the best in these trending titles.</p>
+</div>
+<button class="text-primary font-label-md text-label-md flex items-center gap-2 hover:translate-x-1 transition-transform">
+                    View All Games <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Game Card Generator (Logic for 8 cards) -->
+<script>
+                    const games = [
+                        { name: 'Battle Arena', genre: 'Action MOBA', players: '12k', img: 'placeholder' },
+                        { name: 'Chess Masters', genre: 'Strategy', players: '8k', img: 'placeholder' },
+                        { name: 'Neon Ludo', genre: 'Board Game', players: '5k', img: 'placeholder' },
+                        { name: 'Cyber UNO', genre: 'Card Game', players: '15k', img: 'placeholder' },
+                        { name: 'Velocity Racing', genre: 'Car Racing', players: '3k', img: 'placeholder' },
+                        { name: 'Void Snake', genre: 'Arcade', players: '2k', img: 'placeholder' },
+                        { name: 'Zen Carrom', genre: 'Board Game', players: '4k', img: 'placeholder' },
+                        { name: 'Hyper Tic Tac Toe', genre: 'Casual', players: '1k', img: 'placeholder' }
+                    ];
+
+                    const gameGrid = document.currentScript.parentElement;
+                    games.forEach(game => {
+                        const card = document.createElement('div');
+                        card.className = "glass-card rounded-2xl overflow-hidden group cursor-pointer neon-glow flex flex-col h-full";
+                        card.innerHTML = `
+                            <div class="relative h-48 w-full overflow-hidden">
+                                <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" 
+                                     style="background-image: url('${game.img}')" 
+                                     data-alt="Cinematic concept art for a ${game.name} game, featuring ${game.genre} elements in a vibrant neon cyberpunk aesthetic. Soft focus background, high contrast lighting with deep blues and primary accents."></div>
+                                <div class="absolute top-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-[10px] uppercase font-bold text-primary flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                                    ${game.players} Online
+                                </div>
+                            </div>
+                            <div class="p-6 flex flex-col flex-grow">
+                                <div class="text-label-sm text-on-surface-variant mb-1 uppercase tracking-widest">${game.genre}</div>
+                                <h3 class="text-headline-sm font-headline-sm text-white mb-6">${game.name}</h3>
+                                <div class="mt-auto flex justify-between items-center">
+                                    <button class="text-white font-label-md flex items-center gap-2 group-hover:text-primary transition-colors">
+                                        Join Match <span class="material-symbols-outlined text-sm">play_arrow</span>
+                                    </button>
+                                    <div class="flex -space-x-2">
+                                        <div class="w-6 h-6 rounded-full border border-[#050505] bg-surface-variant"></div>
+                                        <div class="w-6 h-6 rounded-full border border-[#050505] bg-surface-variant"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        gameGrid.appendChild(card);
+                    });
+                </script>
+</div>
+</section>
+<!-- Platform Features -->
+<section class="py-24 bg-surface-container-lowest">
+<div class="max-w-container-max mx-auto px-margin-desktop">
+<div class="text-center mb-16">
+<h2 class="font-headline-xl text-headline-xl text-white mb-4">Ultimate Gaming Infrastructure</h2>
+<p class="text-on-surface-variant max-w-2xl mx-auto">Built on a distributed cloud architecture to ensure 99.9% uptime and zero-latency performance for competitive gamers.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="glass-card p-8 rounded-2xl hover:translate-y-[-8px]">
+<div class="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center text-primary mb-6">
+<span class="material-symbols-outlined text-3xl">bolt</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-white mb-4">Real Time Multiplayer</h3>
+<p class="text-on-surface-variant">Experience lightning-fast matchmaking and gameplay sync with our proprietary Photon-X netcode.</p>
+</div>
+<div class="glass-card p-8 rounded-2xl hover:translate-y-[-8px]">
+<div class="w-14 h-14 bg-secondary/10 rounded-xl flex items-center justify-center text-secondary mb-6">
+<span class="material-symbols-outlined text-3xl">leaderboard</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-white mb-4">Global Leaderboards</h3>
+<p class="text-on-surface-variant">Climb the regional and global ranks to earn exclusive rewards, badges, and prestigious titles.</p>
+</div>
+<div class="glass-card p-8 rounded-2xl hover:translate-y-[-8px]">
+<div class="w-14 h-14 bg-tertiary/10 rounded-xl flex items-center justify-center text-tertiary mb-6">
+<span class="material-symbols-outlined text-3xl">record_voice_over</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-white mb-4">Spatial Voice Chat</h3>
+<p class="text-on-surface-variant">Communicate with your squad using high-fidelity spatial audio that makes strategic coordination effortless.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Top Players Leaderboard & Community Bento -->
+<section class="py-24 max-w-container-max mx-auto px-margin-desktop">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Leaderboard -->
+<div class="lg:col-span-2 glass-card rounded-2xl p-8">
+<div class="flex justify-between items-center mb-8">
+<h2 class="font-headline-lg text-headline-lg text-white">Elite Rankings</h2>
+<select class="bg-surface-container border-none text-on-surface rounded-lg text-label-md px-4 py-2 outline-none cursor-pointer">
+<option>Season 12: Galactic</option>
+<option>All Time Legends</option>
+</select>
+</div>
+<div class="space-y-4">
+<div class="grid grid-cols-6 px-4 py-2 text-label-sm text-on-surface-variant border-b border-white/5 uppercase tracking-tighter">
+<div class="col-span-1">Rank</div>
+<div class="col-span-2">Player</div>
+<div class="col-span-1 text-center">Level</div>
+<div class="col-span-1 text-center">Win Rate</div>
+<div class="col-span-1 text-right">XP</div>
+</div>
+<!-- Player Rows -->
+<div class="space-y-2">
+<div class="grid grid-cols-6 px-4 py-4 rounded-xl hover:bg-white/5 items-center transition-all">
+<div class="col-span-1 font-bold text-primary">#01</div>
+<div class="col-span-2 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container" data-alt="Hyper-realistic digital avatar portrait of a top-tier esports athlete, neon lighting, dark room, cinematic focus." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAWD-CmSh0BzOTYVhxAjn2950OaBBMIzQf7wgFfwRFncdEyg2zzZVRf-p_QaLdqwAW3J2EwxJ0dwhSC7XCzHGsXbREDfEZspS_ga_4QveAt2HdVB3r9Ymf4PobQPXJUvHHw7l6J8WtNwkR9VqGyVue7UseONOlam8eiS1H65qHFz0Mq3WWWcggJit9saQdh2qIwKtpooY_4gwWzs1MljCYPRL0UtnloGJ2Mso4KRlW5dis7n_zRoeWhOh5KhP_YFUPk0QuSh9n2ko8')"></div>
+<span class="font-bold text-white">ShadowVoid_X</span>
+</div>
+<div class="col-span-1 text-center text-on-surface-variant">Lv. 99</div>
+<div class="col-span-1 text-center text-on-surface-variant">84.2%</div>
+<div class="col-span-1 text-right font-mono text-primary">1,245,000</div>
+</div>
+<div class="grid grid-cols-6 px-4 py-4 rounded-xl hover:bg-white/5 items-center transition-all">
+<div class="col-span-1 font-bold text-secondary">#02</div>
+<div class="col-span-2 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container" data-alt="Cyberpunk character portrait with mechanical eyepiece, neon blue hair, intense lighting, digital art style." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA4l4z2gOw-E3adNZg0KCP3K292AidZ_IAnQ2KfS-bk8u_WLvUXl4rAfSk5GtC3ajZuHIB5KJI28lgKx0IAnlyiS3N6sdr00qy1rAtjv7NHJIwZuQb7XYD1JEdTt58k4CQoAQLZMxoREzYnxnwFuxF9xBfHntKOVd1l3T5zK31GpDSXIoou-QKgJJHxR5mYSxWQ8OVP4tkd5hdta5rn5hgzkDyyIEifJStrQIkvuCv4uA8x1ZaQBANwc7bpYn_aORyfkWYWEBYTDaA')"></div>
+<span class="font-bold text-white">Neon_Reaper</span>
+</div>
+<div class="col-span-1 text-center text-on-surface-variant">Lv. 92</div>
+<div class="col-span-1 text-center text-on-surface-variant">79.5%</div>
+<div class="col-span-1 text-right font-mono text-secondary">982,100</div>
+</div>
+<div class="grid grid-cols-6 px-4 py-4 rounded-xl hover:bg-white/5 items-center transition-all">
+<div class="col-span-1 font-bold text-tertiary">#03</div>
+<div class="col-span-2 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container" data-alt="Portrait of a female gamer with glowing facial tattoos, futuristic streetwear, vibrant neon purple lighting." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDaVogj9ePWxw0jwu1SlAbMXOKLBUsMeHbKogPb0hgOeL9HaO2BxaoJZ4-xtpncewnrvIjKFE8jm6AOjy2LA0QZ_Yksf4Qug3KGCWv2DkAuyi4BC0rzfJ7S31YU1ZukNGQjpiDfQAIAH__c7zVlfofTGB0k0_M1WUDTo32LCADvTqVp32FVYvJ_q5CqRvANJTk58NJOfSbl2Dd9dytm10Cx3T30NQMDYQpDxvlGRJqLyweaFqwHEXAZIrr6A0s-Wqa6h-0cod0H4bM')"></div>
+<span class="font-bold text-white">PixelQueen</span>
+</div>
+<div class="col-span-1 text-center text-on-surface-variant">Lv. 88</div>
+<div class="col-span-1 text-center text-on-surface-variant">76.8%</div>
+<div class="col-span-1 text-right font-mono text-tertiary">845,300</div>
+</div>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-white/5 text-center">
+<button class="text-label-md text-on-surface-variant hover:text-white transition-colors">Load More Rankings...</button>
+</div>
+</div>
+<!-- News & Community Chat -->
+<div class="space-y-8">
+<div class="glass-card rounded-2xl p-6 flex flex-col h-full">
+<div class="flex items-center gap-3 mb-6 text-primary">
+<span class="material-symbols-outlined">forum</span>
+<h3 class="font-headline-sm text-headline-sm">Community Pulse</h3>
+</div>
+<div class="flex-grow space-y-4 max-h-[350px] overflow-y-auto pr-2 custom-scrollbar">
+<div class="flex gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container shrink-0"></div>
+<div class="bg-surface-container-high p-3 rounded-tr-xl rounded-br-xl rounded-bl-xl">
+<p class="text-label-sm font-bold text-primary mb-1">GameDev_Alex</p>
+<p class="text-body-md text-sm text-on-surface-variant">New patch dropping at 14:00 UTC! Get ready for the new map.</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container shrink-0"></div>
+<div class="bg-surface-container-high p-3 rounded-tr-xl rounded-br-xl rounded-bl-xl">
+<p class="text-label-sm font-bold text-secondary mb-1">NovaBlade</p>
+<p class="text-body-md text-sm text-on-surface-variant">Anyone up for a 3v3 Arena match? Need a healer!</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container shrink-0"></div>
+<div class="bg-surface-container-high p-3 rounded-tr-xl rounded-br-xl rounded-bl-xl">
+<p class="text-label-sm font-bold text-tertiary mb-1">Cyborg_Zen</p>
+<p class="text-body-md text-sm text-on-surface-variant">The leaderboards are getting intense this season 🤯</p>
+</div>
+</div>
+</div>
+<div class="mt-6 flex gap-2">
+<input class="flex-grow bg-surface-container-high border-none rounded-lg px-4 py-2 text-on-surface text-sm outline-none focus:ring-1 focus:ring-primary transition-all" placeholder="Type to chat..." type="text"/>
+<button class="bg-primary text-on-primary p-2 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full relative bottom-0 bg-background border-t border-outline-variant/20">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-desktop py-16 max-w-container-max mx-auto">
+<div class="space-y-4">
+<div class="font-headline-sm text-headline-sm font-bold text-on-surface">GameVerse</div>
+<p class="text-on-surface-variant text-body-md">The nexus for next-gen competitive gaming. Powered by ultra-low latency technology.</p>
+</div>
+<div class="space-y-4">
+<div class="text-white font-bold mb-4 uppercase tracking-widest text-xs">Navigation</div>
+<ul class="space-y-2">
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-label-md" href="#">Games Library</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-label-md" href="#">Tournaments</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-label-md" href="#">Leaderboards</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-label-md" href="#">Community</a></li>
+</ul>
+</div>
+<div class="space-y-4">
+<div class="text-white font-bold mb-4 uppercase tracking-widest text-xs">Community</div>
+<ul class="space-y-2">
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-label-md" href="#">Discord</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-label-md" href="#">YouTube</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-label-md" href="#">Contact Support</a></li>
+</ul>
+</div>
+<div class="space-y-4">
+<div class="text-white font-bold mb-4 uppercase tracking-widest text-xs">Legal</div>
+<ul class="space-y-2">
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-label-md" href="#">Terms of Service</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-label-md" href="#">Privacy Policy</a></li>
+</ul>
+</div>
+</div>
+<div class="max-w-container-max mx-auto px-margin-desktop pb-8 text-center md:text-left">
+<div class="scanline mb-8"></div>
+<p class="text-on-surface-variant font-label-sm text-label-sm">© 2024 GameVerse Nexus. All rights reserved.</p>
+</div>
+</footer>
+<script>
+        // Simple micro-interactions for the cards
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-10px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0px)';
+            });
+        });
+
+        // Animation for live stats (simulated)
+        const stats = document.querySelectorAll('.font-headline-xl');
+        stats.forEach(stat => {
+            let target = parseFloat(stat.innerText.replace(/[^0-9.]/g, ''));
+            let current = 0;
+            let increment = target / 50;
+            let interval = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    clearInterval(interval);
+                    current = target;
+                }
+                stat.innerText = current.toFixed(1) + (stat.innerText.includes('M') ? 'M' : stat.innerText.includes('K') ? 'K' : '+');
+            }, 30);
+        });
+    </script>
+</body></html>

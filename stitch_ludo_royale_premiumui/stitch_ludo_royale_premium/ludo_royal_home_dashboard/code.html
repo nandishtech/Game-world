@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Ludo Royal - Home</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&amp;family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-container": "#f39461",
+                    "outline": "#8f909d",
+                    "tertiary-fixed": "#ffdbcb",
+                    "on-secondary": "#002e6a",
+                    "outline-variant": "#444651",
+                    "ludo-blue": "#3B82F6",
+                    "secondary-fixed-dim": "#adc6ff",
+                    "surface-container-high": "#222a3d",
+                    "surface-container-low": "#131b2e",
+                    "error-container": "#93000a",
+                    "on-tertiary-fixed": "#341100",
+                    "on-tertiary": "#552000",
+                    "error": "#ffb4ab",
+                    "surface-container": "#171f33",
+                    "ludo-yellow": "#F59E0B",
+                    "on-background": "#dae2fd",
+                    "on-surface-variant": "#c5c5d3",
+                    "on-secondary-container": "#e6ecff",
+                    "surface-dim": "#0b1326",
+                    "tertiary-container": "#6e2c00",
+                    "on-error-container": "#ffdad6",
+                    "neon-glow": "rgba(59, 130, 246, 0.5)",
+                    "secondary": "#adc6ff",
+                    "secondary-container": "#0566d9",
+                    "surface-variant": "#2d3449",
+                    "tertiary": "#ffb691",
+                    "inverse-on-surface": "#283044",
+                    "surface-container-highest": "#2d3449",
+                    "secondary-fixed": "#d8e2ff",
+                    "ludo-green": "#10B981",
+                    "on-primary": "#05297a",
+                    "on-secondary-fixed-variant": "#004395",
+                    "surface-bright": "#31394d",
+                    "tertiary-fixed-dim": "#ffb691",
+                    "primary-fixed": "#dce1ff",
+                    "background": "#0b1326",
+                    "primary-container": "#1e3a8a",
+                    "surface-tint": "#b6c4ff",
+                    "on-surface": "#dae2fd",
+                    "on-error": "#690005",
+                    "primary": "#b6c4ff",
+                    "on-primary-fixed-variant": "#264191",
+                    "ludo-red": "#EF4444",
+                    "on-tertiary-fixed-variant": "#773205",
+                    "on-primary-container": "#90a8ff",
+                    "inverse-surface": "#dae2fd",
+                    "on-primary-fixed": "#00164e",
+                    "surface-glass": "rgba(255, 255, 255, 0.05)",
+                    "inverse-primary": "#4059aa",
+                    "primary-fixed-dim": "#b6c4ff",
+                    "surface-container-lowest": "#060e20",
+                    "on-secondary-fixed": "#001a42",
+                    "surface": "#0b1326"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xl": "32px",
+                    "sm": "8px",
+                    "margin-desktop": "40px",
+                    "gutter": "16px",
+                    "lg": "24px",
+                    "3xl": "64px",
+                    "base": "8px",
+                    "xs": "4px",
+                    "margin-mobile": "20px",
+                    "2xl": "48px",
+                    "md": "16px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "headline-lg": ["Montserrat"],
+                    "title-md": ["Inter"],
+                    "display-lg": ["Montserrat"],
+                    "headline-lg-mobile": ["Montserrat"],
+                    "label-caps": ["Inter"],
+                    "stat-value": ["Montserrat"]
+            },
+            "fontSize": {
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "stat-value": ["18px", {"lineHeight": "24px", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0b1326;
+            color: #dae2fd;
+            -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
+        }
+        .neon-border-blue { border-color: #3B82F6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
+        .neon-border-yellow { border-color: #F59E0B; box-shadow: 0 0 15px rgba(245, 158, 11, 0.3); }
+        .neon-border-red { border-color: #EF4444; box-shadow: 0 0 15px rgba(239, 68, 68, 0.3); }
+        .neon-border-green { border-color: #10B981; box-shadow: 0 0 15px rgba(16, 185, 129, 0.3); }
+        
+        @keyframes subtle-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        .animate-float { animation: subtle-float 4s ease-in-out infinite; }
+
+        .progress-flare {
+            position: relative;
+        }
+        .progress-flare::after {
+            content: '';
+            position: absolute;
+            right: -4px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 15px 4px rgba(59, 130, 246, 0.8);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-lg">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16 bg-surface-glass backdrop-blur-xl border-b border-white/10 bg-surface-container-low/80 shadow-md shadow-neon-glow/20">
+<div class="flex items-center gap-3">
+<div class="relative group cursor-pointer">
+<div class="w-10 h-10 rounded-full border-2 border-primary p-0.5 overflow-hidden active:scale-95 transition-transform duration-150">
+<img class="w-full h-full object-cover rounded-full" data-alt="A professional high-quality 3D avatar profile picture of a stylized cyberpunk gamer character with glowing blue details, short futuristic hairstyle, set against a deep navy background with soft purple rim lighting, illustrating a premium digital identity for Ludo Royal." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAriKRlYX66T36uQlcuwBODYAXh5pX733_ORhwj-HWs17YcV3nSCWkJMO7WTqobdKt87qeC1wAj4uz7ANUI1i57v9yWtltVqOs3j77VF2Cw_uXv4EldKZxo8W9EcQnX5NuwRrcAG99qaegR9ZfI3JBzdWjQpXtMvsq5GGi_g7Z-7yy5bongGsb67J7MPcrOb7xhXMDJyISUC3hlTP5S284rEStWXhNbNEkD_eHwx73jsSnPnUhr5c2Y"/>
+</div>
+<div class="absolute -bottom-1 -right-1 w-4 h-4 bg-ludo-green rounded-full border-2 border-surface-container-low"></div>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-extrabold text-ludo-yellow tracking-tight">LUDO ROYAL</h1>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center bg-surface-container-highest px-3 py-1 rounded-full border border-white/10">
+<span class="material-symbols-outlined text-ludo-yellow text-[18px] mr-1" style="font-variation-settings: 'FILL' 1;">monetization_on</span>
+<span class="font-stat-value text-stat-value text-on-surface">12.5k</span>
+</div>
+<div class="flex items-center bg-surface-container-highest px-3 py-1 rounded-full border border-white/10">
+<span class="material-symbols-outlined text-primary text-[18px] mr-1" style="font-variation-settings: 'FILL' 1;">diamond</span>
+<span class="font-stat-value text-stat-value text-on-surface">450</span>
+</div>
+</div>
+</header>
+<main class="pt-20 pb-24 px-margin-mobile max-w-2xl mx-auto space-y-lg">
+<!-- Hero: Battle Pass -->
+<section class="relative overflow-hidden rounded-2xl p-lg bg-gradient-to-br from-primary-container to-surface-container-lowest border border-primary/20 shadow-xl shadow-primary/10">
+<!-- Background Decoration -->
+<div class="absolute top-0 right-0 w-48 h-48 bg-ludo-blue/20 blur-3xl -z-10 rounded-full translate-x-12 -translate-y-12"></div>
+<div class="flex justify-between items-start mb-md">
+<div>
+<span class="font-label-caps text-label-caps text-primary bg-primary/10 px-2 py-0.5 rounded uppercase tracking-widest">Season 4</span>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-primary-container mt-1">CYBER ROYALE</h2>
+</div>
+<div class="text-right">
+<p class="font-label-caps text-label-caps text-outline uppercase">Tier 42</p>
+<p class="font-stat-value text-stat-value text-on-surface">XP 1250/3000</p>
+</div>
+</div>
+<!-- Progress Bar -->
+<div class="w-full h-3 bg-surface-container-low rounded-full overflow-hidden relative mb-lg">
+<div class="h-full bg-gradient-to-r from-ludo-blue to-primary progress-flare" style="width: 42%;"></div>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 bg-gradient-to-r from-ludo-blue to-primary hover:scale-[1.02] active:scale-95 transition-all text-on-primary font-bold py-3 rounded-xl shadow-lg shadow-ludo-blue/25">
+                    VIEW PASS
+                </button>
+<button class="bg-surface-glass border border-white/20 hover:bg-white/10 active:scale-95 transition-all text-on-surface p-3 rounded-xl">
+<span class="material-symbols-outlined">auto_awesome</span>
+</button>
+</div>
+</section>
+<!-- Main Game Modes - Grid -->
+<section class="grid grid-cols-2 gap-gutter">
+<!-- Quick Play -->
+<div class="glass-panel rounded-2xl p-md flex flex-col items-center justify-center text-center space-y-3 cursor-pointer hover:bg-white/10 transition-all border-b-4 border-ludo-blue active:scale-95">
+<div class="w-16 h-16 flex items-center justify-center bg-ludo-blue/10 rounded-full animate-float">
+<span class="material-symbols-outlined text-[40px] text-ludo-blue" style="font-variation-settings: 'FILL' 1;">casino</span>
+</div>
+<h3 class="font-title-md text-title-md">Quick Play</h3>
+<p class="font-body-sm text-body-sm text-outline">2 Min Blitz</p>
+</div>
+<!-- Play Online -->
+<div class="glass-panel rounded-2xl p-md flex flex-col items-center justify-center text-center space-y-3 cursor-pointer hover:bg-white/10 transition-all border-b-4 border-ludo-green active:scale-95">
+<div class="w-16 h-16 flex items-center justify-center bg-ludo-green/10 rounded-full animate-float" style="animation-delay: 0.5s;">
+<span class="material-symbols-outlined text-[40px] text-ludo-green" style="font-variation-settings: 'FILL' 1;">public</span>
+</div>
+<h3 class="font-title-md text-title-md">Play Online</h3>
+<p class="font-body-sm text-body-sm text-outline">vs Global Users</p>
+</div>
+<!-- Tournaments -->
+<div class="glass-panel rounded-2xl p-md flex flex-col items-center justify-center text-center space-y-3 cursor-pointer hover:bg-white/10 transition-all border-b-4 border-ludo-yellow active:scale-95">
+<div class="w-16 h-16 flex items-center justify-center bg-ludo-yellow/10 rounded-full animate-float" style="animation-delay: 1s;">
+<span class="material-symbols-outlined text-[40px] text-ludo-yellow" style="font-variation-settings: 'FILL' 1;">emoji_events</span>
+</div>
+<h3 class="font-title-md text-title-md">Tournaments</h3>
+<p class="font-body-sm text-body-sm text-outline">Win Big Rewards</p>
+</div>
+<!-- Friends -->
+<div class="glass-panel rounded-2xl p-md flex flex-col items-center justify-center text-center space-y-3 cursor-pointer hover:bg-white/10 transition-all border-b-4 border-ludo-red active:scale-95">
+<div class="w-16 h-16 flex items-center justify-center bg-ludo-red/10 rounded-full animate-float" style="animation-delay: 1.5s;">
+<span class="material-symbols-outlined text-[40px] text-ludo-red" style="font-variation-settings: 'FILL' 1;">group</span>
+</div>
+<h3 class="font-title-md text-title-md">With Friends</h3>
+<p class="font-body-sm text-body-sm text-outline">Local/Remote</p>
+</div>
+</section>
+<!-- Daily Missions -->
+<section class="space-y-md">
+<div class="flex justify-between items-center">
+<h2 class="font-title-md text-title-md">DAILY MISSIONS</h2>
+<span class="font-label-caps text-label-caps text-primary cursor-pointer uppercase">Refresh in 12h</span>
+</div>
+<div class="space-y-sm">
+<!-- Mission 1 -->
+<div class="glass-panel rounded-xl p-md flex items-center gap-md border-l-4 border-ludo-blue">
+<div class="w-12 h-12 bg-surface-container-high rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">target</span>
+</div>
+<div class="flex-1">
+<h4 class="font-body-lg font-bold">Win 3 Matches</h4>
+<div class="w-full h-1.5 bg-surface-container-lowest rounded-full mt-2">
+<div class="h-full bg-ludo-blue" style="width: 66%;"></div>
+</div>
+</div>
+<div class="text-center min-w-[60px]">
+<span class="text-ludo-yellow font-bold">+500</span>
+<span class="material-symbols-outlined text-ludo-yellow block text-sm">monetization_on</span>
+</div>
+</div>
+<!-- Mission 2 -->
+<div class="glass-panel rounded-xl p-md flex items-center gap-md border-l-4 border-ludo-green">
+<div class="w-12 h-12 bg-surface-container-high rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-ludo-green">person_add</span>
+</div>
+<div class="flex-1">
+<h4 class="font-body-lg font-bold">Play with 1 Friend</h4>
+<div class="w-full h-1.5 bg-surface-container-lowest rounded-full mt-2">
+<div class="h-full bg-ludo-green" style="width: 0%;"></div>
+</div>
+</div>
+<div class="text-center min-w-[60px]">
+<span class="text-primary font-bold">+10</span>
+<span class="material-symbols-outlined text-primary block text-sm">diamond</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Friends Carousel -->
+<section class="space-y-md pb-8">
+<h2 class="font-title-md text-title-md uppercase tracking-tight">Friends Online</h2>
+<div class="flex gap-lg overflow-x-auto pb-4 scrollbar-hide no-scrollbar" style="-ms-overflow-style: none; scrollbar-width: none;">
+<!-- Friend 1 -->
+<div class="flex flex-col items-center gap-sm shrink-0">
+<div class="w-16 h-16 rounded-full border-2 border-ludo-green p-0.5 relative">
+<img class="w-full h-full object-cover rounded-full" data-alt="Close-up 3D stylized game profile of a smiling female gamer with neon green headphones, digital art style, vibrant aesthetic with deep navy background, part of the Ludo Royal friends list UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbuA-20Suezn0zVP4xcJXzfxhBWeNNWIpDZItyjaJ2D_33LzIQkI40bxMz8cHX-bJCsgVb3d0XDAQleL_m3KkZasbjdzGSaAIMj2sc_W90cEnP_oFsMIZ1L15NVCb_n7K3LSJTsL4hM_3GVY2TtaRqENUTAGav34QE9zwspKGHQ_UZxj5NTunxWRt3WCbct4GyrbDBIc6VEr5nfWtwUi7M0O2yyh04aSw6w4Qne-TbARQAdPPEIxZt"/>
+<div class="absolute bottom-0 right-0 w-4 h-4 bg-ludo-green rounded-full border-2 border-surface"></div>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface">Alex_V8</span>
+</div>
+<!-- Friend 2 -->
+<div class="flex flex-col items-center gap-sm shrink-0">
+<div class="w-16 h-16 rounded-full border-2 border-ludo-green p-0.5 relative">
+<img class="w-full h-full object-cover rounded-full" data-alt="Character portrait of a cool futuristic gamer with high-tech glasses, cyan and magenta lighting, digital painting style, clean high-fidelity character design for a gaming app social feature." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5PWZlfwcDOAUc-dYtbbESWmMx4qxMWqKVSFdfwnSvSN_8tFLt_rX-Yw76ed5Z4K1j3PG0H0pNSPUy6Apnn9yTwK1GMW_AS0tBxY1C9qZ5tO7PnnRo-cKV_mavDFdJ99KzcHGIu4AMhZnMMJ8K69Ot9ti07H9m2VH3DeRKvGxlMCh4va6h9wB3F3qMvmWNqB9ehsQ1hKHAW3B_Kt7NYJ5MT6XVrwtLgX8ZtlZCO7lh7OiqBwm0mj38"/>
+<div class="absolute bottom-0 right-0 w-4 h-4 bg-ludo-green rounded-full border-2 border-surface"></div>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface">NeoKing</span>
+</div>
+<!-- Friend 3 -->
+<div class="flex flex-col items-center gap-sm shrink-0">
+<div class="w-16 h-16 rounded-full border-2 border-ludo-yellow p-0.5 relative">
+<img class="w-full h-full object-cover rounded-full" data-alt="3D render of a mischievous gaming character with a golden crown and glowing yellow accents, high detail textures, professional game art style, looking slightly away." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5XIJi451xxpCEkg8zS2XE_apxeSjQivJUc3oSt3mnJn3WWke_UOhfwElkxdubNcK3Xa6xu01kOfPadcEoz512-VUJohko5MtQ6OFABD_a-iP65YBeV5syt4l7ErLXEqhOHwYhDO3doYceMi17kbBJYWE_HXqFxrq2AvxuLkGKMtZo7r2CoCmd32S8a9odtplQeAKPtowYZRMutforqxWGlYTMpjlMgRYIBG_ICfUg8V9O5L5pHBmh"/>
+<div class="absolute bottom-0 right-0 w-4 h-4 bg-ludo-yellow rounded-full border-2 border-surface"></div>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Rex_01</span>
+</div>
+<!-- Friend 4 -->
+<div class="flex flex-col items-center gap-sm shrink-0">
+<div class="w-16 h-16 rounded-full border-2 border-ludo-green p-0.5 relative">
+<img class="w-full h-full object-cover rounded-full" data-alt="Digital illustration of a high-tier esports athlete avatar with subtle cybernetic facial markings, glowing blue eyes, dark techwear clothing, premium high-fidelity gaming aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSAAffurlfIJWLysPrrLq5uSvfup6krE3nkJZhgNC-aprG6XN3aPXF7gI45DtLqkjS3GQ6S6EoQT08fE9ZtNRbtZoptQGoQDic6kPNL3hQLH9i3-aNrWF58sLXkAUeEPKM54q6Vwu3aCKwtXFCbCtLuqte8GFzF-9G_DIRddQKtxP3nLIuQ01MtMnsYoXApzDppPV7w9prZjvoDGFNjT8_FYbpGqdJpsYHfIuBi5JLTvQUKQ_qwzXd"/>
+<div class="absolute bottom-0 right-0 w-4 h-4 bg-ludo-green rounded-full border-2 border-surface"></div>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface">Zelda99</span>
+</div>
+<!-- Add New -->
+<div class="flex flex-col items-center gap-sm shrink-0">
+<button class="w-16 h-16 rounded-full bg-surface-container-high border-2 border-dashed border-outline flex items-center justify-center hover:bg-surface-bright transition-colors">
+<span class="material-symbols-outlined text-outline">add</span>
+</button>
+<span class="font-label-caps text-label-caps text-outline">Invite</span>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-4 pb-safe h-20 bg-surface-glass backdrop-blur-xl border-t border-white/10 bg-surface-container-low/90 shadow-[0_-4px_20px_rgba(59,130,246,0.3)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-primary font-bold bg-primary-container/30 rounded-full py-1 px-4 active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-caps text-label-caps">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="font-label-caps text-label-caps">Shop</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">extension</span>
+<span class="font-label-caps text-label-caps">Play</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">emoji_events</span>
+<span class="font-label-caps text-label-caps">Events</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-caps text-label-caps">Profile</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions and atmospheric logic
+        document.querySelectorAll('.glass-panel').forEach(card => {
+            card.addEventListener('click', function() {
+                this.classList.add('scale-95');
+                setTimeout(() => this.classList.remove('scale-95'), 150);
+            });
+        });
+
+        // Simple parallax or glow follow effect could be added here if needed
+        const bgFollow = (e) => {
+            // Placeholder for potential mouse-follow glow effects for desktop
+        };
+        window.addEventListener('mousemove', bgFollow);
+    </script>
+</body></html>

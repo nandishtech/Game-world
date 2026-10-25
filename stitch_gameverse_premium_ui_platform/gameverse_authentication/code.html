@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GameVerse | Join the Nexus</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;family=Orbitron:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #050505;
+            color: #e5e2e1;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .font-orbitron { font-family: 'Orbitron', sans-serif; }
+        
+        .glass-panel {
+            background: rgba(32, 31, 31, 0.4);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-panel::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
+        }
+
+        .neon-glow-primary {
+            box-shadow: 0 0 20px rgba(173, 198, 255, 0.2);
+        }
+
+        .neon-border-focus:focus-within {
+            border-color: #adc6ff;
+            box-shadow: 0 0 15px rgba(173, 198, 255, 0.3);
+        }
+
+        .scanline {
+            width: 100%;
+            height: 2px;
+            background: rgba(173, 198, 255, 0.1);
+            position: absolute;
+            z-index: 10;
+            top: 0;
+            animation: scan 8s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { top: -2%; }
+            100% { top: 102%; }
+        }
+
+        .strength-bar {
+            height: 4px;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .floating-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .tab-transition {
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#1c1b1b",
+                        "outline": "#8c909f",
+                        "primary": "#adc6ff",
+                        "on-primary": "#002e6a",
+                        "secondary": "#d0bcff",
+                        "tertiary": "#4cd7f6",
+                        "background": "#131313",
+                        "surface": "#131313",
+                        "on-surface": "#e5e2e1",
+                        "on-surface-variant": "#c2c6d6"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "margin-desktop": "48px",
+                        "container-max": "1440px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Space Grotesk"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Space Grotesk"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background min-h-screen flex items-center justify-center p-0 md:p-6 overflow-hidden">
+<!-- Top Navigation Anchor (Manual for Auth Context) -->
+<nav class="fixed top-0 left-0 w-full z-50 px-margin-desktop py-6 flex justify-between items-center pointer-events-none">
+<div class="flex items-center gap-2 pointer-events-auto cursor-pointer">
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">rocket_launch</span>
+<span class="font-headline-sm text-headline-sm font-bold text-primary tracking-tighter">GameVerse</span>
+</div>
+<div class="hidden md:flex gap-8 pointer-events-auto">
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Support</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">System Status</a>
+</div>
+</nav>
+<!-- Main Auth Container -->
+<main class="w-full max-w-[1200px] h-full md:h-[800px] flex flex-col md:flex-row glass-panel rounded-none md:rounded-3xl shadow-2xl overflow-hidden relative">
+<div class="scanline"></div>
+<!-- Left Side: Epic Illustration & Branding -->
+<div class="hidden md:block w-1/2 relative bg-[#0a0a0a] overflow-hidden border-r border-white/5">
+
+<div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10"></div>
+<div class="relative z-20 h-full flex flex-col justify-end p-12 space-y-4">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 w-fit">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-[10px] font-bold tracking-widest uppercase text-primary">Nexus System Active</span>
+</div>
+<h1 class="font-orbitron text-5xl font-black text-white leading-tight uppercase">
+                    Unleash Your <br/>
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-tertiary to-secondary">Digital Legacy</span>
+</h1>
+<p class="text-on-surface-variant text-body-md max-w-sm">
+                    Join the premier global hub for elite gaming, tournaments, and community interaction. Your journey across the GameVerse starts here.
+                </p>
+<div class="pt-8 flex gap-4">
+<div class="flex -space-x-3">
+<div class="w-10 h-10 rounded-full border-2 border-background bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A futuristic 3D avatar of a cybernetic gaming character with neon blue accents and reflective visor, digital art style, high fidelity, Cyber-Nexus aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcqm7uvfUho-Q4zopVqHaNsmKuSBW_yGY-fSxQZnSt9LyV1eFwzJVH4xScWg2fDTwI-Mftwuamk_mRLsWYXepeLFK_LjZ728T7q33Ad0JuvHxY3TpgQ2CQbNiSLL87FNdLXkjg1D3AJmHtmoX1NfqD1VlaU6M68qrH9W_7cpN9bfxQSddrYUpUlRNktWKyoxWynWCFbQSn8WLsxmOA_tXi4207qz8GpovshmVfycmdjLZbULjHBGfSzXS8O1O02SvI_SmF6qjEIpA"/>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-background bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A portrait of a futuristic gamer wearing advanced haptic headset with glowing purple lights, dark cinematic lighting, highly detailed digital illustration." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7RV3_HpdLb6AwteciXsy3aW_GJ-evQP5ugxF2HAWQYV2B7I7sVeLBA9ywsPHQRHVQvQCPTATh-CQX04y0eWepYXSg9KCNJa99ocQDI6SePdtWaj--JllhHMJmW8zw7jJPjLtiKfK0jxYcjo57LbgrljD7d5x3aqCecAn7MR-6qGJDdkM670fNsMI2ulCNKLGc3l5l17qGP51wQmvBBfvUYruhnxXsw2PHIjzpKlR9cbxOGPeyNnI7iC4cvIDr2zP_6X55DX6dSx8"/>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-background bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close up of a robotic hand holding a glowing data core, neon green highlights, intricate mechanical details, sci-fi dark mode style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA15rU9If1Piv-Sw-Hz1tbCoU2IJc2gU_dbfTdcQIw15lxCqXSKEETy_OPhbFXdWcztz9TFd69-fvxN_xtzSTz0nali1fZXSWdt7vkGsB25UfHcXQIUG6HBCXLLlNm-9s9tYytZPA80leeCooqUXvD8k9EhhFfGtZ0HoylBgyjFeX1N9dX6N3Dl63r0MMJw1qI78G2CMFNqgdeAvAseuueFJ5qoBpAn5aormCd0TsSjsXOsemFcEElPMVDkAGj1SqaRy6aH8JbzVmU"/>
+</div>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-white">4.2M+ Gamers</span>
+<span class="text-[10px] text-on-surface-variant uppercase tracking-tighter">Connected Worldwide</span>
+</div>
+</div>
+</div>
+<!-- Floating Decorative Elements -->
+<div class="absolute top-1/4 right-[-10%] w-64 h-64 bg-primary/10 blur-[100px] rounded-full"></div>
+<div class="absolute bottom-1/4 left-[-10%] w-48 h-48 bg-secondary/10 blur-[80px] rounded-full"></div>
+</div>
+<!-- Right Side: Forms -->
+<div class="w-full md:w-1/2 relative bg-surface-container-lowest/80 overflow-y-auto px-6 py-20 md:px-16 flex flex-col justify-center">
+<div class="relative w-full" id="auth-forms-container">
+<!-- LOGIN FORM -->
+<section class="tab-transition space-y-8" id="login-section">
+<div class="space-y-2">
+<h2 class="font-orbitron text-4xl font-bold text-white tracking-tight">Welcome Back</h2>
+<p class="text-on-surface-variant text-body-md">Initiate sequence to re-enter the Nexus.</p>
+</div>
+<form class="space-y-5" onsubmit="return false;">
+<div class="space-y-1.5">
+<label class="font-label-md text-label-md text-on-surface-variant ml-1">Email / Username</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary transition-colors text-xl">alternate_email</span>
+<input class="w-full bg-black/40 border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-white focus:outline-none neon-border-focus transition-all duration-300 font-body-md" placeholder="commander@gameverse.com" type="text"/>
+</div>
+</div>
+<div class="space-y-1.5">
+<div class="flex justify-between items-center px-1">
+<label class="font-label-md text-label-md text-on-surface-variant">Access Code (Password)</label>
+<a class="text-[12px] text-primary hover:underline transition-all" href="#">Forgot?</a>
+</div>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary transition-colors text-xl">lock</span>
+<input class="w-full bg-black/40 border border-white/10 rounded-xl py-3.5 pl-12 pr-12 text-white focus:outline-none neon-border-focus transition-all duration-300 font-body-md" placeholder="••••••••••••" type="password"/>
+<button class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-white transition-colors" type="button">
+<span class="material-symbols-outlined text-xl">visibility</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-2 px-1">
+<input class="w-4 h-4 rounded border-white/10 bg-black/40 text-primary focus:ring-primary/20" id="remember" type="checkbox"/>
+<label class="text-sm text-on-surface-variant select-none" for="remember">Remember this station</label>
+</div>
+<button class="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary font-bold rounded-xl shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-200 neon-glow-primary group flex items-center justify-center gap-2">
+<span>AUTHORIZE ACCESS</span>
+<span class="material-symbols-outlined transition-transform group-hover:translate-x-1">login</span>
+</button>
+</form>
+<div class="relative">
+<div class="absolute inset-0 flex items-center"><div class="w-full border-t border-white/5"></div></div>
+<div class="relative flex justify-center text-xs uppercase"><span class="bg-surface-container-lowest px-4 text-outline font-label-sm">Or sync via</span></div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<button class="flex items-center justify-center gap-3 py-3 px-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all active:scale-95">
+<img alt="Google" class="w-5 h-5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDs6BMldDOhUR-vELW3QyPufkLu8TbKQVXpie6GN7ScPCkmKPs9a2o97EUuEZ9_Fd0wycj51WfXKMT_qVBSElv4fDHwuhKypYan7vImZzjwQkW3T4IR3NFB-5BEpgW7X2pSauTmD2wdY9xGpUFNp70L5874rHVy5M7Kq-VymHNPliuyKGfNOOgzVPkrFQKRFcYgDBiXbqkSRCNAzRpl7q4fQQN-ebfeW4H1UILN175POZRKbLBAYTizFrjC8xlNmjIvK-tZx2gmmQI"/>
+<span class="font-label-md text-white">Google</span>
+</button>
+<button class="flex items-center justify-center gap-3 py-3 px-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all active:scale-95">
+<span class="material-symbols-outlined text-[#5865F2]" style="font-variation-settings: 'FILL' 1;">diamond</span>
+<span class="font-label-md text-white">Discord</span>
+</button>
+</div>
+<p class="text-center text-on-surface-variant text-sm">
+                        New explorer? <button class="text-primary font-bold hover:underline" onclick="toggleAuth('register')">Create Account</button>
+</p>
+</section>
+<!-- REGISTER FORM -->
+<section class="tab-transition hidden space-y-6" id="register-section">
+<div class="space-y-2">
+<h2 class="font-orbitron text-4xl font-bold text-white tracking-tight">Join Nexus</h2>
+<p class="text-on-surface-variant text-body-md">Establish your digital footprint today.</p>
+</div>
+<form class="space-y-4" onsubmit="return false;">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="space-y-1.5">
+<label class="font-label-md text-label-md text-on-surface-variant ml-1">Callsign</label>
+<input class="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none neon-border-focus transition-all duration-300 font-body-md" placeholder="ProGamer99" type="text"/>
+</div>
+<div class="space-y-1.5">
+<label class="font-label-md text-label-md text-on-surface-variant ml-1">Region</label>
+<select class="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none neon-border-focus transition-all duration-300 font-body-md appearance-none">
+<option value="na">North America</option>
+<option value="eu">Europe</option>
+<option value="asia">Asia-Pacific</option>
+<option value="sa">South America</option>
+</select>
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="font-label-md text-label-md text-on-surface-variant ml-1">Email Interface</label>
+<input class="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none neon-border-focus transition-all duration-300 font-body-md" placeholder="nexus@gameverse.com" type="email"/>
+</div>
+<div class="space-y-1.5">
+<label class="font-label-md text-label-md text-on-surface-variant ml-1">Security Key (Password)</label>
+<input class="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none neon-border-focus transition-all duration-300 font-body-md" id="password-input" placeholder="••••••••••••" type="password"/>
+<div class="flex gap-1 pt-2" id="strength-meter">
+<div class="strength-bar flex-1 bg-white/5"></div>
+<div class="strength-bar flex-1 bg-white/5"></div>
+<div class="strength-bar flex-1 bg-white/5"></div>
+<div class="strength-bar flex-1 bg-white/5"></div>
+</div>
+<p class="text-[10px] text-outline uppercase tracking-wider mt-1" id="strength-text">Encryption Level: Low</p>
+</div>
+<div class="space-y-1.5">
+<label class="font-label-md text-label-md text-on-surface-variant ml-1">Verify Security Key</label>
+<input class="w-full bg-black/40 border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none neon-border-focus transition-all duration-300 font-body-md" placeholder="••••••••••••" type="password"/>
+</div>
+<div class="flex items-start gap-2 pt-2">
+<input class="mt-1 w-4 h-4 rounded border-white/10 bg-black/40 text-primary focus:ring-primary/20" id="terms" type="checkbox"/>
+<label class="text-[12px] text-on-surface-variant leading-tight" for="terms">
+                                I accept the <a class="text-primary hover:underline" href="#">Directives</a> and <a class="text-primary hover:underline" href="#">Privacy Protocol</a> of the Nexus.
+                            </label>
+</div>
+<button class="w-full py-4 bg-gradient-to-r from-tertiary to-primary text-on-primary-fixed font-bold rounded-xl shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-200 group flex items-center justify-center gap-2 mt-4">
+<span>INITIALIZE ACCOUNT</span>
+<span class="material-symbols-outlined transition-transform group-hover:scale-125">auto_awesome</span>
+</button>
+</form>
+<p class="text-center text-on-surface-variant text-sm">
+                        Already registered? <button class="text-primary font-bold hover:underline" onclick="toggleAuth('login')">Sign In</button>
+</p>
+</section>
+</div>
+<!-- Footer Details -->
+<div class="mt-12 text-center">
+<p class="text-[10px] text-outline uppercase tracking-widest">© 2024 GAMEVERSE NEXUS // ALL RIGHTS RESERVED</p>
+</div>
+</div>
+</main>
+<script>
+        function toggleAuth(mode) {
+            const loginSection = document.getElementById('login-section');
+            const registerSection = document.getElementById('register-section');
+            
+            if (mode === 'register') {
+                loginSection.style.opacity = '0';
+                loginSection.style.transform = 'translateY(-20px)';
+                setTimeout(() => {
+                    loginSection.classList.add('hidden');
+                    registerSection.classList.remove('hidden');
+                    registerSection.style.opacity = '0';
+                    registerSection.style.transform = 'translateY(20px)';
+                    requestAnimationFrame(() => {
+                        registerSection.style.opacity = '1';
+                        registerSection.style.transform = 'translateY(0)';
+                    });
+                }, 300);
+            } else {
+                registerSection.style.opacity = '0';
+                registerSection.style.transform = 'translateY(-20px)';
+                setTimeout(() => {
+                    registerSection.classList.add('hidden');
+                    loginSection.classList.remove('hidden');
+                    loginSection.style.opacity = '0';
+                    loginSection.style.transform = 'translateY(20px)';
+                    requestAnimationFrame(() => {
+                        loginSection.style.opacity = '1';
+                        loginSection.style.transform = 'translateY(0)';
+                    });
+                }, 300);
+            }
+        }
+
+        // Simple Password Strength Simulation
+        const passwordInput = document.getElementById('password-input');
+        const strengthBars = document.querySelectorAll('.strength-bar');
+        const strengthText = document.getElementById('strength-text');
+
+        passwordInput.addEventListener('input', (e) => {
+            const val = e.target.value;
+            let strength = 0;
+            if (val.length > 5) strength++;
+            if (val.length > 8) strength++;
+            if (/[A-Z]/.test(val)) strength++;
+            if (/[!@#$%^&*]/.test(val)) strength++;
+
+            strengthBars.forEach((bar, index) => {
+                bar.className = 'strength-bar flex-1';
+                if (index < strength) {
+                    if (strength === 1) bar.classList.add('bg-error');
+                    else if (strength === 2) bar.classList.add('bg-orange-500');
+                    else if (strength === 3) bar.classList.add('bg-primary');
+                    else if (strength === 4) bar.classList.add('bg-green-400');
+                } else {
+                    bar.classList.add('bg-white/5');
+                }
+            });
+
+            const labels = ["Low", "Weak", "Stable", "Secure", "Elite"];
+            strengthText.innerText = `Encryption Level: ${labels[strength]}`;
+        });
+    </script>
+</body></html>

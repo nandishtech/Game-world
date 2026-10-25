@@ -1,0 +1,373 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>GameVerse | Cloud Gaming Nexus</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        :root {
+            --neon-glow: rgba(173, 198, 255, 0.3);
+        }
+        body {
+            background-color: #050505;
+            color: #e5e2e1;
+            overflow-x: hidden;
+        }
+        .glass-panel {
+            background: rgba(28, 27, 27, 0.4);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+        }
+        .neon-border-hover:hover {
+            border-color: #adc6ff;
+            box-shadow: 0 0 20px var(--neon-glow);
+        }
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scan-line {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#adc6ff",
+                        "on-primary": "#002e6a",
+                        "primary-container": "#4d8eff",
+                        "on-primary-container": "#00285d",
+                        "secondary": "#d0bcff",
+                        "surface": "#131313",
+                        "surface-container-low": "#1c1b1b",
+                        "surface-container-highest": "#353534",
+                        "background": "#050505",
+                        "outline-variant": "#424754"
+                    },
+                    "spacing": {
+                        "container-max": "1440px",
+                        "margin-desktop": "48px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Space Grotesk"],
+                        "headline-lg": ["Space Grotesk"],
+                        "headline-sm": ["Space Grotesk"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-body-md text-body-md selection:bg-primary/30">
+<!-- Ambient Shader Background -->
+
+<!-- Top Navigation (Shared Component Logic) -->
+<nav class="fixed top-0 w-full z-50 bg-surface/40 backdrop-blur-3xl border-b border-white/10 shadow-xl">
+<div class="flex justify-between items-center px-margin-desktop py-4 max-w-container-max mx-auto">
+<div class="flex items-center gap-8">
+<span class="font-headline-sm text-headline-sm font-bold text-primary tracking-tighter cursor-pointer active:scale-95 transition-all">GameVerse</span>
+<div class="hidden md:flex gap-6">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 cursor-pointer" href="#">Home</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 cursor-pointer" href="#">Games</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 cursor-pointer" href="#">Community</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 cursor-pointer" href="#">Leaderboards</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="bg-black/40 border border-outline-variant/40 rounded-full py-2 pl-10 pr-4 text-sm focus:outline-none focus:border-primary transition-all w-64" placeholder="Search universe..." type="text">
+</div>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-all">notifications</span>
+<button class="bg-primary text-on-primary font-label-md px-6 py-2 rounded-full hover:scale-105 hover:brightness-110 active:scale-95 transition-all shadow-[0_0_15px_rgba(173,198,255,0.4)]">Sign In</button>
+</div>
+</div>
+</nav>
+<!-- Side Navigation (Shared Component Logic) -->
+<aside class="fixed left-0 top-0 h-full w-64 z-40 bg-surface-container-low/60 backdrop-blur-xl border-r border-white/5 shadow-2xl pt-24 hidden xl:flex flex-col px-4">
+<div class="flex items-center gap-3 mb-8 px-2">
+<div class="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-secondary p-[1px]">
+<div class="w-full h-full rounded-xl bg-surface-container-low flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A high-fidelity digital portrait of a futuristic gamer avatar with glowing cybernetic accents on their headset. The art style is hyper-realistic with cinematic rim lighting in shades of neon blue and violet against a dark, tech-filled background. The mood is focused and intense, suggesting an elite professional player profile." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCig3LOOGOclpE9E6Np5tW4piHdNoyyf9tQl00O1NLsc0MS41EflxJnpJKYspP0_eO-tmIo4CHNpnWmwvKgQ2fY5sqtw-VVm8C525aY32j6UBTb5qoc-Bt-HIlBpaVy8PFFghbufaJxylUZc6TUuQNTRD1hvaxpyKbRnQTcHYV3rnHuovFvm2gg1h4ch438n61tJJzpymjdYdvAgxUPY7NlWl1aNzuXcH9j7Ve5pbFWy87x7sN8s8_DFxLYge6wbYPNQxm7PaCHks8">
+</div>
+</div>
+<div>
+<p class="font-label-md text-primary">Pro Gamer</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-widest">Level 42 Elite</p>
+</div>
+</div>
+<nav class="flex-1 space-y-2">
+<div class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-white/5 cursor-pointer transition-all active:translate-x-1 group">
+<span class="material-symbols-outlined group-hover:text-primary">person</span>
+<span class="font-label-md">Profile</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary/10 text-primary border-r-4 border-primary cursor-pointer active:translate-x-1">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">cloud</span>
+<span class="font-label-md">Cloud Library</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-white/5 cursor-pointer transition-all active:translate-x-1 group">
+<span class="material-symbols-outlined group-hover:text-primary">military_tech</span>
+<span class="font-label-md">Achievements</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-white/5 cursor-pointer transition-all active:translate-x-1 group">
+<span class="material-symbols-outlined group-hover:text-primary">group</span>
+<span class="font-label-md">Friends</span>
+</div>
+</nav>
+<div class="mt-auto pb-8 space-y-2">
+<div class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-white/5 cursor-pointer transition-all group">
+<span class="material-symbols-outlined group-hover:text-primary">help</span>
+<span class="font-label-md">Support</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 rounded-lg text-error/70 hover:bg-error/10 cursor-pointer transition-all group">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md">Sign Out</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="relative z-10 pt-24 xl:pl-64 min-h-screen px-margin-desktop pb-16">
+<div class="max-w-container-max mx-auto space-y-12">
+<!-- Hero: Play Instantly -->
+<section class="relative group overflow-hidden rounded-3xl glass-panel p-8 md:p-12 min-h-[400px] flex flex-col md:flex-row gap-12 items-center">
+<div class="absolute inset-0 shimmer opacity-20 pointer-events-none"></div>
+<div class="absolute top-0 right-0 p-8">
+<span class="bg-primary/20 text-primary px-4 py-1 rounded-full text-xs font-bold tracking-widest uppercase flex items-center gap-2">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+</span>
+                        Featured Game
+                    </span>
+</div>
+<div class="flex-1 space-y-6 z-10">
+<h1 class="font-headline-xl text-headline-xl text-white">Play Instantly</h1>
+<p class="text-body-lg text-on-surface-variant max-w-lg">
+                        Jump into <span class="text-primary font-bold">Project: Vanguard</span> without any downloads. Powered by GameVerse Nexus high-performance cloud clusters.
+                    </p>
+<div class="flex flex-wrap gap-4 pt-4">
+<button class="bg-primary text-on-primary font-headline-sm px-8 py-4 rounded-xl flex items-center gap-3 hover:scale-105 transition-all shadow-[0_0_30px_rgba(173,198,255,0.3)] group">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                            Launch Game
+                        </button>
+<button class="border border-white/20 bg-white/5 backdrop-blur-md text-white px-8 py-4 rounded-xl font-headline-sm hover:bg-white/10 transition-all">
+                            View Trailer
+                        </button>
+</div>
+<div class="flex items-center gap-6 pt-6 text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">wifi</span>
+<span class="text-sm font-label-md">15ms Latency</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">hd</span>
+<span class="text-sm font-label-md">4K | 120 FPS</span>
+</div>
+</div>
+</div>
+<div class="flex-1 w-full max-w-md aspect-video rounded-2xl overflow-hidden shadow-2xl relative border border-white/10">
+<img class="w-full h-full object-cover" data-alt="A cinematic gameplay screenshot of a futuristic first-person shooter set in a sprawling cyberpunk cityscape at night. Neon signs reflect on wet asphalt streets while high-tech armored soldiers engage in combat with glowing projectile tracers. The visual style is characterized by deep contrast, vibrant accent lighting, and hyper-detailed textures consistent with a high-end AAA gaming experience." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFYS4_1xlirMBPtixiwhvALMOdpNpEfufi6tJASXjU9qROhBgnHv41xGNxu_Gw0TiPtCTT081FOkF3unlk1Xk-1GEfC9u_VmyzHU1x8OPUw93gg51-U91ht8cK82rvmnNtn-NTySd4C7TDHDoOx6_HaEqwFNHtMwzVlyVPPQPHXGpEcNBtL-kySpXiTr_WtlTKi3IPApVSwBC6BubZPBvQXVmaUcy_GTs1CtFj5SukLkFP4FMWMpH3WPxRyBpfNlamX4-U6iwcHMs">
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+</div>
+</section>
+<!-- Library & Connectivity Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-gutter">
+<!-- Sidebar Control: Connection Status -->
+<div class="lg:col-span-1 space-y-6">
+<div class="glass-panel p-6 rounded-2xl space-y-6">
+<h3 class="font-headline-sm text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">analytics</span>
+                            Connection
+                        </h3>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between text-xs mb-2">
+<span class="text-on-surface-variant">Bandwidth</span>
+<span class="text-primary">850 Mbps</span>
+</div>
+<div class="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+<div class="w-[85%] h-full bg-primary shadow-[0_0_10px_#adc6ff]"></div>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">joystick</span>
+<span class="text-sm">Controller</span>
+</div>
+<span class="text-[10px] bg-green-500/20 text-green-400 px-2 py-0.5 rounded-full border border-green-500/30">DETECTED</span>
+</div>
+<div class="space-y-3">
+<label class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">Server Region</label>
+<select class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:ring-1 focus:ring-primary focus:border-primary outline-none appearance-none">
+<option>US West (Oregon)</option>
+<option>Europe (Frankfurt)</option>
+<option>Asia (Tokyo)</option>
+<option>US East (Virginia)</option>
+</select>
+</div>
+</div>
+</div>
+<div class="glass-panel p-6 rounded-2xl border-l-4 border-secondary">
+<p class="text-xs text-on-surface-variant italic leading-relaxed">
+                            "System optimal. Latency consistent under 20ms for current session."
+                        </p>
+</div>
+</div>
+<!-- Game Library Bento Grid -->
+<div class="lg:col-span-3 space-y-8">
+<div class="flex justify-between items-end">
+<div>
+<h2 class="font-headline-lg text-white">Your Cloud Library</h2>
+<p class="text-on-surface-variant text-sm">Ready to stream instantly</p>
+</div>
+<div class="flex gap-2">
+<button class="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-on-surface-variant transition-all">
+<span class="material-symbols-outlined">grid_view</span>
+</button>
+<button class="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-on-surface-variant transition-all">
+<span class="material-symbols-outlined">list</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+<!-- Game Card 1 -->
+<div class="group relative aspect-[4/5] rounded-2xl overflow-hidden glass-panel border-white/10 hover:border-primary/50 transition-all duration-500">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700" data-alt="A detailed, vibrant digital painting of a dark fantasy landscape featuring a towering, monolithic castle glowing with eerie green magical energy. The foreground shows a lone warrior in reflective silver armor standing on a cliff edge. The lighting is dramatic and moody, utilizing the GameVerse signature palette of deep shadows and neon accents." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDKXItO2-8KdJnElvdXG0lzzp8z1VP7m0QgDuDzrD3B2QS8zVzKNPnfdqb13qCMgamXkos6Sfb1DFzHqHFKGawPs8WFIvuro4Pfn0jED0mcb_9y1Xv8oYAKf-9Pb71pj5IIrmFo5EWEeUyC35otYwuKq6egZdspvAL2aIXaWSM2cDdCe-SUD6S10ExCkrkHGW9Zjzi33bxDopVX-8knzihGE590cs1qU60Ybc0WxURBnSzTDd3gf8YKQANf5xiE37Lx-BbV7eg7rt4')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+<div class="absolute inset-0 p-6 flex flex-col justify-end">
+<div class="flex justify-between items-center mb-2">
+<span class="text-[10px] font-bold text-primary bg-primary/20 px-2 py-0.5 rounded backdrop-blur-md">ACTION RPG</span>
+<div class="flex items-center gap-1">
+<div class="w-1.5 h-1.5 rounded-full bg-green-500"></div>
+<span class="text-[10px] text-white">12ms</span>
+</div>
+</div>
+<h4 class="font-headline-sm text-white mb-4">Shadow of Nexus</h4>
+<button class="w-full py-3 bg-white/10 hover:bg-primary text-white hover:text-on-primary rounded-xl font-label-md backdrop-blur-md transition-all active:scale-95 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">bolt</span>
+                                    Instant Launch
+                                </button>
+</div>
+</div>
+<!-- Game Card 2 -->
+<div class="group relative aspect-[4/5] rounded-2xl overflow-hidden glass-panel border-white/10 hover:border-primary/50 transition-all duration-500">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700" data-alt="High-octane concept art of a futuristic hover-car race through a vertical mega-city. Trails of light streak behind the vehicles against a background of massive skyscrapers and holographic advertisements. The color scheme is heavy on electric blues and magentas, reflecting a high-speed, high-fidelity gaming aesthetic with smooth glassmorphic textures." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAA8UDUpmyN-3mqzQfk76pTY7LMPJvr8zlfeWD8O64zu0UZkraQJwpCU7jnlEbpHNsshn-_7XIKO_WfJ31REpHIo0x5mc2aJWo8jEErvVUGZFcQiSmqShifd6DIsFBk-bhSteM96-CEl56sALFrDNbjd41C0eqH_0G893tfr8plbzbYoG-kJr_BJ-Oca0rQgobNzpsElekaDm6JZ3W7PprmR3UJ1Q5gfu7aqfqlJ0OUNAg5MEZOvb-v_Fd8NgIbm5rIVs8iUAmXD1Y')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+<div class="absolute inset-0 p-6 flex flex-col justify-end">
+<div class="flex justify-between items-center mb-2">
+<span class="text-[10px] font-bold text-secondary bg-secondary/20 px-2 py-0.5 rounded backdrop-blur-md">RACING</span>
+<div class="flex items-center gap-1">
+<div class="w-1.5 h-1.5 rounded-full bg-yellow-500"></div>
+<span class="text-[10px] text-white">28ms</span>
+</div>
+</div>
+<h4 class="font-headline-sm text-white mb-4">Neon Velocity</h4>
+<button class="w-full py-3 bg-white/10 hover:bg-primary text-white hover:text-on-primary rounded-xl font-label-md backdrop-blur-md transition-all active:scale-95 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">bolt</span>
+                                    Instant Launch
+                                </button>
+</div>
+</div>
+<!-- Game Card 3 -->
+<div class="group relative aspect-[4/5] rounded-2xl overflow-hidden glass-panel border-white/10 hover:border-primary/50 transition-all duration-500">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700" data-alt="A stylized, atmospheric digital landscape of a floating island city nestled amongst crystalline clouds. The art style is painterly yet sharp, with ethereal lighting coming from a dual-sun system. The scene is calm and majestic, using soft blues, purples, and pearlescent whites to create a premium, next-gen adventure game feel." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDXo6Pkieox6vbC4mzrmBbaUdrefiSs-9YGovsq2DMPPlKWc3iahN1UleujNiQClVVmrLZRNeYI3IyJJAG7UWsMTED990bwq4El3D5gg8aSOMScyPuY8pp-2zQIIppQjouSBIKs3rOKEt7wGWQJLaw8jR378usxAuRZ0M3-hH4SG7QT2tCtp31kQfTEOk-twObg3ZqkDBzHmErC8yjoXEJG2fzAiUiSRlm7yzvXYT9Rn5Qdq2iSBKq-5eyFouxRrKuhFhylw01R9S4')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
+<div class="absolute inset-0 p-6 flex flex-col justify-end">
+<div class="flex justify-between items-center mb-2">
+<span class="text-[10px] font-bold text-tertiary bg-tertiary/20 px-2 py-0.5 rounded backdrop-blur-md">ADVENTURE</span>
+<div class="flex items-center gap-1">
+<div class="w-1.5 h-1.5 rounded-full bg-green-500"></div>
+<span class="text-[10px] text-white">18ms</span>
+</div>
+</div>
+<h4 class="font-headline-sm text-white mb-4">Aether Sky</h4>
+<button class="w-full py-3 bg-white/10 hover:bg-primary text-white hover:text-on-primary rounded-xl font-label-md backdrop-blur-md transition-all active:scale-95 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">bolt</span>
+                                    Instant Launch
+                                </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer (Shared Component Logic) -->
+<footer class="relative z-10 border-t border-outline-variant/20 bg-background pt-16 pb-8">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-desktop max-w-container-max mx-auto mb-16">
+<div class="space-y-4">
+<span class="font-headline-sm text-headline-sm font-bold text-white">GameVerse</span>
+<p class="text-on-surface-variant text-sm leading-relaxed">The ultimate cloud-native gaming ecosystem for the next generation of players.</p>
+</div>
+<div class="space-y-4">
+<h5 class="text-primary font-label-md">Platform</h5>
+<ul class="space-y-2 text-sm text-on-surface-variant">
+<li class="hover:text-primary cursor-pointer transition-colors">Games Library</li>
+<li class="hover:text-primary cursor-pointer transition-colors">Streaming Specs</li>
+<li class="hover:text-primary cursor-pointer transition-colors">Global Servers</li>
+</ul>
+</div>
+<div class="space-y-4">
+<h5 class="text-primary font-label-md">Community</h5>
+<ul class="space-y-2 text-sm text-on-surface-variant">
+<li class="hover:text-primary cursor-pointer transition-colors">Discord</li>
+<li class="hover:text-primary cursor-pointer transition-colors">YouTube</li>
+<li class="hover:text-primary cursor-pointer transition-colors">Tournaments</li>
+</ul>
+</div>
+<div class="space-y-4">
+<h5 class="text-primary font-label-md">Support</h5>
+<ul class="space-y-2 text-sm text-on-surface-variant">
+<li class="hover:text-primary cursor-pointer transition-colors">Help Center</li>
+<li class="hover:text-primary cursor-pointer transition-colors">Terms of Service</li>
+<li class="hover:text-primary cursor-pointer transition-colors">Privacy Policy</li>
+</ul>
+</div>
+</div>
+<div class="px-margin-desktop max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center pt-8 border-t border-white/5 text-on-surface-variant font-label-sm text-xs gap-4">
+<p>© 2024 GameVerse Nexus. All rights reserved.</p>
+<div class="flex gap-6">
+<span class="hover:text-white cursor-pointer transition-all">Status: Systems Operational</span>
+<span class="hover:text-white cursor-pointer transition-all">v2.4.0-nexus</span>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interactions for buttons and cards
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mouseenter', () => {
+                button.classList.add('brightness-110');
+            });
+            button.addEventListener('mouseleave', () => {
+                button.classList.remove('brightness-110');
+            });
+        });
+
+        // Simulating real-time ping updates
+        setInterval(() => {
+            document.querySelectorAll('.text-\[10px\].text-white').forEach(pingDisplay => {
+                const currentPing = parseInt(pingDisplay.innerText);
+                const fluctuation = Math.floor(Math.random() * 5) - 2;
+                pingDisplay.innerText = Math.max(8, currentPing + fluctuation) + 'ms';
+            });
+        }, 3000);
+    </script>
+</body></html>

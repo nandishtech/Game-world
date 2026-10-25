@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 350" width="600" height="350">
+  <defs>
+    <radialGradient id="grad_dungeon_crawl" cx="50%" cy="38%" r="72%">
+      <stop offset="0%" stop-color="#371313" />
+      <stop offset="100%" stop-color="#0f0404" />
+    </radialGradient>
+    <filter id="glow_dungeon_crawl" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    <filter id="shadow_dungeon_crawl" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.85" />
+    </filter>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="600" height="350" fill="url(#grad_dungeon_crawl)" />
+
+  <!-- Subtle Atmospheric Grid Pattern -->
+  <g opacity="0.06" stroke="#ffffff" stroke-width="1">
+    <line x1="0" y1="70" x2="600" y2="70" />
+    <line x1="0" y1="140" x2="600" y2="140" />
+    <line x1="0" y1="210" x2="600" y2="210" />
+    <line x1="0" y1="280" x2="600" y2="280" />
+    <line x1="120" y1="0" x2="120" y2="350" />
+    <line x1="240" y1="0" x2="240" y2="350" />
+    <line x1="360" y1="0" x2="360" y2="350" />
+    <line x1="480" y1="0" x2="480" y2="350" />
+  </g>
+
+  <!-- Ambient Glow Behind Icon -->
+  <circle cx="300" cy="120" r="90" fill="#ef4444" opacity="0.18" filter="url(#glow_dungeon_crawl)" />
+
+  <!-- Corner Brackets -->
+  <path d="M 24 44 L 24 24 L 44 24" stroke="#ef4444" stroke-width="2.5" fill="none" opacity="0.45" stroke-linecap="round" />
+  <path d="M 576 44 L 576 24 L 556 24" stroke="#ef4444" stroke-width="2.5" fill="none" opacity="0.45" stroke-linecap="round" />
+  <path d="M 24 306 L 24 326 L 44 326" stroke="#ef4444" stroke-width="2.5" fill="none" opacity="0.45" stroke-linecap="round" />
+  <path d="M 576 306 L 576 326 L 556 326" stroke="#ef4444" stroke-width="2.5" fill="none" opacity="0.45" stroke-linecap="round" />
+
+  <!-- Central Icon Graphic -->
+  <g transform="translate(300, 120)" filter="url(#shadow_dungeon_crawl)">
+    
+          <!-- Ancient Dragon Crest / Chalice -->
+          <path d="M 0,-45 L 28,-15 C 32,15 20,38 0,48 C -20,38 -32,15 -28,-15 Z" fill="#7f1d1d" stroke="#ef4444" stroke-width="3" />
+          <polygon points="0,-30 18,-8 10,24 -10,24 -18,-8" fill="#fbbf24" />
+          <circle cx="0" cy="-2" r="6" fill="#dc2626" />
+        
+  </g>
+
+  <!-- Pill Badge -->
+  <g transform="translate(300, 230)">
+    <rect x="-65" y="-11" width="130" height="22" rx="11" fill="#000000" fill-opacity="0.7" stroke="#ef4444" stroke-width="1.2" stroke-opacity="0.6" />
+    <text x="0" y="4" text-anchor="middle" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="9" font-weight="800" fill="#ef4444" letter-spacing="2">OFFICIAL TITLE</text>
+  </g>
+
+  <!-- Title Text -->
+  <text x="300" y="278" text-anchor="middle" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="26" font-weight="900" fill="#ffffff" letter-spacing="1.5" filter="url(#shadow_dungeon_crawl)">DUNGEON CRAWL</text>
+
+  <!-- Subtitle Text -->
+  <text x="300" y="305" text-anchor="middle" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#94a3b8" letter-spacing="1">Stone Soup Roguelike</text>
+</svg>

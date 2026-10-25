@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+    <title>Flappy Clone</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Rubik:wght@400;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "on-secondary": "#ffffff",
+                "surface-container": "#f0eded",
+                "surface-bright": "#fcf9f8",
+                "surface": "#fcf9f8",
+                "secondary-container": "#9bf0f9",
+                "surface-tint": "#6f5d00",
+                "primary-fixed-dim": "#e7c500",
+                "inverse-surface": "#303030",
+                "error": "#ba1a1a",
+                "primary-fixed": "#ffe262",
+                "on-primary-container": "#6c5b00",
+                "on-tertiary-container": "#366800",
+                "on-background": "#1b1c1c",
+                "primary-container": "#f7d308",
+                "surface-variant": "#e4e2e1",
+                "outline-variant": "#cfc6ab",
+                "primary": "#6f5d00",
+                "tertiary": "#376b00",
+                "on-primary": "#ffffff",
+                "on-surface": "#1b1c1c",
+                "on-surface-variant": "#4c4732",
+                "background": "#fcf9f8",
+                "surface-dim": "#dcd9d9",
+              },
+              fontFamily: {
+                "headline-lg": ["Bricolage Grotesque"],
+                "display-arcade": ["Bricolage Grotesque"],
+                "body-bold": ["Rubik"],
+                "label-mono": ["Space Mono"]
+              }
+            }
+          }
+        }
+    </script>
+    <style>
+        /* HTML/Body resets to fill viewport */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #7fd4dd;
+            font-family: 'Rubik', sans-serif;
+        }
+
+        /* Scaled Game Board container */
+        [tp-flappy] {
+            position: absolute;
+            inset: 0;
+            width: 1200px;
+            height: 700px;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        /* Game Entity Classes (Preserving original names & logic offsets) */
+        .passaro {
+            position: absolute;
+            width: 60px;
+            left: calc(50% - 30px);
+            z-index: 25;
+        }
+
+        .par-de-barreiras {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            z-index: 20;
+        }
+
+        .barreira {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .barreira .borda {
+            height: 30px;
+            width: 130px;
+            background: linear-gradient(#639301, #A5E82E);
+            border: 4px solid #1b1c1c;
+            border-radius: 4px;
+            box-shadow: 3px 3px 0px #1b1c1c;
+        }
+
+        .barreira .corpo {
+            width: 110px;
+            background: linear-gradient(#639301, #A5E82E);
+            border-left: 4px solid #1b1c1c;
+            border-right: 4px solid #1b1c1c;
+            box-shadow: 3px 0px 0px #1b1c1c;
+        }
+
+        .progresso {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Bricolage Grotesque', sans-serif;
+            font-size: 72px;
+            font-weight: 800;
+            color: #ffffff;
+            text-shadow: 4px 4px 0px #1b1c1c;
+            z-index: 30;
+        }
+
+        /* Neo-Retro Arcade Styles */
+        .arcade-border {
+            border: 4px solid #1b1c1c;
+        }
+        .arcade-shadow {
+            box-shadow: 4px 4px 0px #1b1c1c;
+        }
+        .arcade-shadow-lg {
+            box-shadow: 8px 8px 0px #1b1c1c;
+        }
+        .arcade-btn:active {
+            transform: translate(3px, 3px);
+            box-shadow: 1px 1px 0px #1b1c1c !important;
+        }
+
+        #game-scale-wrapper {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 1200px;
+            height: 700px;
+            transform-origin: center center;
+        }
+        
+        /* Continuous Moving Cloud Layers */
+        @keyframes drift {
+            from { transform: translateX(105vw); }
+            to { transform: translateX(-100%); }
+        }
+        
+        .cloud-drift-1 { animation: drift 50s linear infinite; }
+        .cloud-drift-2 { animation: drift 35s linear infinite; }
+        .cloud-drift-3 { animation: drift 20s linear infinite; }
+
+        .flash-anim {
+            animation: flash 1s infinite alternate;
+        }
+        @keyframes flash {
+            from { opacity: 1; }
+            to { opacity: 0.5; }
+        }
+
+        @keyframes bounce-subtle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        .animate-bounce-subtle {
+            animation: bounce-subtle 2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-[#7fd4dd] text-on-background h-screen w-screen overflow-hidden flex flex-col justify-center items-center relative selection:bg-primary-container selection:text-on-primary-container">
+
+    <!-- Scenic Background Sky & Cloud Environment (Continuous Parallax Layers) -->
+    <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none w-full h-full">
+        <!-- Distant Clouds (Large, Slow) -->
+        <div class="absolute w-72 h-36 bg-white/70 rounded-full cloud-drift-1 arcade-border" style="top: 15%; left: 0%; animation-delay: -5s;"></div>
+        <div class="absolute w-96 h-40 bg-white/60 rounded-full cloud-drift-1 arcade-border" style="top: 50%; left: 0%; animation-delay: -25s;"></div>
+        
+        <!-- Middle Clouds (Medium, Moderate Speed) -->
+        <div class="absolute w-48 h-24 bg-white/90 rounded-full cloud-drift-2 arcade-border" style="top: 30%; left: 0%; animation-delay: -12s;"></div>
+        <div class="absolute w-60 h-28 bg-white/80 rounded-full cloud-drift-2 arcade-border" style="top: 70%; left: 0%; animation-delay: -30s;"></div>
+
+        <!-- Foreground Clouds (Small, Fast) -->
+        <div class="absolute w-32 h-16 bg-white rounded-full cloud-drift-3 arcade-border" style="top: 20%; left: 0%; animation-delay: -8s;"></div>
+        <div class="absolute w-40 h-20 bg-white rounded-full cloud-drift-3 arcade-border" style="top: 80%; left: 0%; animation-delay: -18s;"></div>
+    </div>
+
+    <!-- Scaled Game Arena Wrapper (Proportionally scaled to viewport size) -->
+    <div id="game-scale-wrapper" class="relative w-[1200px] h-[700px] overflow-hidden bg-transparent z-10 transition-transform duration-100 flex flex-col items-center justify-center">
+
+        <!-- Main Game Viewport Container -->
+        <main tp-flappy>
+            <!-- Barriers and bird are dynamically appended here -->
+        </main>
+
+        <!-- 1. Start Menu Overlay -->
+        <div id="start-screen" class="absolute inset-0 z-30 flex flex-col justify-between py-12 px-6 bg-[#7fd4dd]/80 select-none">
+            <!-- Header / Logo -->
+            <div class="text-center mt-8">
+                <h1 class="font-display-arcade text-5xl md:text-7xl text-primary-container drop-shadow-[5px_5px_0px_#1b1c1c] uppercase tracking-tighter">
+                    FLAPPY CLONE
+                </h1>
+                <p class="font-label-mono text-xs text-on-surface-variant uppercase tracking-widest mt-2">
+                    ARCADE AVIATOR EDITION
+                </p>
+            </div>
+
+            <!-- Center Interactive Buttons -->
+            <div class="flex flex-col items-center justify-center space-y-6 w-full max-w-sm mx-auto">
+                <!-- Play Button -->
+                <div class="animate-bounce-subtle">
+                    <button onclick="clickPlay()" class="bg-primary-container text-on-primary-container font-headline-lg text-2xl uppercase px-14 py-6 rounded-2xl arcade-border arcade-shadow hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none active:translate-x-[3px] active:translate-y-[3px] active:shadow-none transition-all flex flex-col items-center gap-1 group cursor-pointer arcade-btn">
+                        <span class="material-symbols-outlined text-[48px] group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                        <span>PLAY</span>
+                    </button>
+                </div>
+
+                <!-- Library Button -->
+                <button onclick="exitGame()" class="w-full bg-surface text-on-surface font-body-bold text-base uppercase px-6 py-4 rounded-xl arcade-border arcade-shadow hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none active:translate-x-[3px] active:translate-y-[3px] active:shadow-none transition-all flex items-center justify-center gap-3 cursor-pointer arcade-btn">
+                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">grid_view</span>
+                    <span>LIBRARY</span>
+                </button>
+
+                <!-- Best Score Card -->
+                <div class="bg-surface p-4 rounded-xl arcade-border arcade-shadow w-full flex justify-between items-center rotate-[-1deg]">
+                    <div class="flex flex-col">
+                        <span class="font-label-mono text-xs text-on-surface-variant uppercase">Best Score</span>
+                        <span id="start-best-score" class="font-headline-lg text-3xl text-on-surface">0</span>
+                    </div>
+                    <div class="bg-tertiary-container px-3 py-1 rounded-full arcade-border">
+                        <span class="font-label-mono text-xs text-on-tertiary-container uppercase">New</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Foreground Scenery (Ground) -->
+            <div class="w-full h-8 bg-surface-tint border-t-4 border-on-background bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PHBhdGggZD0iTTAgMGg0MHY0MEgweiIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0wIDIwaDQwdjIwSDB6IiBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMSkiLz48L3N2Zz4=')]"></div>
+        </div>
+
+        <!-- 2. Game Over Overlay -->
+        <div id="gameover-screen" class="absolute inset-0 z-30 hidden flex flex-col items-center justify-center bg-[#7fd4dd]/80 px-6 select-none">
+            <h1 class="font-display-arcade text-5xl md:text-7xl text-error drop-shadow-[5px_5px_0px_#1b1c1c] text-center transform -rotate-2 tracking-tighter mb-8">
+                GAME OVER
+            </h1>
+
+            <div class="bg-surface w-full max-w-sm arcade-border rounded-xl arcade-shadow-lg p-6 flex flex-col items-center space-y-6 relative mb-8">
+                <!-- New Best Badge -->
+                <div id="new-best-badge" class="absolute -top-3 -right-3 bg-tertiary-container text-on-tertiary-container font-label-mono text-xs px-3 py-1 arcade-border rounded-full transform rotate-6 arcade-shadow flash-anim flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">emoji_events</span>
+                    NEW BEST!
+                </div>
+
+                <!-- Score Grid -->
+                <div class="grid grid-cols-2 gap-4 w-full text-center">
+                    <div class="flex flex-col items-center bg-surface-container-high rounded-lg p-3 arcade-border">
+                        <span class="font-label-mono text-xs text-on-surface-variant uppercase mb-1">Score</span>
+                        <span id="final-score" class="font-display-arcade text-4xl font-bold text-on-surface leading-none">0</span>
+                    </div>
+                    <div class="flex flex-col items-center bg-primary-container rounded-lg p-3 arcade-border relative overflow-hidden">
+                        <span class="font-label-mono text-xs text-on-primary-container uppercase mb-1">Best</span>
+                        <span id="final-best" class="font-display-arcade text-4xl font-bold text-on-primary-container leading-none">0</span>
+                    </div>
+                </div>
+
+                <!-- Defeated bird image -->
+                <div class="w-20 h-20 bg-surface-variant rounded-full arcade-border arcade-shadow flex items-center justify-center overflow-hidden">
+                    <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxBdf4AHhNf-56R-8rY2Beb5R5lSYF0eoT069SZYcRuYqp8FKYvKG2PNPsZd7pEriAKT7utyZEPWv3gKYp2AdUJSfG8l_cihK1i4d4iwz4rLYOKl6OgCILNcxTcTcIzVuokJslDMrtjxl9tvvkvGeqW751DBrJbFNOOAna9Li7Gefz0VFnggtgZU-w8yAfEJroQkUM0ew4j0U2Ra4n53TDN82fNYBrxSaFzJsfpUHeqKSV8XNx2GYcmA">
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col w-full max-w-sm space-y-4">
+                <button onclick="clickPlay()" class="w-full bg-primary-container text-on-primary-container font-headline-lg text-xl uppercase py-4 px-6 rounded-xl arcade-border arcade-shadow arcade-btn transition-all flex items-center justify-center gap-2 cursor-pointer">
+                    <span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                    REPLAY
+                </button>
+                <button onclick="exitGame()" class="w-full bg-surface-variant text-on-surface font-body-bold text-base uppercase py-4 px-6 rounded-xl arcade-border arcade-shadow arcade-btn transition-all flex items-center justify-center gap-2 cursor-pointer">
+                    <span class="material-symbols-outlined text-[20px]">grid_view</span>
+                    LIBRARY
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="js/flappy.js"></script>
+    <script>
+        // Scaling alignment
+        function applyScaling() {
+            const wrapper = document.getElementById('game-scale-wrapper');
+            if (wrapper) {
+                const scaleX = window.innerWidth / 1200;
+                const scaleY = window.innerHeight / 700;
+                const scale = Math.min(scaleX, scaleY);
+                // Translate and scale combined to prevent centering clips
+                wrapper.style.transform = `translate(-50%, -50%) scale(${scale})`;
+            }
+        }
+
+        window.addEventListener('resize', applyScaling);
+        window.addEventListener('load', applyScaling);
+        applyScaling();
+
+        // Load high score
+        function loadBestScore() {
+            const best = localStorage.getItem('flappy_bird_best_score') || '0';
+            document.getElementById('start-best-score').textContent = best;
+            return parseInt(best);
+        }
+
+        // Start Play state machine
+        function clickPlay() {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('gameover-screen').classList.add('hidden');
+            window.startGame();
+        }
+
+        // Show Game Over UI
+        window.showGameOver = (score) => {
+            const best = loadBestScore();
+            const isNewBest = score > best;
+            
+            if (isNewBest) {
+                localStorage.setItem('flappy_bird_best_score', score.toString());
+                document.getElementById('new-best-badge').classList.remove('hidden');
+                document.getElementById('final-best').textContent = score.toString();
+            } else {
+                document.getElementById('new-best-badge').classList.add('hidden');
+                document.getElementById('final-best').textContent = best.toString();
+            }
+
+            document.getElementById('final-score').textContent = score.toString();
+            document.getElementById('gameover-screen').classList.remove('hidden');
+        };
+
+        function exitGame() {
+            window.parent.postMessage('EXIT_GAME', '*');
+        }
+
+        // Load best score on startup
+        window.addEventListener('load', () => {
+            loadBestScore();
+        });
+    </script>
+</body>
+</html>

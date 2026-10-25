@@ -1,0 +1,741 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>GameVerse | Multiplayer Nexus</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-high": "#2a2a2a",
+                        "on-secondary-fixed-variant": "#5516be",
+                        "background": "#131313",
+                        "on-tertiary-container": "#002f38",
+                        "inverse-surface": "#e5e2e1",
+                        "secondary-container": "#571bc1",
+                        "surface-container-lowest": "#0e0e0e",
+                        "error-container": "#93000a",
+                        "primary-fixed": "#d8e2ff",
+                        "outline-variant": "#424754",
+                        "surface-container-low": "#1c1b1b",
+                        "on-primary-fixed": "#001a42",
+                        "inverse-primary": "#005ac2",
+                        "on-secondary-container": "#c4abff",
+                        "on-secondary-fixed": "#23005c",
+                        "on-error-container": "#ffdad6",
+                        "surface-variant": "#353534",
+                        "on-primary-fixed-variant": "#004395",
+                        "on-surface-variant": "#c2c6d6",
+                        "secondary-fixed-dim": "#d0bcff",
+                        "primary": "#adc6ff",
+                        "on-secondary": "#3c0091",
+                        "primary-fixed-dim": "#adc6ff",
+                        "tertiary-fixed-dim": "#4cd7f6",
+                        "tertiary-container": "#009eb9",
+                        "tertiary-fixed": "#acedff",
+                        "surface": "#131313",
+                        "surface-bright": "#3a3939",
+                        "secondary": "#d0bcff",
+                        "on-primary": "#002e6a",
+                        "primary-container": "#4d8eff",
+                        "surface-container": "#201f1f",
+                        "inverse-on-surface": "#313030",
+                        "outline": "#8c909f",
+                        "on-error": "#690005",
+                        "surface-dim": "#131313",
+                        "on-surface": "#e5e2e1",
+                        "on-primary-container": "#00285d",
+                        "error": "#ffb4ab",
+                        "tertiary": "#4cd7f6",
+                        "on-tertiary-fixed": "#001f26",
+                        "surface-container-highest": "#353534",
+                        "secondary-fixed": "#e9ddff",
+                        "on-tertiary-fixed-variant": "#004e5c",
+                        "surface-tint": "#adc6ff",
+                        "on-tertiary": "#003640",
+                        "on-background": "#e5e2e1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "48px",
+                        "container-max": "1440px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Space Grotesk"],
+                        "display-lg-mobile": ["Space Grotesk"],
+                        "headline-xl": ["Space Grotesk"],
+                        "display-lg": ["Space Grotesk"],
+                        "label-sm": ["Inter"],
+                        "headline-lg": ["Space Grotesk"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                        "display-lg-mobile": ["40px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "headline-xl": ["40px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "1", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #050505;
+            color: #e5e2e1;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(32, 31, 31, 0.4);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+        .glass-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(173, 198, 255, 0.2), transparent);
+        }
+        .neon-glow-btn:hover {
+            box-shadow: 0 0 20px rgba(173, 198, 255, 0.4);
+            filter: brightness(1.1);
+        }
+        .neon-glow-secondary:hover {
+            box-shadow: 0 0 20px rgba(208, 188, 255, 0.4);
+            filter: brightness(1.1);
+        }
+        .active-tab-indicator {
+            box-shadow: 0 0 15px rgba(173, 198, 255, 0.5);
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #353534; }
+        
+        /* Shaders */
+        #radarCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md selection:bg-primary selection:text-on-primary">
+<header class="fixed top-0 w-full z-50 bg-surface/40 dark:bg-surface-container/40 backdrop-blur-3xl border-b border-white/10 shadow-xl">
+<div class="flex justify-between items-center px-margin-desktop py-4 max-w-container-max mx-auto">
+<div class="font-headline-sm text-headline-sm font-bold text-primary tracking-tighter cursor-pointer active:scale-95">
+            GameVerse
+        </div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md cursor-pointer active:scale-95" href="#">Home</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md cursor-pointer active:scale-95" href="#">Games</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md cursor-pointer active:scale-95" href="#">Community</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md cursor-pointer active:scale-95" href="#">Leaderboards</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md cursor-pointer active:scale-95" href="#">Tournaments</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-label-md text-label-md cursor-pointer active:scale-95" href="#">Multiplayer</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md cursor-pointer active:scale-95" href="#">About</a>
+</nav>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-on-surface-variant">
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors" data-icon="search">search</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors relative" data-icon="notifications">notifications<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full"></span></span>
+</div>
+<div class="flex items-center gap-3">
+<button class="font-label-md text-label-md text-on-surface hover:text-primary transition-colors cursor-pointer active:scale-95">Sign In</button>
+<button class="bg-primary text-on-primary font-label-md text-label-md px-6 py-2 rounded-lg font-bold neon-glow-btn transition-all duration-200 cursor-pointer active:scale-95">Sign Up</button>
+</div>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-16 px-margin-desktop max-w-container-max mx-auto grid grid-cols-12 gap-gutter relative">
+<!-- Left Content (Col 1-9) -->
+<div class="col-span-12 lg:col-span-9 space-y-12 relative z-10">
+<!-- Hero Selection -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Quick Match with Preview Radar Hover -->
+<div class="glass-card group cursor-pointer p-8 rounded-xl flex flex-col items-center text-center transition-all duration-300 hover:scale-[1.02] active:scale-95 border-primary/20 bg-primary/5 overflow-hidden" onclick="startMatchmaking('Quick Match')" onmouseenter="showMiniRadar()" onmouseleave="hideMiniRadar()">
+<!-- Mini Radar Preview Layer -->
+<div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" id="miniRadarContainer">
+<canvas class="w-full h-full" id="miniRadarCanvas"></canvas>
+<div class="absolute inset-0 bg-background/40 backdrop-blur-[2px]"></div>
+</div>
+<div class="relative z-10">
+<div class="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mb-6 group-hover:bg-primary/40 transition-colors">
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="bolt">bolt</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Quick Match</h3>
+<p class="font-body-md text-on-surface-variant">Instant entry into a balanced casual match.</p>
+<div class="mt-6 flex items-center gap-2 text-primary font-label-md uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">
+                        Join Queue <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+</div>
+<!-- Ranked Match -->
+<div class="glass-card group cursor-pointer p-8 rounded-xl flex flex-col items-center text-center transition-all duration-300 hover:scale-[1.02] active:scale-95 border-secondary/20 bg-secondary/5" onclick="startMatchmaking('Ranked Match')">
+<div class="w-16 h-16 rounded-full bg-secondary/20 flex items-center justify-center mb-6 group-hover:bg-secondary/40 transition-colors">
+<span class="material-symbols-outlined text-secondary text-4xl" data-icon="military_tech" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-secondary mb-2">Ranked Match</h3>
+<p class="font-body-md text-on-surface-variant">Competitive play for Global Leaderboard points.</p>
+<div class="mt-6 flex items-center gap-2 text-secondary font-label-md uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">
+                    Ascend Rank <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+<!-- Custom Room -->
+<div class="glass-card group cursor-pointer p-8 rounded-xl flex flex-col items-center text-center transition-all duration-300 hover:scale-[1.02] active:scale-95 border-tertiary/20 bg-tertiary/5">
+<div class="w-16 h-16 rounded-full bg-tertiary/20 flex items-center justify-center mb-6 group-hover:bg-tertiary/40 transition-colors">
+<span class="material-symbols-outlined text-tertiary text-4xl" data-icon="settings_input_component">settings_input_component</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-tertiary mb-2">Custom Room</h3>
+<p class="font-body-md text-on-surface-variant">Create or join private lobbies with specific rules.</p>
+<div class="mt-6 flex items-center gap-2 text-tertiary font-label-md uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">
+                    Configure <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</div>
+</div>
+</section>
+<!-- Featured Multiplayer Games -->
+<section>
+<div class="flex justify-between items-end mb-8">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-1">Featured Multiplayer</h2>
+<p class="font-body-md text-on-surface-variant">Hand-picked arenas with 2x XP active today.</p>
+</div>
+<button class="text-primary font-label-md hover:underline">View All Games</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+<!-- Game Card 1 -->
+<div class="glass-card group rounded-xl overflow-hidden hover:scale-[1.03] transition-transform duration-300">
+<div class="h-48 w-full bg-cover bg-center relative" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBTpAXRHndX1JW-LbCsJ7nzseAcb2DGkopbEIPWn50-9Yfe4w96am1QObVtsGPmLnSxX1YfK4oQdmaQzlToqJNyXWfsCv4-m0YqOueN_ZV5VIbr_yxda4-GM4pbfIlpJ5GOcO3sQzUX1EIDXslnBnoUj8SgrwlCx5NKxJFXIstDcX11np3mx0EjDmKXBi1rgOZfSKR5F5XQOQt8zoDUrffDNZk9osDKTbyPH3aXYEiLtC12Jdcz6sf0huMm2kF1H2knCP8Zm7lFJKg')">
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent"></div>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-primary/20 text-primary px-3 py-1 rounded-full font-label-sm backdrop-blur-md border border-primary/30">FPS</span>
+<span class="bg-error/20 text-error px-3 py-1 rounded-full font-label-sm backdrop-blur-md border border-error/30">2x XP</span>
+</div>
+</div>
+<div class="p-6">
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-2">Neon Strike: Zero</h4>
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant font-label-md flex items-center gap-1"><span class="material-symbols-outlined text-sm" data-icon="group">group</span> 12.4k Online</span>
+<button class="bg-surface-container-high px-4 py-2 rounded-lg text-primary font-label-md neon-glow-btn transition-all">Join Lobby</button>
+</div>
+</div>
+</div>
+<!-- Game Card 2 -->
+<div class="glass-card group rounded-xl overflow-hidden hover:scale-[1.03] transition-transform duration-300">
+<div class="h-48 w-full bg-cover bg-center relative" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCxk5pLot9pNeWik6EW5ZdDHTWCeUDfzOfTfniaXW7LTUXkSyFEiDoYZgFgyl3PuJm6eMOuqmuNnTV-9MXzsBl2V86xoc8GJDR1wKRaBMwvtnw0iB6JYfpgSvwqkiXW8mh_L5Y7YKIvuKLwcIhGlSZfjewScpZwUHCKoHQf5abR7x2jeNOosBBoOZO_aam_X51GCFYEwL9lcd9kGKu8Xr7UoJSvqjEy-QKrqLFZ3-VOFFNbNBL8cyMATHK0Y3AGT1SGALMk2hJ2CHo')">
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent"></div>
+<div class="absolute top-4 left-4">
+<span class="bg-secondary/20 text-secondary px-3 py-1 rounded-full font-label-sm backdrop-blur-md border border-secondary/30">MOBA</span>
+</div>
+</div>
+<div class="p-6">
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-2">Ether Realms</h4>
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant font-label-md flex items-center gap-1"><span class="material-symbols-outlined text-sm" data-icon="group">group</span> 45.1k Online</span>
+<button class="bg-surface-container-high px-4 py-2 rounded-lg text-primary font-label-md neon-glow-btn transition-all">Join Lobby</button>
+</div>
+</div>
+</div>
+<!-- Game Card 3 -->
+<div class="glass-card group rounded-xl overflow-hidden hover:scale-[1.03] transition-transform duration-300">
+<div class="h-48 w-full bg-cover bg-center relative" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC5okKjoCq8G4lYwG-jmxu5MhLB1Gl6rdCzy3x324XHdXDYkAOYPGNnf3-woZUss0OEy3lLmM6KKV4Dc72Lkr1TKjwQzE0AQYwvnDZFpd1-BgWcYelChVK8TDRR8OboZkJ2Zivk2dKLxsCyDW1aI13ju7v_AIHjMT03P4qyE7B8ALhgnKQz7g2UouuFHtQb65OcFTo96WZG2XWw2FyNbaa5WK6_T1H2iUAhZagzMBZ78TkepyzGASBFnGESXGai2nRtWjAAQ0nXDnI')">
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent"></div>
+<div class="absolute top-4 left-4">
+<span class="bg-tertiary/20 text-tertiary px-3 py-1 rounded-full font-label-sm backdrop-blur-md border border-tertiary/30">Racing</span>
+</div>
+</div>
+<div class="p-6">
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-2">Velocity X</h4>
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant font-label-md flex items-center gap-1"><span class="material-symbols-outlined text-sm" data-icon="group">group</span> 8.9k Online</span>
+<button class="bg-surface-container-high px-4 py-2 rounded-lg text-primary font-label-md neon-glow-btn transition-all">Join Lobby</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Live Pro Matches (Spectate) -->
+<section>
+<div class="flex items-center gap-3 mb-8">
+<span class="w-3 h-3 bg-error rounded-full animate-pulse shadow-[0_0_10px_rgba(255,180,171,0.5)]"></span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Live Pro Matches</h2>
+</div>
+<div class="space-y-4">
+<!-- Match Row 1 -->
+<div class="glass-card flex items-center justify-between p-6 rounded-xl hover:bg-white/5 transition-all group">
+<div class="flex items-center gap-12">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center font-bold text-primary border border-primary/20">A1</div>
+<div class="space-y-1">
+<span class="font-label-md text-on-surface block">Apex Legends: Masters League</span>
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 bg-error/10 text-error text-[10px] rounded border border-error/20 font-bold uppercase tracking-wider">Live</span>
+<span class="text-on-surface-variant text-[12px]">Round 4 of 5</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="text-center min-w-[80px]">
+<p class="font-label-sm text-on-surface-variant uppercase mb-1">Team Alpha</p>
+<p class="font-headline-sm text-primary font-bold">142</p>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-outline-variant font-bold text-sm">VS</span>
+<div class="w-px h-6 bg-white/10 my-1"></div>
+</div>
+<div class="text-center min-w-[80px]">
+<p class="font-label-sm text-on-surface-variant uppercase mb-1">Cyber Knights</p>
+<p class="font-headline-sm text-secondary font-bold">138</p>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="text-right">
+<p class="text-on-surface-variant font-label-sm">Spectators</p>
+<p class="text-on-surface font-label-md flex items-center justify-end gap-1"><span class="material-symbols-outlined text-sm" data-icon="visibility">visibility</span> 1.2k</p>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-label-md neon-glow-btn transition-all flex items-center gap-2">
+                            Spectate
+                        </button>
+</div>
+</div>
+<!-- Match Row 2 -->
+<div class="glass-card flex items-center justify-between p-6 rounded-xl hover:bg-white/5 transition-all group">
+<div class="flex items-center gap-12">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center font-bold text-secondary border border-secondary/20">ER</div>
+<div class="space-y-1">
+<span class="font-label-md text-on-surface block">Ether Realms Invitational</span>
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 bg-error/10 text-error text-[10px] rounded border border-error/20 font-bold uppercase tracking-wider">Live</span>
+<span class="text-on-surface-variant text-[12px]">Grand Finals</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="text-center min-w-[80px]">
+<p class="font-label-sm text-on-surface-variant uppercase mb-1">Mystic Void</p>
+<p class="font-headline-sm text-secondary font-bold">2</p>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-outline-variant font-bold text-sm">VS</span>
+<div class="w-px h-6 bg-white/10 my-1"></div>
+</div>
+<div class="text-center min-w-[80px]">
+<p class="font-label-sm text-on-surface-variant uppercase mb-1">Ghost Division</p>
+<p class="font-headline-sm text-tertiary font-bold">1</p>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="text-right">
+<p class="text-on-surface-variant font-label-sm">Spectators</p>
+<p class="text-on-surface font-label-md flex items-center justify-end gap-1"><span class="material-symbols-outlined text-sm" data-icon="visibility">visibility</span> 842</p>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-label-md neon-glow-btn transition-all flex items-center gap-2">
+                            Spectate
+                        </button>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Persistent Social Sidebar (Col 10-12) -->
+<aside class="hidden lg:block lg:col-span-3 space-y-6 sticky top-24 h-[calc(100vh-120px)]">
+<div class="glass-card rounded-2xl p-6 h-full flex flex-col">
+<div class="flex items-center justify-between mb-8">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Social</h3>
+<div class="flex gap-2">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer text-xl" data-icon="person_add">person_add</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer text-xl" data-icon="settings">settings</span>
+</div>
+</div>
+<!-- My Status -->
+<div class="flex items-center gap-4 mb-8 p-3 rounded-xl bg-primary/5 border border-primary/10">
+<div class="relative">
+<div class="w-12 h-12 rounded-full border-2 border-primary overflow-hidden">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJnreaTuv666Qbu3Hld9IMIzLLkX_hSgGeJEfopAGZ7Sr6yo6F2NjLnL5oXW_Dg3EmT_LvMwmEB4oh1Oazs-HCKkB_-N5v3_GHp6tGphYDhdPYmSf3g-ksMvE-avFFjxAfVQ2UrVTQeJ1aVEbe4EzMy7eucS-_YvuOmNmsQxKFEzaAyMj4GEYXKg9-cOS8PbMnT7qRGNcWwQuWmAyQsWDoivQxb3jL2FRxg7su1xR-5TOlGNaVotmOShaFjMIGzU0jW4Qt-CDQUuc">
+</div>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-background"></div>
+</div>
+<div>
+<p class="font-label-md text-on-surface font-bold">Pro Gamer</p>
+<p class="font-label-sm text-primary">Level 42 Elite</p>
+</div>
+</div>
+<!-- Tabs -->
+<div class="flex border-b border-white/5 mb-6">
+<button class="flex-1 pb-2 text-primary font-label-md border-b-2 border-primary active-tab-indicator transition-all" id="tab-friends" onclick="switchSocialTab('friends')">Friends</button>
+<button class="flex-1 pb-2 text-on-surface-variant font-label-md hover:text-on-surface transition-all" id="tab-party" onclick="switchSocialTab('party')">Party</button>
+<button class="flex-1 pb-2 text-on-surface-variant font-label-md hover:text-on-surface transition-all" id="tab-recent" onclick="switchSocialTab('recent')">Recent</button>
+</div>
+<!-- Scrollable Content Areas -->
+<div class="flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-6">
+<!-- Friends List Section -->
+<div class="space-y-6" id="section-friends">
+<div class="flex items-center justify-between group">
+<div class="flex items-center gap-3">
+<div class="relative">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjhUsVylACH1GlUJtD26pz_-OTDka_csvYlsvBH0BiBVimbr0ENuwxXD0D6jhHU0Y1zEjycHoplBDlyaLQwCpR_NL-Tbxp5G28_B4wnViD1O6mg0DN4R6EX7cP3qDNQw54rIHefTZN1LpusJun2cJ-H4DjScXTlXjFs2L8TqNdB2bBPVgAfAgWvwJRV7sVGzPtR9o8ajnOAWRnrH7OUXjDTEkXWuKGkNqrL_pgy486Id5FcviSnD00zzSVxoxrp2kiOfDKUsuaiOw">
+</div>
+<div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-background"></div>
+</div>
+<div>
+<p class="font-label-md text-on-surface group-hover:text-primary transition-colors">ShadowStep</p>
+<p class="text-[10px] text-primary uppercase font-bold tracking-tight">Playing Neon Strike</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary cursor-pointer" data-icon="chat">chat</span>
+</div>
+<div class="flex items-center justify-between group">
+<div class="flex items-center gap-3">
+<div class="relative">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBaDWn6tw8zzwbbLNAtDEvvlA3VAeF3NS39YDmxCsF9i5CeFdoNul-wJvFbUhQBCmUnou_wAEKDSWgnkSQQvxWda2UUmV7tQ9P2Kfccqdn9vQbQibRQ-7gHAbBeU3rWdvg0LrLAEDzEcoyj0eXhTv5H3QC6qKRhW4uwcwqhFPJHdw7FeFb4SSMv_XddbOYhCO75kXVfz9V_x196e8p4Cl4aAz35_z7Dlz4bSVoCgeZyFElmLhV9jx7_snE-HxjZfWYk42_obgfgjhU">
+</div>
+<div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-background"></div>
+</div>
+<div>
+<p class="font-label-md text-on-surface group-hover:text-primary transition-colors">IronClad_99</p>
+<p class="text-[10px] text-green-500 uppercase font-bold tracking-tight">Online</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary cursor-pointer" data-icon="chat">chat</span>
+</div>
+<div class="flex items-center justify-between opacity-60">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden grayscale">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3cuJhP3Xp1vEQVgVXGIECkGJfZL4Lsr9UYFWFhah_Cb2NS8v6P1lKg-sQBAOx0m0-YxVK8mjUMcg6JAeAre_OVYCIM4WXTP77iMGY32xuJTNhGcO_4dJTon3gJn0Lp8JzKpRo4YU4pttvlJ6EesT9dHbvkEX_dit5JSlnCHT_M7mgdg4M0r2P3zgd6yPKhFhXR2xLhJ4ylP2IOd7ubyhUCUyGalquNYLBuFNU65i-U0pNra4Zhvk9zWBTjikfEdgqHWULGht3j8g">
+</div>
+<div>
+<p class="font-label-md text-on-surface">VoidWalker</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-tighter">Offline • 2h ago</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Players Section (Hidden by default) -->
+<div class="hidden space-y-6" id="section-recent">
+<div class="flex items-center justify-between group">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary/20 flex items-center justify-center font-bold text-secondary">XK</div>
+<div>
+<p class="font-label-md text-on-surface">X_Killa</p>
+<p class="text-[10px] text-on-surface-variant">Met in Velocity X</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer" data-icon="add_circle">add_circle</span>
+</div>
+<div class="flex items-center justify-between group">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-tertiary/20 flex items-center justify-center font-bold text-tertiary">NT</div>
+<div>
+<p class="font-label-md text-on-surface">NeoTox</p>
+<p class="text-[10px] text-on-surface-variant">Met in Neon Strike</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer" data-icon="add_circle">add_circle</span>
+</div>
+</div>
+<!-- Party Section -->
+<div class="hidden space-y-6" id="section-party">
+<div class="flex flex-col items-center justify-center py-8 text-center bg-white/5 rounded-xl border border-dashed border-white/10">
+<span class="material-symbols-outlined text-4xl text-on-surface-variant mb-3" data-icon="groups">groups</span>
+<p class="font-label-md text-on-surface-variant mb-1">No Active Party</p>
+<p class="text-xs text-on-surface-variant/60">Invite friends to start a session</p>
+</div>
+</div>
+</div>
+<!-- Party Footer (Persistent) -->
+<div class="mt-8 pt-6 border-t border-white/5">
+<p class="font-label-sm text-on-surface-variant uppercase mb-4 tracking-widest">Active Party</p>
+<div class="flex gap-2">
+<div class="w-8 h-8 rounded-full border-2 border-primary flex items-center justify-center text-[10px] font-bold text-primary shadow-[0_0_10px_rgba(173,198,255,0.3)]">YOU</div>
+<div class="w-8 h-8 rounded-full border border-dashed border-outline-variant flex items-center justify-center text-outline-variant hover:border-primary hover:text-primary cursor-pointer transition-colors group">
+<span class="material-symbols-outlined text-sm group-hover:scale-110" data-icon="add">add</span>
+</div>
+<div class="w-8 h-8 rounded-full border border-dashed border-outline-variant flex items-center justify-center text-outline-variant/30"></div>
+<div class="w-8 h-8 rounded-full border border-dashed border-outline-variant flex items-center justify-center text-outline-variant/30"></div>
+</div>
+<button class="w-full mt-6 py-2.5 rounded-lg bg-primary text-on-primary font-label-md neon-glow-btn transition-all font-bold">Create Party</button>
+</div>
+</div>
+</aside>
+</main>
+<!-- Footer -->
+<footer class="w-full relative bottom-0 bg-background dark:bg-background border-t border-outline-variant/20">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-desktop py-16 max-w-container-max mx-auto">
+<div class="col-span-1 md:col-span-1">
+<div class="font-headline-sm text-headline-sm font-bold text-on-surface mb-6">GameVerse</div>
+<p class="font-body-md text-on-surface-variant mb-6">The ultimate nexus for competitive gaming, social connection, and immersive discovery.</p>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer" data-icon="public">public</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer" data-icon="smart_display">smart_display</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer" data-icon="alternate_email">alternate_email</span>
+</div>
+</div>
+<div>
+<h4 class="font-label-md text-on-surface font-bold mb-6 uppercase tracking-widest">Explore</h4>
+<ul class="space-y-4">
+<li><a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Game Library</a></li>
+<li><a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Tournaments</a></li>
+<li><a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Marketplace</a></li>
+<li><a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Nexus Pro</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label-md text-on-surface font-bold mb-6 uppercase tracking-widest">Connect</h4>
+<ul class="space-y-4">
+<li><a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Discord</a></li>
+<li><a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">YouTube</a></li>
+<li><a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Contact Support</a></li>
+<li><a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Developers</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label-md text-on-surface font-bold mb-6 uppercase tracking-widest">Legal</h4>
+<ul class="space-y-4">
+<li><a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a></li>
+<li><a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a></li>
+<li><a class="font-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Cookie Settings</a></li>
+</ul>
+</div>
+</div>
+<div class="px-margin-desktop py-8 border-t border-white/5 max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="font-label-sm text-on-surface-variant">© 2024 GameVerse Nexus. All rights reserved.</p>
+<div class="flex items-center gap-8 font-label-sm text-on-surface-variant">
+<span class="flex items-center gap-2"><span class="w-2 h-2 bg-green-500 rounded-full"></span> Servers: Optimal</span>
+<span>Region: North America East</span>
+</div>
+</div>
+</footer>
+<!-- Matchmaking Overlay -->
+<div class="fixed inset-0 z-[100] hidden" id="matchmakingOverlay">
+<div class="absolute inset-0 bg-background/95 backdrop-blur-3xl"></div>
+<!-- Radar Animation Section -->
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<div class="relative w-[500px] h-[500px] rounded-full overflow-hidden border border-white/5 shadow-[0_0_100px_rgba(173,198,255,0.1)]">
+<canvas id="radarCanvas"></canvas>
+<!-- Central Icon -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<div class="w-24 h-24 rounded-full bg-primary/10 border border-primary/40 flex items-center justify-center animate-pulse">
+<span class="material-symbols-outlined text-primary text-5xl" data-icon="travel_explore">travel_explore</span>
+</div>
+</div>
+</div>
+<div class="mt-12 text-center space-y-4">
+<h2 class="font-display-lg text-primary" id="matchmakingTypeLabel">Quick Match</h2>
+<p class="font-headline-sm text-on-surface opacity-80">Scanning local nodes for opponents...</p>
+<div class="flex items-center justify-center gap-12 mt-8">
+<div class="text-center">
+<p class="text-on-surface-variant font-label-sm uppercase tracking-widest mb-1">Elapsed</p>
+<p class="text-3xl font-headline-sm text-on-surface font-bold" id="timer">00:00</p>
+</div>
+<div class="w-px h-16 bg-white/10"></div>
+<div class="text-center">
+<p class="text-on-surface-variant font-label-sm uppercase tracking-widest mb-1">Est. Time</p>
+<p class="text-3xl font-headline-sm text-on-surface font-bold">00:45</p>
+</div>
+</div>
+<button class="mt-12 px-16 py-4 rounded-full border-2 border-error/50 text-error font-label-md hover:bg-error hover:text-on-error hover:border-error transition-all active:scale-95 uppercase tracking-widest font-bold" onclick="stopMatchmaking()">Cancel Search</button>
+</div>
+</div>
+</div>
+<script>
+    let timerInterval;
+    let seconds = 0;
+    let gl, program, positionBuffer, timeUniform, resolutionUniform;
+    let miniGl, miniProgram, miniTimeUniform, miniResolutionUniform;
+    let animationFrame;
+
+    const radarShaderSource = `
+        precision highp float;
+        varying vec2 v_texCoord;
+        uniform float u_time;
+        uniform vec2 u_resolution;
+
+        void main() {
+            vec2 uv = v_texCoord;
+            
+            // Create a pulsing radar-like effect
+            vec2 center = vec2(0.5, 0.5);
+            float dist = distance(uv, center);
+            
+            // Background noise/grid
+            float grid = (sin(uv.x * 40.0) * 0.5 + 0.5) * (sin(uv.y * 40.0) * 0.5 + 0.5);
+            vec3 color = vec3(0.02, 0.02, 0.05); // Deep space blue
+            color += grid * 0.02;
+            
+            // Rotating sweep
+            float angle = atan(uv.y - 0.5, uv.x - 0.5);
+            float sweep = mod(angle - u_time * 2.0, 6.28318) / 6.28318;
+            sweep = pow(sweep, 4.0);
+            
+            // Rings
+            float ring1 = abs(sin(dist * 20.0 - u_time * 2.0)) * 0.1;
+            float ring2 = 1.0 - smoothstep(0.45, 0.46, dist);
+            ring2 *= smoothstep(0.44, 0.45, dist);
+            
+            // Glow
+            vec3 glowColor = vec3(0.23, 0.51, 0.96); // Neon Blue #3B82F6
+            color += sweep * glowColor * 0.3;
+            color += ring1 * glowColor * 0.2 * (1.0 - dist);
+            color += ring2 * glowColor * 0.8;
+            
+            // Center point
+            float centerDot = 1.0 - smoothstep(0.0, 0.01, dist);
+            color += centerDot * vec3(1.0);
+
+            gl_FragColor = vec4(color, 1.0);
+        }
+    `;
+
+    const vertexShaderSource = `
+        attribute vec2 a_position;
+        varying vec2 v_texCoord;
+        void main() {
+            gl_Position = vec4(a_position, 0, 1);
+            v_texCoord = a_position * 0.5 + 0.5;
+        }
+    `;
+
+    function initGL(canvasId) {
+        const canvas = document.getElementById(canvasId);
+        const glContext = canvas.getContext('webgl');
+        if (!glContext) return null;
+
+        const vs = glContext.createShader(glContext.VERTEX_SHADER);
+        glContext.shaderSource(vs, vertexShaderSource);
+        glContext.compileShader(vs);
+
+        const fs = glContext.createShader(glContext.FRAGMENT_SHADER);
+        glContext.shaderSource(fs, radarShaderSource);
+        glContext.compileShader(fs);
+
+        const prog = glContext.createProgram();
+        glContext.attachShader(prog, vs);
+        glContext.attachShader(prog, fs);
+        glContext.linkProgram(prog);
+
+        const posBuffer = glContext.createBuffer();
+        glContext.bindBuffer(glContext.ARRAY_BUFFER, posBuffer);
+        glContext.bufferData(glContext.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, -1,1, 1,-1, 1,1]), glContext.STATIC_DRAW);
+
+        return { glContext, prog, posBuffer };
+    }
+
+    function render(ctx, time) {
+        const { glContext, prog, posBuffer } = ctx;
+        if (!glContext) return;
+
+        glContext.viewport(0, 0, glContext.canvas.width, glContext.canvas.height);
+        glContext.useProgram(prog);
+
+        const posLoc = glContext.getAttribLocation(prog, "a_position");
+        glContext.enableVertexAttribArray(posLoc);
+        glContext.vertexAttribPointer(posLoc, 2, glContext.FLOAT, false, 0, 0);
+
+        const tLoc = glContext.getUniformLocation(prog, "u_time");
+        const rLoc = glContext.getUniformLocation(prog, "u_resolution");
+
+        glContext.uniform1f(tLoc, time * 0.001);
+        glContext.uniform2f(rLoc, glContext.canvas.width, glContext.canvas.height);
+
+        glContext.drawArrays(glContext.TRIANGLES, 0, 6);
+    }
+
+    function startMatchmaking(type) {
+        const overlay = document.getElementById('matchmakingOverlay');
+        const typeText = document.getElementById('matchmakingTypeLabel');
+        const timerText = document.getElementById('timer');
+        
+        typeText.innerText = type;
+        overlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+
+        const mainRadar = initGL('radarCanvas');
+        function animate(time) {
+            render(mainRadar, time);
+            animationFrame = requestAnimationFrame(animate);
+        }
+        animationFrame = requestAnimationFrame(animate);
+
+        seconds = 0;
+        timerText.innerText = "00:00";
+        timerInterval = setInterval(() => {
+            seconds++;
+            const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const secs = (seconds % 60).toString().padStart(2, '0');
+            timerText.innerText = `${mins}:${secs}`;
+        }, 1000);
+    }
+
+    function stopMatchmaking() {
+        const overlay = document.getElementById('matchmakingOverlay');
+        overlay.classList.add('hidden');
+        document.body.style.overflow = '';
+        clearInterval(timerInterval);
+        cancelAnimationFrame(animationFrame);
+    }
+
+    let miniRadarAnimateFrame;
+    function showMiniRadar() {
+        const ctx = initGL('miniRadarCanvas');
+        function anim(time) {
+            render(ctx, time);
+            miniRadarAnimateFrame = requestAnimationFrame(anim);
+        }
+        miniRadarAnimateFrame = requestAnimationFrame(anim);
+    }
+
+    function hideMiniRadar() {
+        cancelAnimationFrame(miniRadarAnimateFrame);
+    }
+
+    function switchSocialTab(tabId) {
+        ['friends', 'party', 'recent'].forEach(t => {
+            document.getElementById(`section-${t}`).classList.add('hidden');
+            document.getElementById(`tab-${t}`).classList.remove('text-primary', 'border-primary', 'active-tab-indicator');
+            document.getElementById(`tab-${t}`).classList.add('text-on-surface-variant');
+        });
+
+        document.getElementById(`section-${tabId}`).classList.remove('hidden');
+        const activeTab = document.getElementById(`tab-${tabId}`);
+        activeTab.classList.add('text-primary', 'border-primary', 'active-tab-indicator');
+        activeTab.classList.remove('text-on-surface-variant');
+    }
+
+    // Initialize mini radar context sizes
+    window.addEventListener('load', () => {
+        const mini = document.getElementById('miniRadarCanvas');
+        mini.width = mini.clientWidth;
+        mini.height = mini.clientHeight;
+        
+        const main = document.getElementById('radarCanvas');
+        main.width = 500;
+        main.height = 500;
+    });
+</script>
+</body></html>

@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GameVerse Creator Studio</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#93000a",
+                        "on-secondary-fixed": "#23005c",
+                        "on-tertiary": "#003640",
+                        "on-secondary": "#3c0091",
+                        "on-primary-fixed-variant": "#004395",
+                        "primary-container": "#4d8eff",
+                        "on-secondary-container": "#c4abff",
+                        "tertiary-container": "#009eb9",
+                        "on-secondary-fixed-variant": "#5516be",
+                        "secondary-fixed": "#e9ddff",
+                        "background": "#131313",
+                        "surface-container-lowest": "#0e0e0e",
+                        "primary-fixed": "#d8e2ff",
+                        "inverse-primary": "#005ac2",
+                        "error": "#ffb4ab",
+                        "on-error-container": "#ffdad6",
+                        "on-background": "#e5e2e1",
+                        "tertiary-fixed": "#acedff",
+                        "on-surface": "#e5e2e1",
+                        "on-primary-fixed": "#001a42",
+                        "surface-dim": "#131313",
+                        "surface-container-low": "#1c1b1b",
+                        "secondary-fixed-dim": "#d0bcff",
+                        "surface-container-high": "#2a2a2a",
+                        "on-tertiary-fixed": "#001f26",
+                        "surface-variant": "#353534",
+                        "primary-fixed-dim": "#adc6ff",
+                        "tertiary-fixed-dim": "#4cd7f6",
+                        "surface-tint": "#adc6ff",
+                        "inverse-on-surface": "#313030",
+                        "surface-container": "#201f1f",
+                        "secondary-container": "#571bc1",
+                        "on-tertiary-fixed-variant": "#004e5c",
+                        "on-tertiary-container": "#002f38",
+                        "on-surface-variant": "#c2c6d6",
+                        "on-error": "#690005",
+                        "tertiary": "#4cd7f6",
+                        "outline": "#8c909f",
+                        "surface": "#131313",
+                        "on-primary-container": "#00285d",
+                        "surface-container-highest": "#353534",
+                        "primary": "#adc6ff",
+                        "surface-bright": "#3a3939",
+                        "outline-variant": "#424754",
+                        "secondary": "#d0bcff",
+                        "inverse-surface": "#e5e2e1",
+                        "on-primary": "#002e6a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1440px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "48px",
+                        "gutter": "24px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Space Grotesk"],
+                        "display-lg": ["Space Grotesk"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Space Grotesk"],
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-sm": ["Space Grotesk"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #050505;
+            color: #e5e2e1;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        .glass-panel {
+            background: rgba(32, 31, 31, 0.4);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+        }
+        .neon-glow-primary {
+            box-shadow: 0 0 20px rgba(173, 198, 255, 0.2);
+        }
+        .neon-border-primary {
+            border: 1px solid rgba(173, 198, 255, 0.3);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #adc6ff;
+            border-radius: 10px;
+        }
+        .pulse-animation {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body class="dark selection:bg-primary selection:text-on-primary">
+<!-- Background Shader -->
+
+<!-- Top Navigation -->
+<nav class="fixed top-0 w-full z-50 bg-surface/40 dark:bg-surface-container/40 backdrop-blur-3xl border-b border-white/10 shadow-xl">
+<div class="flex justify-between items-center px-margin-desktop py-4 max-w-container-max mx-auto">
+<div class="flex items-center gap-8">
+<span class="font-headline-sm text-headline-sm font-bold text-primary tracking-tighter cursor-pointer active:scale-95 transition-all">GameVerse</span>
+<div class="hidden md:flex gap-6">
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md" href="#">Home</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md" href="#">Games</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-label-md text-label-md" href="#">Creator Studio</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md" href="#">Community</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer transition-colors" data-icon="search">search</span>
+<div class="relative">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer transition-colors" data-icon="notifications">notifications</span>
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-error rounded-full"></span>
+</div>
+<div class="flex items-center gap-3 pl-4 border-l border-white/10">
+<div class="text-right hidden sm:block">
+<p class="font-label-md text-label-md text-on-surface">Pro Gamer</p>
+<p class="text-[10px] text-primary uppercase tracking-widest">Level 42 Elite</p>
+</div>
+<img class="w-10 h-10 rounded-full border-2 border-primary/30" data-alt="A futuristic circular profile avatar for a premium gaming platform, featuring a professional gamer with stylized neon highlights on their headset and a sleek dark background with subtle blue geometric lens flares." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-wNeKu4_LWjR2V9b2R8yTcjOa9cNGlZlBpzCBtvhCVo2HGrMEGBdIwVUWCusRQ3OsjtzWZ9yJG9H7YYGEKXU6vT7yuF7W1kP0RFmQAPuwdUwOnE5dLiu1gn2vaks77e7oIjRy6fGBDJqBq6hfpdweN9omgNhZHY2exlxafQpqGSH5-L3iGWkaM1pWay3XRNe64guMDkNLcbdCHRpyeYjBYdvbc-KWDETRyQemONZQJ4DaoFL4AneyBj24WJZcP5S1C6S8wMxjKKk"/>
+</div>
+</div>
+</div>
+</nav>
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-full w-64 z-40 bg-surface-container-low dark:bg-surface-container-low/60 backdrop-blur-xl border-r border-white/5 shadow-2xl pt-24 hidden lg:flex flex-col px-4 gap-2">
+<div class="mb-8 px-4">
+<h3 class="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-[0.2em] mb-4">Stream Menu</h3>
+<div class="space-y-1">
+<div class="flex items-center gap-4 p-3 rounded-lg bg-primary/10 text-primary border-r-4 border-primary cursor-pointer">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</div>
+<div class="flex items-center gap-4 p-3 rounded-lg text-on-surface-variant hover:bg-white/5 cursor-pointer transition-all">
+<span class="material-symbols-outlined" data-icon="video_library">video_library</span>
+<span class="font-label-md text-label-md">Content Library</span>
+</div>
+<div class="flex items-center gap-4 p-3 rounded-lg text-on-surface-variant hover:bg-white/5 cursor-pointer transition-all">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-label-md text-label-md">Insights</span>
+</div>
+</div>
+</div>
+<div class="mb-8 px-4">
+<h3 class="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-[0.2em] mb-4">Engagement</h3>
+<div class="space-y-1">
+<div class="flex items-center gap-4 p-3 rounded-lg text-on-surface-variant hover:bg-white/5 cursor-pointer transition-all">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-md text-label-md">Community</span>
+</div>
+<div class="flex items-center gap-4 p-3 rounded-lg text-on-surface-variant hover:bg-white/5 cursor-pointer transition-all">
+<span class="material-symbols-outlined" data-icon="military_tech">military_tech</span>
+<span class="font-label-md text-label-md">Achievements</span>
+</div>
+</div>
+</div>
+<div class="mt-auto pb-8 px-4 border-t border-white/5 pt-4">
+<div class="flex items-center gap-4 p-3 rounded-lg text-on-surface-variant hover:bg-white/5 cursor-pointer transition-all mb-2">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Studio Settings</span>
+</div>
+<div class="flex items-center gap-4 p-3 rounded-lg text-error hover:bg-error/10 cursor-pointer transition-all">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label-md text-label-md">Sign Out</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="lg:ml-64 pt-24 pb-12 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<!-- Header Section -->
+<header class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+<div>
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface leading-tight">Creator <span class="text-primary">Studio</span></h1>
+<p class="text-on-surface-variant font-body-lg text-body-lg">Ready to broadcast, Elite Level 42.</p>
+</div>
+<button class="flex items-center gap-2 bg-primary text-on-primary px-8 py-4 rounded-xl font-label-md text-label-md font-bold hover:scale-105 hover:brightness-110 active:scale-95 transition-all neon-glow-primary">
+<span class="material-symbols-outlined" data-icon="sensors">sensors</span>
+                GO LIVE NOW
+            </button>
+</header>
+<!-- Grid Layout: Split View -->
+<div class="grid grid-cols-12 gap-gutter mb-12">
+<!-- Left: Stream Controls -->
+<div class="col-span-12 xl:col-span-8 space-y-6">
+<!-- Preview Window -->
+<div class="glass-panel rounded-2xl overflow-hidden relative aspect-video group">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="A professional live stream preview layout in a dark futuristic room, showing a gamer in the bottom right corner in a circle, a high-octane cyberpunk action game in the background, and holographic overlays showing chat and viewer count in a clean minimalist blue aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCT6BBh-2J8Po3KRRypESYO6l3FmOEbQsqqO_ZPpEPnULaI9k04JsD9hyOswKUJcMuQ1p4fRfUZUEDhs47sJXdCxxg3f5ETYvdoyCuCczbQDhzFzurHELOjtpxMIFrfPSWYuRINNtRC4T3XVSebSs6KeNgxiWIR7E2ReRLGi9Ngi4HTMh3IXhYBYkdYgy1VEWVK-eD9pW4xmc4UOrn64-dZaUYEvtvv2lmDJdGw-bB7VjUXusz76BXnj0jqJhkAMVsmQpQIfPitzAE')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="bg-error text-white text-[10px] px-2 py-1 rounded font-bold tracking-widest flex items-center gap-1 pulse-animation">
+<span class="w-1.5 h-1.5 bg-white rounded-full"></span> PREVIEW
+                        </span>
+<span class="bg-black/40 backdrop-blur-md text-white text-[10px] px-2 py-1 rounded font-bold tracking-widest border border-white/10">1080P | 60FPS</span>
+</div>
+<div class="absolute bottom-6 left-6 right-6 flex items-center justify-between">
+<div class="flex gap-4">
+<button class="w-12 h-12 rounded-full glass-panel flex items-center justify-center hover:bg-primary hover:text-on-primary transition-all active:scale-90">
+<span class="material-symbols-outlined" data-icon="mic">mic</span>
+</button>
+<button class="w-12 h-12 rounded-full glass-panel flex items-center justify-center hover:bg-primary hover:text-on-primary transition-all active:scale-90">
+<span class="material-symbols-outlined" data-icon="videocam">videocam</span>
+</button>
+<button class="w-12 h-12 rounded-full glass-panel flex items-center justify-center hover:bg-primary hover:text-on-primary transition-all active:scale-90">
+<span class="material-symbols-outlined" data-icon="screen_share">screen_share</span>
+</button>
+</div>
+<div class="flex items-center gap-4">
+<div class="text-right">
+<p class="text-[10px] text-on-surface-variant font-bold uppercase tracking-wider">Current Bitrate</p>
+<p class="text-primary font-headline-sm">6,500 <span class="text-xs">kbps</span></p>
+</div>
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="equalizer">equalizer</span>
+</div>
+</div>
+</div>
+<!-- Scene Selection -->
+<div class="glass-panel p-6 rounded-2xl">
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="layers">layers</span> Active Scenes
+                    </h3>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="p-4 rounded-xl border-2 border-primary bg-primary/5 cursor-pointer relative overflow-hidden group">
+<p class="font-label-md text-label-md text-primary mb-1">Gameplay</p>
+<p class="text-[10px] text-on-surface-variant">Default Scene</p>
+<div class="absolute -right-4 -bottom-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl" data-icon="sports_esports">sports_esports</span>
+</div>
+</div>
+<div class="p-4 rounded-xl border border-white/10 hover:border-primary/50 bg-white/5 cursor-pointer relative overflow-hidden group transition-all">
+<p class="font-label-md text-label-md text-on-surface mb-1">Intermission</p>
+<p class="text-[10px] text-on-surface-variant">Chat &amp; Cam</p>
+<div class="absolute -right-4 -bottom-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl" data-icon="chat">chat</span>
+</div>
+</div>
+<div class="p-4 rounded-xl border border-white/10 hover:border-primary/50 bg-white/5 cursor-pointer relative overflow-hidden group transition-all">
+<p class="font-label-md text-label-md text-on-surface mb-1">Be Right Back</p>
+<p class="text-[10px] text-on-surface-variant">Animated Loop</p>
+<div class="absolute -right-4 -bottom-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-6xl" data-icon="timer">timer</span>
+</div>
+</div>
+<div class="p-4 rounded-xl border border-dashed border-white/20 hover:border-primary/50 flex flex-col items-center justify-center gap-1 group cursor-pointer transition-all">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary" data-icon="add_circle">add_circle</span>
+<span class="text-[10px] font-bold text-on-surface-variant tracking-wider uppercase">Add Scene</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: Real-time Stats & Chat -->
+<div class="col-span-12 xl:col-span-4 space-y-6">
+<!-- Stats Summary -->
+<div class="grid grid-cols-2 gap-4">
+<div class="glass-panel p-4 rounded-2xl border-l-4 border-tertiary">
+<p class="text-[10px] font-bold text-on-surface-variant tracking-widest uppercase mb-1">Viewers</p>
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-on-surface">12,482</span>
+<span class="text-tertiary text-xs">+12%</span>
+</div>
+</div>
+<div class="glass-panel p-4 rounded-2xl border-l-4 border-secondary">
+<p class="text-[10px] font-bold text-on-surface-variant tracking-widest uppercase mb-1">Donations</p>
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-on-surface">$1,240</span>
+<span class="text-secondary text-xs">New</span>
+</div>
+</div>
+</div>
+<!-- Live Chat -->
+<div class="glass-panel rounded-2xl flex flex-col h-[500px]">
+<div class="p-4 border-b border-white/10 flex justify-between items-center">
+<h3 class="font-label-md text-label-md font-bold tracking-widest uppercase">Stream Chat</h3>
+<div class="flex gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-sm cursor-pointer hover:text-primary" data-icon="settings">settings</span>
+<span class="material-symbols-outlined text-on-surface-variant text-sm cursor-pointer hover:text-primary" data-icon="more_vert">more_vert</span>
+</div>
+</div>
+<div class="flex-1 p-4 space-y-4 overflow-y-auto custom-scrollbar">
+<div class="flex gap-3">
+<div class="w-8 h-8 rounded-full bg-primary/20 flex-shrink-0 flex items-center justify-center text-[10px] font-bold border border-primary/30">M1</div>
+<div>
+<p class="text-[10px] font-bold text-primary mb-1">Mod_Gamer1 <span class="text-on-surface-variant/50 font-normal">10:42 AM</span></p>
+<p class="text-body-md text-label-md text-on-surface">Let's keep it friendly in the chat everyone!</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary/20 flex-shrink-0 flex items-center justify-center text-[10px] font-bold border border-secondary/30">SK</div>
+<div>
+<p class="text-[10px] font-bold text-secondary mb-1">ShadowKiller <span class="text-on-surface-variant/50 font-normal">10:43 AM</span></p>
+<p class="text-body-md text-label-md text-on-surface">That last combo was insane! GG 💎</p>
+</div>
+</div>
+<div class="flex gap-3 p-2 bg-primary/5 rounded-lg border border-primary/10">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<div>
+<p class="text-[10px] font-bold text-primary">CyberPulse <span class="text-on-surface-variant font-normal">gifted 5 Subs!</span></p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="w-8 h-8 rounded-full bg-white/10 flex-shrink-0 flex items-center justify-center text-[10px] font-bold border border-white/20">ZZ</div>
+<div>
+<p class="text-[10px] font-bold text-on-surface-variant mb-1">ZenZero <span class="text-on-surface-variant/50 font-normal">10:45 AM</span></p>
+<p class="text-body-md text-label-md text-on-surface">Where can I get those glasses?</p>
+</div>
+</div>
+<!-- More chat items would go here -->
+</div>
+<div class="p-4 border-t border-white/10">
+<div class="relative">
+<input class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-label-md focus:outline-none focus:border-primary transition-all pr-12" placeholder="Send a message..." type="text"/>
+<button class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="send">send</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Section: Content Analytics -->
+<section class="mb-12">
+<div class="flex justify-between items-center mb-6">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Performance <span class="text-primary">Trends</span></h2>
+<div class="flex gap-2">
+<button class="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-label-sm text-on-surface-variant hover:bg-white/10 transition-all">Last 7 Days</button>
+<button class="px-4 py-2 rounded-lg bg-primary/10 border border-primary/20 text-label-sm text-primary">Last 30 Days</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<div class="glass-panel p-6 rounded-2xl h-64 relative overflow-hidden">
+<div class="flex justify-between items-start mb-4">
+<div>
+<p class="text-on-surface-variant font-label-sm uppercase tracking-widest">Follower Growth</p>
+<h4 class="font-headline-sm text-on-surface">+2,450 <span class="text-tertiary text-xs">↑ 18.2%</span></h4>
+</div>
+<span class="material-symbols-outlined text-tertiary" data-icon="show_chart">show_chart</span>
+</div>
+<!-- Mock Chart Visualization -->
+<div class="absolute bottom-0 left-0 w-full h-32 flex items-end px-6 pb-6 gap-2">
+<div class="flex-1 bg-tertiary/20 h-[40%] rounded-t-sm hover:bg-tertiary transition-all"></div>
+<div class="flex-1 bg-tertiary/20 h-[55%] rounded-t-sm hover:bg-tertiary transition-all"></div>
+<div class="flex-1 bg-tertiary/20 h-[45%] rounded-t-sm hover:bg-tertiary transition-all"></div>
+<div class="flex-1 bg-tertiary/20 h-[70%] rounded-t-sm hover:bg-tertiary transition-all"></div>
+<div class="flex-1 bg-tertiary/20 h-[60%] rounded-t-sm hover:bg-tertiary transition-all"></div>
+<div class="flex-1 bg-tertiary/20 h-[85%] rounded-t-sm hover:bg-tertiary transition-all"></div>
+<div class="flex-1 bg-tertiary/20 h-[95%] rounded-t-sm hover:bg-tertiary transition-all"></div>
+</div>
+</div>
+<div class="glass-panel p-6 rounded-2xl h-64 relative overflow-hidden">
+<div class="flex justify-between items-start mb-4">
+<div>
+<p class="text-on-surface-variant font-label-sm uppercase tracking-widest">Estimated Revenue</p>
+<h4 class="font-headline-sm text-on-surface">$5,820 <span class="text-secondary text-xs">↑ 8.4%</span></h4>
+</div>
+<span class="material-symbols-outlined text-secondary" data-icon="payments">payments</span>
+</div>
+<!-- Mock Revenue Graph -->
+<div class="absolute bottom-6 left-6 right-6 h-32">
+<svg class="w-full h-full" viewbox="0 0 400 100">
+<path d="M0 80 Q 50 60, 100 70 T 200 40 T 300 50 T 400 10" fill="none" stroke="#d0bcff" stroke-width="3"></path>
+<path d="M0 80 Q 50 60, 100 70 T 200 40 T 300 50 T 400 10 L 400 100 L 0 100 Z" fill="url(#grad)" opacity="0.2"></path>
+<defs>
+<lineargradient id="grad" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#d0bcff;stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:#d0bcff;stop-opacity:0"></stop>
+</lineargradient>
+</defs>
+</svg>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Creator Studio Management -->
+<section>
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Creator <span class="text-primary">Studio</span> Hub</h2>
+<div class="flex border border-white/10 rounded-xl overflow-hidden glass-panel">
+<button class="px-6 py-2 bg-primary text-on-primary font-label-md text-label-md">Clips</button>
+<button class="px-6 py-2 text-on-surface-variant hover:text-on-surface transition-all font-label-md text-label-md">Highlights</button>
+<button class="px-6 py-2 text-on-surface-variant hover:text-on-surface transition-all font-label-md text-label-md">Calendar</button>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- Content Management (Bento Grid Style) -->
+<div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="glass-panel rounded-2xl overflow-hidden group cursor-pointer">
+<div class="h-48 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="A cinematic gaming highlight clip thumbnail featuring an epic explosion in a futuristic neon cityscape. The image is captured with high-speed motion blur, showcasing vibrant orange sparks and cool blue architectural lighting, conveying a sense of high-stakes action and professional quality." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBrm-Jv-IM3lthH82XefNTFdukTSIk5WxzOTVwn-g5tivbv0FngL9Mmgzc1S-7rCJJ_VYin_nJ6b-aL0pCS1bjOU7WlfZYjFfUMg8cHKVPO9Lo9lZiw_hu9xNaBBKKOGKESLw4WD60t01RHu8TOsg7WI7XiKzZlgTU27MnnqwNyqqaN0YeaWuGxVR1iGYgoj80jB9Wl-Cp_GP_3HZor6VJxnb1NFroLeS2zyN7eIKIORbjG-er_HisL9MiC43B49QLqh85B7lKjNSI')"></div>
+<div class="p-4">
+<div class="flex justify-between items-center mb-2">
+<span class="bg-primary/20 text-primary text-[10px] font-bold px-2 py-0.5 rounded">CLIP</span>
+<span class="text-on-surface-variant text-[10px]">2:45 • 14.2k views</span>
+</div>
+<h5 class="font-label-md text-label-md text-on-surface group-hover:text-primary transition-colors">Insane Quadra-Kill in NeoTokyo</h5>
+</div>
+</div>
+<div class="glass-panel rounded-2xl overflow-hidden group cursor-pointer">
+<div class="h-48 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="A highly detailed gaming thumbnail for a stream highlight, showing a character looking over a vast fantasy landscape with floating islands and purple nebula skies. The lighting is ethereal and majestic, with sharp focus on the character's intricate armor details in the foreground." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCEjge2yUnrBMWFzvfitdPBY20Lcm_BV6n-jYvxSFkS54hH99Ry7zIIfsIKkZQg-1qfnzVua5ebSucOai4a6wMf-fklvPloK14v8jtUgpxA5BIGhondqZecVHGqFBCRRPQ3ds8Qq3Lw2z9mdd4eU9CmwpjI9CotDaSVpiTymG2G9YK4n_dMPdyf_matBNBqW6D9WUcobkIX5r3mjOI6CdCFIGLO8_v4BdZ1iVJdCAgtofITqJVrVCE3yShoZe7ZTlbQ2QRtJMUTIW4')"></div>
+<div class="p-4">
+<div class="flex justify-between items-center mb-2">
+<span class="bg-secondary/20 text-secondary text-[10px] font-bold px-2 py-0.5 rounded">HIGHLIGHT</span>
+<span class="text-on-surface-variant text-[10px]">12:10 • 45.8k views</span>
+</div>
+<h5 class="font-label-md text-label-md text-on-surface group-hover:text-primary transition-colors">Eldritch Isles: The Final Boss</h5>
+</div>
+</div>
+<div class="glass-panel rounded-2xl p-6 md:col-span-2 flex flex-col md:flex-row items-center gap-6">
+<div class="flex-1">
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-2">Content Calendar</h4>
+<p class="text-on-surface-variant text-body-md mb-4">You have 3 scheduled streams this week. Don't forget your collaboration with @NeonNova on Friday!</p>
+<button class="neon-border-primary text-primary px-6 py-2 rounded-lg font-label-md text-label-md hover:bg-primary/10 transition-all">Manage Schedule</button>
+</div>
+<div class="grid grid-cols-7 gap-2 w-full md:w-auto">
+<!-- Simple Calendar View -->
+<div class="w-8 h-8 rounded flex items-center justify-center text-[10px] font-bold text-on-surface-variant/30">M</div>
+<div class="w-8 h-8 rounded flex items-center justify-center text-[10px] font-bold text-on-surface-variant/30">T</div>
+<div class="w-8 h-8 rounded flex items-center justify-center text-[10px] font-bold text-on-surface-variant/30">W</div>
+<div class="w-8 h-8 rounded flex items-center justify-center text-[10px] font-bold text-on-surface-variant/30">T</div>
+<div class="w-8 h-8 rounded flex items-center justify-center text-[10px] font-bold text-on-surface-variant/30">F</div>
+<div class="w-8 h-8 rounded flex items-center justify-center text-[10px] font-bold text-on-surface-variant/30">S</div>
+<div class="w-8 h-8 rounded flex items-center justify-center text-[10px] font-bold text-on-surface-variant/30">S</div>
+<div class="w-8 h-8 rounded bg-white/5 text-[10px] flex items-center justify-center">12</div>
+<div class="w-8 h-8 rounded bg-primary/20 text-primary border border-primary/50 text-[10px] flex items-center justify-center">13</div>
+<div class="w-8 h-8 rounded bg-white/5 text-[10px] flex items-center justify-center">14</div>
+<div class="w-8 h-8 rounded bg-white/5 text-[10px] flex items-center justify-center">15</div>
+<div class="w-8 h-8 rounded bg-secondary/20 text-secondary border border-secondary/50 text-[10px] flex items-center justify-center">16</div>
+<div class="w-8 h-8 rounded bg-white/5 text-[10px] flex items-center justify-center">17</div>
+<div class="w-8 h-8 rounded bg-white/5 text-[10px] flex items-center justify-center">18</div>
+</div>
+</div>
+</div>
+<!-- Quick Actions / Tools -->
+<div class="glass-panel p-6 rounded-2xl">
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-6">Studio Tools</h4>
+<ul class="space-y-4">
+<li class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 cursor-pointer transition-all border border-transparent hover:border-white/10 group">
+<div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Thumbnail Lab</p>
+<p class="text-[10px] text-on-surface-variant">AI-Assisted creation</p>
+</div>
+</li>
+<li class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 cursor-pointer transition-all border border-transparent hover:border-white/10 group">
+<div class="w-10 h-10 rounded-lg bg-tertiary/10 flex items-center justify-center text-tertiary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="music_note">music_note</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Audio Library</p>
+<p class="text-[10px] text-on-surface-variant">Stream-safe music</p>
+</div>
+</li>
+<li class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 cursor-pointer transition-all border border-transparent hover:border-white/10 group">
+<div class="w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center text-secondary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Magic Clip</p>
+<p class="text-[10px] text-on-surface-variant">Auto-detect highlights</p>
+</div>
+</li>
+<li class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 cursor-pointer transition-all border border-transparent hover:border-white/10 group">
+<div class="w-10 h-10 rounded-lg bg-error/10 flex items-center justify-center text-error group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" data-icon="shield">shield</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Bot Guard</p>
+<p class="text-[10px] text-on-surface-variant">Manage chat filters</p>
+</div>
+</li>
+</ul>
+<div class="mt-8 p-4 rounded-xl bg-gradient-to-br from-primary/20 to-secondary/20 border border-white/10">
+<p class="text-xs font-bold text-white mb-2">PRO TIP</p>
+<p class="text-xs text-on-surface-variant leading-relaxed">Engagement is 24% higher when you stream at 6:00 PM EST. Ready to schedule?</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full relative bottom-0 border-t border-outline-variant/20 bg-background pt-16 pb-8">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-desktop max-w-container-max mx-auto mb-12">
+<div class="col-span-1 md:col-span-1">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface block mb-6">GameVerse</span>
+<p class="text-on-surface-variant font-body-md text-body-md">Empowering creators to build the next generation of gaming communities.</p>
+</div>
+<div>
+<h5 class="text-primary font-label-md text-label-md uppercase tracking-widest mb-6">Resources</h5>
+<ul class="space-y-4">
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-label-sm" href="#">Creator Guide</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-label-sm" href="#">API Documentation</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-label-sm" href="#">Brand Assets</a></li>
+</ul>
+</div>
+<div>
+<h5 class="text-primary font-label-md text-label-md uppercase tracking-widest mb-6">Community</h5>
+<ul class="space-y-4">
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-label-sm" href="#">Discord</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-label-sm" href="#">YouTube</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-label-sm" href="#">Partner Program</a></li>
+</ul>
+</div>
+<div>
+<h5 class="text-primary font-label-md text-label-md uppercase tracking-widest mb-6">Support</h5>
+<ul class="space-y-4">
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-label-sm" href="#">Contact Support</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-label-sm" href="#">Privacy Policy</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-label-sm" href="#">Terms of Service</a></li>
+</ul>
+</div>
+</div>
+<div class="px-margin-desktop max-w-container-max mx-auto pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-on-surface-variant font-label-sm text-label-sm">© 2024 GameVerse Nexus. All rights reserved.</p>
+<div class="flex gap-6">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer transition-colors" data-icon="language">language</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer transition-colors" data-icon="share">share</span>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interaction for buttons
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mousedown', () => button.style.transform = 'scale(0.95)');
+            button.addEventListener('mouseup', () => button.style.transform = 'scale(1)');
+            button.addEventListener('mouseleave', () => button.style.transform = 'scale(1)');
+        });
+
+        // Chat scrolling simulation
+        const chatContainer = document.querySelector('.overflow-y-auto');
+        if (chatContainer) {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Live Bitrate simulation
+        setInterval(() => {
+            const bitRateElem = document.querySelector('.text-primary.font-headline-sm');
+            if (bitRateElem) {
+                const base = 6500;
+                const variance = Math.floor(Math.random() * 200) - 100;
+                bitRateElem.innerHTML = `${(base + variance).toLocaleString()} <span class="text-xs">kbps</span>`;
+            }
+        }, 3000);
+    </script>
+</body></html>

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Ludo Royal | Social &amp; Leaderboards</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&amp;family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-container": "#f39461",
+                    "outline": "#8f909d",
+                    "tertiary-fixed": "#ffdbcb",
+                    "on-secondary": "#002e6a",
+                    "outline-variant": "#444651",
+                    "ludo-blue": "#3B82F6",
+                    "secondary-fixed-dim": "#adc6ff",
+                    "surface-container-high": "#222a3d",
+                    "surface-container-low": "#131b2e",
+                    "error-container": "#93000a",
+                    "on-tertiary-fixed": "#341100",
+                    "on-tertiary": "#552000",
+                    "error": "#ffb4ab",
+                    "surface-container": "#171f33",
+                    "ludo-yellow": "#F59E0B",
+                    "on-background": "#dae2fd",
+                    "on-surface-variant": "#c5c5d3",
+                    "on-secondary-container": "#e6ecff",
+                    "surface-dim": "#0b1326",
+                    "tertiary-container": "#6e2c00",
+                    "on-error-container": "#ffdad6",
+                    "neon-glow": "rgba(59, 130, 246, 0.5)",
+                    "secondary": "#adc6ff",
+                    "secondary-container": "#0566d9",
+                    "surface-variant": "#2d3449",
+                    "tertiary": "#ffb691",
+                    "inverse-on-surface": "#283044",
+                    "surface-container-highest": "#2d3449",
+                    "secondary-fixed": "#d8e2ff",
+                    "ludo-green": "#10B981",
+                    "on-primary": "#05297a",
+                    "on-secondary-fixed-variant": "#004395",
+                    "surface-bright": "#31394d",
+                    "tertiary-fixed-dim": "#ffb691",
+                    "primary-fixed": "#dce1ff",
+                    "background": "#0b1326",
+                    "primary-container": "#1e3a8a",
+                    "surface-tint": "#b6c4ff",
+                    "on-surface": "#dae2fd",
+                    "on-error": "#690005",
+                    "primary": "#b6c4ff",
+                    "on-primary-fixed-variant": "#264191",
+                    "ludo-red": "#EF4444",
+                    "on-tertiary-fixed-variant": "#773205",
+                    "on-primary-container": "#90a8ff",
+                    "inverse-surface": "#dae2fd",
+                    "on-primary-fixed": "#00164e",
+                    "surface-glass": "rgba(255, 255, 255, 0.05)",
+                    "inverse-primary": "#4059aa",
+                    "primary-fixed-dim": "#b6c4ff",
+                    "surface-container-lowest": "#060e20",
+                    "on-secondary-fixed": "#001a42",
+                    "surface": "#0b1326"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xl": "32px",
+                    "sm": "8px",
+                    "margin-desktop": "40px",
+                    "gutter": "16px",
+                    "lg": "24px",
+                    "3xl": "64px",
+                    "base": "8px",
+                    "xs": "4px",
+                    "margin-mobile": "20px",
+                    "2xl": "48px",
+                    "md": "16px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "headline-lg": ["Montserrat"],
+                    "title-md": ["Inter"],
+                    "display-lg": ["Montserrat"],
+                    "headline-lg-mobile": ["Montserrat"],
+                    "label-caps": ["Inter"],
+                    "stat-value": ["Montserrat"]
+            },
+            "fontSize": {
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                    "stat-value": ["18px", {"lineHeight": "24px", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0b1326;
+            color: #dae2fd;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
+        }
+        .neon-border-blue {
+            border: 1.5px solid #3B82F6;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+        }
+        .token-glow {
+            filter: drop-shadow(0 0 4px currentColor);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="font-body-lg text-body-lg pb-24">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16 bg-surface-glass backdrop-blur-xl border-b border-white/10">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full border-2 border-ludo-blue overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A high-fidelity 3D profile avatar of a majestic lion wearing a golden crown, set against a deep cosmic navy background with vibrant blue neon accents. The lighting is dramatic and cinematic, emphasizing the luxurious texture of the lion's fur and the brilliant shine of the gold." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVziUf1DFeclGEYBD16ESjUjdPaQvaw4GbM-g1buzDOdJ4OGD_GpULIWs6851iRCcRaMQ2Z0S0GdQI7oA0Vx38-hibF1y03BN57ptpo_QUDFtiwa40ADTZcU1kx7aus2K4WY-RYIEQ3eqZZcmN3QKCSJFgniQ4TVb41Y2PiYpg22IO4ETx-TVtfgqdCqLAk47RBHAteSWlkON-kiY6H_UKlJZKBFGiGhWzG0ELwTL_NkzSVzE-hTFR"/>
+</div>
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-extrabold text-ludo-yellow tracking-tight">LUDO ROYAL</span>
+</div>
+<div class="flex items-center bg-surface-container-low px-md py-xs rounded-full border border-white/5">
+<span class="material-symbols-outlined text-ludo-yellow text-title-md mr-xs">monetization_on</span>
+<span class="font-stat-value text-stat-value text-primary">12.5k</span>
+</div>
+</header>
+<main class="mt-20 px-margin-mobile space-y-lg">
+<!-- Profile Summary Card -->
+<section class="glass-panel rounded-2xl p-lg relative overflow-hidden">
+<!-- Background Shader Effect -->
+
+<div class="relative z-10 flex flex-col md:flex-row md:items-center gap-lg">
+<div class="relative shrink-0">
+<div class="w-24 h-24 rounded-2xl overflow-hidden neon-border-blue rotate-3 hover:rotate-0 transition-transform duration-300">
+<img class="w-full h-full object-cover" data-alt="Close up portrait of a heroic gaming avatar, a sleek futuristic knight in carbon fiber armor with glowing electric blue visors. The background is a digital cityscape at night, rendered in a high-contrast premium gaming style with atmospheric particles and soft neon flares." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-2R4HLi85lxPZRuWo_LC1UtakBnd-zf9uS1xh2rhh9mJQwm_KBvq3od39o1C5nuRf3joKH-U-cfFpCz1w0ZFxb_KviFzCbiTQn-df_Yx4EmAVunHErs03rB4CMyA9-YALpv6sRLYq6n9EJRN3tCbe7sFpL9UVLtY_5C9qqylptnTrZy8GuztZy-RlX_199wDoF8FxKhlo-GlkPJvmm6tH1PDtUmgBHI-Iz6yvhd24_jLJGvBo9Nyh"/>
+</div>
+<div class="absolute -bottom-2 -right-2 bg-ludo-yellow text-on-secondary px-sm py-1 rounded-lg font-label-caps text-[10px] shadow-lg">LVL 42</div>
+</div>
+<div class="flex-grow">
+<div class="flex items-center gap-sm mb-xs">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Alex "Thunder" Ray</h1>
+<span class="material-symbols-outlined text-ludo-blue" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<div class="inline-flex items-center bg-primary-container/40 text-primary-fixed px-md py-1 rounded-full font-label-caps text-label-caps tracking-widest uppercase mb-md">
+                        Ludo Master
+                    </div>
+<div class="grid grid-cols-3 gap-md">
+<div>
+<p class="text-outline font-label-caps text-[10px] uppercase">Win Rate</p>
+<p class="font-stat-value text-stat-value text-ludo-green">68%</p>
+</div>
+<div>
+<p class="text-outline font-label-caps text-[10px] uppercase">Matches</p>
+<p class="font-stat-value text-stat-value text-primary">1,248</p>
+</div>
+<div>
+<p class="text-outline font-label-caps text-[10px] uppercase">Badges</p>
+<div class="flex gap-xs mt-1">
+<span class="material-symbols-outlined text-ludo-yellow text-sm" title="Season Winner">military_tech</span>
+<span class="material-symbols-outlined text-ludo-red text-sm" title="High Roller">diamond</span>
+<span class="material-symbols-outlined text-ludo-blue text-sm" title="Socialite">groups</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Social Navigation Tabs -->
+<nav class="flex space-x-sm bg-surface-container-low/50 p-1 rounded-xl border border-white/5">
+<button class="flex-1 py-3 rounded-lg font-label-caps text-label-caps text-primary bg-primary-container/30 transition-all duration-200">GLOBAL</button>
+<button class="flex-1 py-3 rounded-lg font-label-caps text-label-caps text-outline hover:text-on-surface transition-all duration-200">FRIENDS</button>
+<button class="flex-1 py-3 rounded-lg font-label-caps text-label-caps text-outline hover:text-on-surface transition-all duration-200">CLAN</button>
+</nav>
+<!-- Leaderboard / Social List Area -->
+<section class="space-y-md">
+<!-- Rank 1 Card -->
+<div class="glass-panel p-md rounded-xl flex items-center gap-md border-l-4 border-l-ludo-yellow transform hover:translate-x-2 transition-transform duration-200">
+<div class="w-8 flex justify-center">
+<span class="material-symbols-outlined text-ludo-yellow text-headline-lg-mobile" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+<div class="w-12 h-12 rounded-full overflow-hidden bg-surface-bright">
+<img class="w-full h-full object-cover" data-alt="A portrait of a sophisticated female gamer with purple neon-lit headphones, wearing a futuristic jacket. The style is ultra-high definition digital painting, set in a luxurious penthouse overlooking a neon-infused metropolitan skyline at night. Deep blues and vibrant purples dominate the palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDk9hZFoPBql-6OBl8U5wQKLCipVjRYqeyQL6fGkrUsdx8tvR9EXqUtoTejp9acUQSR2aAyyYAY4KwYGNEpv9Ru0HNnLnoe_mfyn1KCOQOZXkscUAi8vOQhDyGyTOREptnhihle2vpCn9Ingk-8EexWVwsszS-4n-6ri-_4P9dr-eH4eztgodj0B_rSq4wrM-0L2OguhtQUJm05ACsO15O7kMq49Vf6_HggYxmfilSIf2oV8Gpk0qjs"/>
+</div>
+<div class="flex-grow">
+<div class="flex items-center gap-xs">
+<span class="font-title-md text-body-lg font-bold">QueenGambit</span>
+<span class="material-symbols-outlined text-[14px] text-outline">flag</span>
+</div>
+<div class="flex items-center gap-sm mt-1">
+<span class="text-xs text-outline font-body-sm">4.2M XP</span>
+<span class="w-1 h-1 rounded-full bg-outline/40"></span>
+<span class="text-xs text-ludo-green font-body-sm">74% Win Rate</span>
+</div>
+</div>
+<button class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-bright/50 hover:bg-ludo-blue/20 transition-colors">
+<span class="material-symbols-outlined text-primary">person_add</span>
+</button>
+</div>
+<!-- Rank 2 Card -->
+<div class="glass-panel p-md rounded-xl flex items-center gap-md border-l-4 border-l-outline transform hover:translate-x-2 transition-transform duration-200">
+<div class="w-8 flex justify-center font-stat-value text-title-md text-outline">02</div>
+<div class="w-12 h-12 rounded-full overflow-hidden bg-surface-bright">
+<img class="w-full h-full object-cover" data-alt="A rugged digital avatar of a Viking warrior with cybernetic enhancements, featuring intricate glowing Norse tattoos and a metallic beard. Set against a backdrop of aurora borealis lighting, with a premium, high-fantasy aesthetic using rich emerald greens and deep blacks." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0Tz5xJqPofORy1gtrODTpwrt6Rb9DnBlbjvQqe8p3zLzkaN8QiE_K_uuR9KZkc0jd5jYZADf-07fgob18RL_hwDxTy4UPI9dzNjE6Q2hB_HgDkioGbECn-iSVrgZWkppBebdWxL64aeABkeosMOehpU29EYgnhEKR8804mk0Mb1x6gVTOnAnnTiOVh_liGiDRb8mdrYHSWLOl73rpJBtyMd0JIYWvf-uYfA03vZSpeUkbGoP5gXgt"/>
+</div>
+<div class="flex-grow">
+<div class="flex items-center gap-xs">
+<span class="font-title-md text-body-lg font-bold">CyberOdin</span>
+<span class="material-symbols-outlined text-[14px] text-outline">flag</span>
+</div>
+<div class="flex items-center gap-sm mt-1">
+<span class="text-xs text-outline font-body-sm">3.9M XP</span>
+<span class="w-1 h-1 rounded-full bg-outline/40"></span>
+<span class="text-xs text-ludo-green font-body-sm">71% Win Rate</span>
+</div>
+</div>
+<button class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-bright/50 hover:bg-ludo-blue/20 transition-colors">
+<span class="material-symbols-outlined text-primary">person_add</span>
+</button>
+</div>
+<!-- Section Title: Friends Online -->
+<div class="flex items-center justify-between pt-lg">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">Friends Online</h2>
+<span class="text-ludo-green font-label-caps text-label-caps bg-ludo-green/10 px-sm py-1 rounded-full">14 ONLINE</span>
+</div>
+<!-- Friend Row: Active -->
+<div class="glass-panel p-md rounded-xl flex items-center gap-md">
+<div class="relative">
+<div class="w-14 h-14 rounded-xl overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A stylized portrait of a masked Japanese oni-inspired gaming character, with glowing red horns and a detailed traditional mask. The background is a blur of neon Tokyo streetlights, creating a moody, high-stakes esports atmosphere with deep reds and shadowy blacks." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGsy4yj2F18_LQeOCzzjIuo8a84_RPtUjC4nb0iTLnqi3-ieXuxm8jVHeZk0Q9WCUB7V09mY1FJNHOQxNw27ekQAqhXfPsq758EQhgBTSn_i5FfHj0jQB8HGqKN_wB11ltSsBeOT6blJog-dyEjyJw_cPIK06VL60oeJ-ciLZrpPDGPKlqQDkat5Hzxb5WWQMMjteBFiorsrMTS_4IAhLE3IabpJklebBP1tED5avb8BJVml5D2sz0"/>
+</div>
+<div class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-ludo-green border-2 border-background"></div>
+</div>
+<div class="flex-grow">
+<p class="font-title-md text-body-lg font-bold">GhostRunner</p>
+<p class="text-xs text-ludo-green font-body-sm">In a Match (Classic)</p>
+</div>
+<div class="flex gap-sm">
+<button class="h-10 px-md rounded-lg glass-panel font-label-caps text-[10px] text-on-surface-variant hover:text-on-surface transition-all active:scale-95">SPECTATE</button>
+</div>
+</div>
+<!-- Friend Row: Idle -->
+<div class="glass-panel p-md rounded-xl flex items-center gap-md">
+<div class="relative">
+<div class="w-14 h-14 rounded-xl overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A modern digital portrait of a high-tech robotic intelligence with a glass core containing swirling blue energy. The aesthetic is clean and futuristic, like a high-end luxury tech brand, with soft white glowing accents and a deep matte navy background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAXRsDa5XTxXfbLPjhzhcNFE4ktAy_ugP8MMzPnR4YCZQUL_Sug2oLFZXCsgUHSLFihEBHWjBqfzZBpJ3TYsrXD6NwVSqtn-q0LrlkcRravKscIUEl3_FF9Y0hxfFQBTbYSLY2MpxmTQEsck9x4YCYEYxY62U4EOFxs98XSkW5utOkwBYaYchfCpyeeBLkBSILqzq4tMBqfTQi3DGeTaKn75e0c_5vWiGl3sl-bpT3pv1Y5yiNXjuQ"/>
+</div>
+<div class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-ludo-yellow border-2 border-background"></div>
+</div>
+<div class="flex-grow">
+<p class="font-title-md text-body-lg font-bold">BotMaster_99</p>
+<p class="text-xs text-outline font-body-sm">Main Menu</p>
+</div>
+<div class="flex gap-sm">
+<button class="h-10 px-md rounded-lg bg-gradient-to-r from-ludo-blue to-secondary-container font-label-caps text-[10px] text-white shadow-lg active:scale-95 transition-transform">CHALLENGE</button>
+</div>
+</div>
+<!-- Friend Row: Offline -->
+<div class="glass-panel p-md rounded-xl flex items-center gap-md opacity-60">
+<div class="relative">
+<div class="w-14 h-14 rounded-xl overflow-hidden grayscale">
+<img class="w-full h-full object-cover" data-alt="Digital art of a futuristic hacker character with holographic interface goggles and a dark hoodie. The lighting is low-key with subtle cyan highlights, reflecting a gritty cyberpunk aesthetic in a professional gaming style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAm4UWSegvJ38qrMkePLfDyuNxg6bckaH1f6pBvLdLfkdztu2_28u2Jr4L-9xT8dhJVD_K1iaTk202adZJyBWnG4baPfHFEC8Jch6TDpsparinvIJKRE4_xa26FaPhyFuYIO9qG2NydhF4VnAJ8hoOdnlBYcYLEAY0xS9GkFOaE5LK8YcK0Tj85Y9anP3IxSi5KkPbZtTjkyZyBvRBm4_k_B7BJD2QjYF2IUiH9s8gKa_d4TC4tEcKk"/>
+</div>
+<div class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-outline border-2 border-background"></div>
+</div>
+<div class="flex-grow">
+<p class="font-title-md text-body-lg font-bold">ZeroX</p>
+<p class="text-xs text-outline font-body-sm">Last seen 2h ago</p>
+</div>
+<div class="flex gap-sm">
+<button class="h-10 px-md rounded-lg glass-panel font-label-caps text-[10px] text-on-surface-variant hover:text-on-surface transition-all active:scale-95">INVITE</button>
+</div>
+</div>
+</section>
+<!-- CTA / Action Section (Bento Style) -->
+<div class="grid grid-cols-2 gap-md">
+<div class="glass-panel p-lg rounded-2xl flex flex-col justify-between aspect-square border-ludo-yellow/20 hover:border-ludo-yellow/50 transition-all group">
+<span class="material-symbols-outlined text-ludo-yellow text-3xl mb-md group-hover:scale-110 transition-transform">share</span>
+<div>
+<h3 class="font-title-md text-body-lg font-bold mb-xs">Refer a Friend</h3>
+<p class="text-xs text-outline">Earn 5,000 Coins per join</p>
+</div>
+</div>
+<div class="glass-panel p-lg rounded-2xl flex flex-col justify-between aspect-square border-ludo-blue/20 hover:border-ludo-blue/50 transition-all group">
+<span class="material-symbols-outlined text-ludo-blue text-3xl mb-md group-hover:scale-110 transition-transform">campaign</span>
+<div>
+<h3 class="font-title-md text-body-lg font-bold mb-xs">Social Hub</h3>
+<p class="text-xs text-outline">Join the community chat</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<footer class="fixed bottom-0 w-full z-50 flex justify-around items-center px-4 pb-safe h-20 bg-surface-glass backdrop-blur-xl border-t border-white/10 rounded-t-xl">
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-200">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-caps text-label-caps mt-1">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-200">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="font-label-caps text-label-caps mt-1">Shop</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-200">
+<span class="material-symbols-outlined">extension</span>
+<span class="font-label-caps text-label-caps mt-1">Play</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-200">
+<span class="material-symbols-outlined">emoji_events</span>
+<span class="font-label-caps text-label-caps mt-1">Events</span>
+</button>
+<!-- Active Tab: Profile (Closest to Social/Leaderboard) -->
+<button class="flex flex-col items-center justify-center text-primary font-bold bg-primary-container/30 rounded-full py-1 px-4 transition-all active:scale-90 duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label-caps text-label-caps mt-1">Profile</span>
+</button>
+</footer>
+<!-- Interactive Layer: Vanilla JS for subtle micro-interactions -->
+<script>
+        document.querySelectorAll('nav button').forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active styles from siblings
+                this.parentElement.querySelectorAll('button').forEach(btn => {
+                    btn.classList.remove('bg-primary-container/30', 'text-primary');
+                    btn.classList.add('text-outline');
+                });
+                // Add to current
+                this.classList.remove('text-outline');
+                this.classList.add('bg-primary-container/30', 'text-primary');
+            });
+        });
+
+        // Floating Action Button logic if needed later
+        // Suppression: Hidden on Detail/Social screens as per instructions
+    </script>
+</body></html>

@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Ludo Royal - Battle Arena</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&amp;family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        :root {
+            --neon-blue: #3B82F6;
+            --neon-red: #EF4444;
+            --neon-green: #10B981;
+            --neon-yellow: #F59E0B;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #0b1326;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .token-glow-blue { filter: drop-shadow(0 0 8px var(--neon-blue)); }
+        .token-glow-red { filter: drop-shadow(0 0 8px var(--neon-red)); }
+        .token-glow-green { filter: drop-shadow(0 0 8px var(--neon-green)); }
+        .token-glow-yellow { filter: drop-shadow(0 0 8px var(--neon-yellow)); }
+
+        .dice-roll-animation {
+            animation: diceRotate 0.4s ease-in-out infinite;
+        }
+
+        @keyframes diceRotate {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        .turn-timer-ring {
+            stroke-dasharray: 100;
+            stroke-dashoffset: 25;
+            transition: stroke-dashoffset 1s linear;
+        }
+
+        .ludo-grid {
+            display: grid;
+            grid-template-columns: repeat(15, 1fr);
+            grid-template-rows: repeat(15, 1fr);
+            aspect-ratio: 1/1;
+        }
+
+        .starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            background: radial-gradient(circle at center, #131b2e 0%, #060e20 100%);
+        }
+
+        .nebula {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(239, 68, 68, 0.1) 0%, transparent 40%);
+            filter: blur(60px);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-container": "#f39461",
+                        "outline": "#8f909d",
+                        "on-secondary": "#002e6a",
+                        "ludo-blue": "#3B82F6",
+                        "surface-container-high": "#222a3d",
+                        "surface-container-low": "#131b2e",
+                        "ludo-yellow": "#F59E0B",
+                        "neon-glow": "rgba(59, 130, 246, 0.5)",
+                        "secondary": "#adc6ff",
+                        "ludo-green": "#10B981",
+                        "primary": "#b6c4ff",
+                        "ludo-red": "#EF4444",
+                        "surface-glass": "rgba(255, 255, 255, 0.05)",
+                        "surface": "#0b1326"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Montserrat"],
+                        "display-lg": ["Montserrat"],
+                        "headline-lg-mobile": ["Montserrat"],
+                        "label-caps": ["Inter"],
+                        "stat-value": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "stat-value": ["18px", {"lineHeight": "24px", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="dark text-on-surface">
+<div class="starfield">
+<div class="nebula"></div>
+<canvas class="w-full h-full" id="particles"></canvas>
+</div>
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16 bg-surface-container-low/80 backdrop-blur-xl border-b border-white/10 shadow-md shadow-neon-glow/20">
+<div class="flex items-center gap-3">
+<button class="w-10 h-10 rounded-full bg-surface-glass flex items-center justify-center hover:bg-surface-bright/20 transition-colors active:scale-95 duration-150" onclick="location.href='ludo-home.html'">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-extrabold text-ludo-yellow tracking-tight">LUDO ROYAL</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 bg-surface-container px-3 py-1.5 rounded-full border border-white/10 cursor-pointer hover:border-primary/40" onclick="location.href='ludo-shop.html'">
+<span class="material-symbols-outlined text-ludo-yellow" style="font-variation-settings: 'FILL' 1;">monetization_on</span>
+<span class="font-stat-value text-stat-value text-primary">12.5k</span>
+</div>
+<button class="w-10 h-10 rounded-full bg-surface-glass border border-white/10 overflow-hidden active:scale-95 transition-transform" onclick="location.href='profile.html'">
+<img class="w-full h-full object-cover" data-alt="A stylized futuristic 3D avatar profile picture of a pro gamer wearing high-tech neon blue glasses and a sleek dark hoodie. The lighting is cinematic with deep purple and cyan rim lights, set against a dark atmospheric background consistent with a luxury gaming app aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtbkoMG0Mx_U0O8TUeq03lbs-D1_KcaJuij8EijBK7hgzKHtnrNUkFvso92S5Iw6qP2AuEq-AtdNpiDrOFGEsisYUKdopiDoruKllxfUAeqZYocuG1-iTEC9CutaRMUWWdP07lZDT1IiSZVcvyIh2JQM-E42Oy1C9aWxhDENHloDO5mrRRRnTiMxJsZlS29k7Qlzj0mV4nWc49vC8dYTwk_oJhGVuemlF0dHzgJoX4QqPvWEMFitgx"/>
+</button>
+</div>
+</header>
+<!-- Main Game Canvas -->
+<main class="relative w-full h-screen flex items-center justify-center pt-16 pb-20 px-4 overflow-hidden">
+<!-- Player HUD: Corners -->
+<!-- Top Left: Player 1 (Red) -->
+<div class="absolute top-20 left-4 z-20">
+<div class="relative p-2 rounded-2xl bg-surface-glass border-2 border-ludo-red/30 shadow-lg shadow-ludo-red/10 flex flex-col items-center">
+<div class="absolute -top-1 -right-1 w-4 h-4 bg-ludo-red rounded-full border-2 border-surface animate-pulse"></div>
+<div class="w-16 h-16 rounded-xl overflow-hidden border-2 border-ludo-red mb-2">
+<img class="w-full h-full object-cover" data-alt="A profile portrait of a competitive gaming character with fiery red hair and tribal tattoos on their face. The image is rendered in a sharp, high-fidelity digital art style with vibrant red neon highlights and a dark, moody background for a premium Ludo game interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEvPu4jmwWjvPQ2WkABflQxyhAJE8ERPEqo-kdg_lEighQsOnr7qST6Z9JJSPM_t1WnSMHCsItFPDaJ6rxUr3iMGiGxl14AONbQe2zXC70qDOO15rMmW0o00QrtVI23DBtoRUOkVBwZHfWEyuWsJTYfE-OTSLcpqtTrwcIwBRDf9jtZk_ijTHnJpqv-hdd1fS1arOlmrZDaPIW7U8zHL9VSma3E6wgKddy1ZAkPqiWixv8imqQO72g"/>
+</div>
+<div class="text-center">
+<p class="font-label-caps text-label-caps text-white">DRAGON_99</p>
+<div class="w-12 h-1.5 bg-surface-container-high rounded-full mt-1 overflow-hidden">
+<div class="w-3/4 h-full bg-ludo-red shadow-[0_0_8px_rgba(239,68,68,0.8)]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Top Right: Player 2 (Green) -->
+<div class="absolute top-20 right-4 z-20">
+<div class="relative p-2 rounded-2xl bg-surface-glass border-2 border-white/10 flex flex-col items-center opacity-60">
+<div class="w-16 h-16 rounded-xl overflow-hidden border-2 border-ludo-green mb-2">
+<img class="w-full h-full object-cover" data-alt="A profile portrait of a mysterious female gamer wearing a sleek green cyber-suit with glowing circuitry patterns. The art style is polished 3D with soft neomorphic shadows and vibrant emerald green lighting accents, set in a dark futuristic environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKS2zywQA4tK355lM3NQI0J9G2IHRAwGhAcGCxIowggFAtPbrbkE4uZ6RXasRg0y3cYws8sPtCTfhW0ZEBnmU917mUVLq4A673waOp4lB51a_RGkLJO9GI3Pe5nIEXMSdgCZsGpXTarGFElfWWgzQk6Nbvq7GDDQquP9E5lktR164m09RKkBzEtfWPvXWphBg8bM2fdcKZAfdcg0ljWKiPOS7ebdLdAAxl8XAb5QNROiq62LgKTvFn"/>
+</div>
+<div class="text-center">
+<p class="font-label-caps text-label-caps text-on-surface-variant">CYBER_JANE</p>
+<div class="w-12 h-1.5 bg-surface-container-high rounded-full mt-1 overflow-hidden">
+<div class="w-full h-full bg-ludo-green"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Left: Player 3 (Yellow) -->
+<div class="absolute bottom-24 left-4 z-20">
+<div class="relative p-2 rounded-2xl bg-surface-glass border-2 border-white/10 flex flex-col items-center opacity-60">
+<div class="w-16 h-16 rounded-xl overflow-hidden border-2 border-ludo-yellow mb-2">
+<img class="w-full h-full object-cover" data-alt="A portrait of a gold-armored warrior character with a glowing visor, rendered in a premium 3D gaming style. The background is a dark deep blue with floating gold particles and amber neon accents, perfectly fitting a high-stakes digital board game atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2kYc6Wb1xoM7pk7o2DTOoAg550p4dPraqo3FFoO8hxhxjuafiizB_CNOz2a0TfGDevbZ5JVV5EKI6_WrEGqh_AFE9PQv2X2feNzwN7QvbrQIUd_eCdu9pOxH1a-pAZ3_p8IMvzeYDRRLvjCk1NxlFgSHeBB8mbiSsaqqFzoEGNMHsPoE-PdfNKhhBi8on9b3WNeDunSYDvCG4JjGNEvOErfEG3_rzMbk-hrZJzfWK9EnpUFxjRoIZ"/>
+</div>
+<div class="text-center">
+<p class="font-label-caps text-label-caps text-on-surface-variant">GOLD_KING</p>
+<div class="w-12 h-1.5 bg-surface-container-high rounded-full mt-1 overflow-hidden">
+<div class="w-1/2 h-full bg-ludo-yellow"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Right: Player 4 (Blue - CURRENT PLAYER) -->
+<div class="absolute bottom-24 right-4 z-20">
+<div class="relative p-3 rounded-2xl bg-surface-container-high border-2 border-ludo-blue shadow-2xl shadow-ludo-blue/30 flex flex-col items-center scale-110">
+<svg class="absolute inset-0 w-full h-full -rotate-90 pointer-events-none">
+<circle class="text-ludo-blue/20" cx="50%" cy="50%" fill="none" r="48%" stroke="currentColor" stroke-width="2"></circle>
+<circle class="text-ludo-blue turn-timer-ring" cx="50%" cy="50%" fill="none" r="48%" stroke="currentColor" stroke-width="3"></circle>
+</svg>
+<div class="w-20 h-20 rounded-xl overflow-hidden border-2 border-ludo-blue mb-2 z-10">
+<img class="w-full h-full object-cover" data-alt="A high-quality 3D render of a futuristic hero with blue glowing eyes and a sleek silver helmet. The aesthetic is clean and premium, featuring dramatic blue lighting and soft glassmorphism shadows against a dark, star-filled void." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrcfKm4VpRsuEtFxUpAgVuF55-WvsL_274JnhDt7dlJrRkPk8YXvIYCZHGpA4n7LW268c7ui7Pwl4kzUP8Xp4us9k5kUqR-hj_WeImnfsl5Gcr1ikFrCKMuMNrxA3O10o9UFvtyBieGIPTgdTfe-UHSqDs3x9lsCCHafE7Ru6TurR2Asr2CFyv9i5-R1isrwKXMf5Tzprwr5L_Y6fvRTy9u7szUavc9zs64JbboHc9vi5y1Wu0Cc7H"/>
+</div>
+<div class="text-center z-10">
+<p class="font-label-caps text-label-caps text-white font-bold">YOU (VORTEX)</p>
+<div class="w-16 h-2 bg-surface-container-lowest rounded-full mt-1 overflow-hidden">
+<div class="w-full h-full bg-gradient-to-r from-ludo-blue to-primary animate-pulse"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Ludo Board Container -->
+<div class="relative w-full max-w-[500px] aspect-square p-2 bg-surface-container-low rounded-3xl border border-white/5 shadow-2xl overflow-hidden">
+
+<div class="ludo-grid w-full h-full gap-1">
+<!-- RED HOME (Top Left) -->
+<div class="col-span-6 row-span-6 bg-ludo-red/10 rounded-xl border-2 border-ludo-red/30 p-4 grid grid-cols-2 gap-4">
+<div class="bg-ludo-red/20 rounded-full border-2 border-ludo-red/40 flex items-center justify-center">
+<span class="material-symbols-outlined text-ludo-red scale-150" style="font-variation-settings: 'FILL' 1;">token</span>
+</div>
+<div class="bg-ludo-red/20 rounded-full border-2 border-ludo-red/40 flex items-center justify-center">
+<span class="material-symbols-outlined text-ludo-red scale-150" style="font-variation-settings: 'FILL' 1;">token</span>
+</div>
+<div class="bg-ludo-red/20 rounded-full border-2 border-ludo-red/40 flex items-center justify-center">
+<span class="material-symbols-outlined text-ludo-red scale-150" style="font-variation-settings: 'FILL' 1;">token</span>
+</div>
+<div class="bg-ludo-red/20 rounded-full border-2 border-ludo-red/40 flex items-center justify-center">
+<span class="material-symbols-outlined text-ludo-red scale-150" style="font-variation-settings: 'FILL' 1;">token</span>
+</div>
+</div>
+<!-- TOP VERTICAL TRACK -->
+<div class="col-span-3 row-span-6 grid grid-cols-3 grid-rows-6 gap-0.5">
+<!-- Column 1 -->
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-ludo-green/40 rounded-sm border border-ludo-green/60 flex items-center justify-center">
+<span class="material-symbols-outlined text-ludo-green text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<!-- Row 2 -->
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-ludo-green/40 rounded-sm border border-ludo-green/60"></div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<!-- Row 3 -->
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-ludo-green/40 rounded-sm border border-ludo-green/60"></div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<!-- Row 4 -->
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-ludo-green/40 rounded-sm border border-ludo-green/60"></div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<!-- Row 5 -->
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-ludo-green/40 rounded-sm border border-ludo-green/60"></div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<!-- Row 6 -->
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-ludo-green/40 rounded-sm border border-ludo-green/60"></div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+</div>
+<!-- GREEN HOME (Top Right) -->
+<div class="col-span-6 row-span-6 bg-ludo-green/10 rounded-xl border-2 border-ludo-green/30 p-4 grid grid-cols-2 gap-4">
+<div class="bg-ludo-green/20 rounded-full border-2 border-ludo-green/40 flex items-center justify-center opacity-40"></div>
+<div class="bg-ludo-green/20 rounded-full border-2 border-ludo-green/40 flex items-center justify-center opacity-40"></div>
+<div class="bg-ludo-green/20 rounded-full border-2 border-ludo-green/40 flex items-center justify-center opacity-40"></div>
+<div class="bg-ludo-green/20 rounded-full border-2 border-ludo-green/40 flex items-center justify-center opacity-40"></div>
+</div>
+<!-- LEFT HORIZONTAL TRACK -->
+<div class="col-span-6 row-span-3 grid grid-cols-6 grid-rows-3 gap-0.5">
+<!-- Safe zone track with a token -->
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-ludo-red/40 rounded-sm border border-ludo-red/60 flex items-center justify-center">
+<span class="material-symbols-outlined text-ludo-red text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<!-- Middle red path -->
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-ludo-red/40 rounded-sm border border-ludo-red/60"></div>
+<div class="bg-ludo-red/40 rounded-sm border border-ludo-red/60"></div>
+<div class="bg-ludo-red/40 rounded-sm border border-ludo-red/60"></div>
+<div class="bg-ludo-red/40 rounded-sm border border-ludo-red/60"></div>
+<div class="bg-ludo-red/40 rounded-sm border border-ludo-red/60"></div>
+<!-- Bottom track -->
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+</div>
+<!-- CENTER FINISH (Vortex) -->
+<div class="col-span-3 row-span-3 bg-surface-container-high flex items-center justify-center relative">
+<div class="absolute inset-0 bg-gradient-to-br from-ludo-red/40 via-ludo-green/40 to-ludo-blue/40 animate-pulse"></div>
+<span class="material-symbols-outlined text-white scale-[2.5] relative z-10" style="font-variation-settings: 'FILL' 1;">stars</span>
+</div>
+<!-- RIGHT HORIZONTAL TRACK -->
+<div class="col-span-6 row-span-3 grid grid-cols-6 grid-rows-3 gap-0.5">
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<!-- Blue finish path -->
+<div class="bg-ludo-yellow/40 rounded-sm border border-ludo-yellow/60"></div>
+<div class="bg-ludo-yellow/40 rounded-sm border border-ludo-yellow/60"></div>
+<div class="bg-ludo-yellow/40 rounded-sm border border-ludo-yellow/60"></div>
+<div class="bg-ludo-yellow/40 rounded-sm border border-ludo-yellow/60"></div>
+<div class="bg-ludo-yellow/40 rounded-sm border border-ludo-yellow/60"></div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<!-- Safe zone -->
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-ludo-yellow/40 rounded-sm border border-ludo-yellow/60 flex items-center justify-center">
+<span class="material-symbols-outlined text-ludo-yellow text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+</div>
+<!-- YELLOW HOME (Bottom Left) -->
+<div class="col-span-6 row-span-6 bg-ludo-yellow/10 rounded-xl border-2 border-ludo-yellow/30 p-4 grid grid-cols-2 gap-4">
+<div class="bg-ludo-yellow/20 rounded-full border-2 border-ludo-yellow/40 flex items-center justify-center opacity-40"></div>
+<div class="bg-ludo-yellow/20 rounded-full border-2 border-ludo-yellow/40 flex items-center justify-center opacity-40"></div>
+<div class="bg-ludo-yellow/20 rounded-full border-2 border-ludo-yellow/40 flex items-center justify-center opacity-40"></div>
+<div class="bg-ludo-yellow/20 rounded-full border-2 border-ludo-yellow/40 flex items-center justify-center opacity-40"></div>
+</div>
+<!-- BOTTOM VERTICAL TRACK -->
+<div class="col-span-3 row-span-6 grid grid-cols-3 grid-rows-6 gap-0.5">
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-ludo-blue/40 rounded-sm border border-ludo-blue/60"></div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<!-- Active tokens -->
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-ludo-blue/40 rounded-sm border border-ludo-blue/60 flex items-center justify-center">
+<div class="w-full h-full relative group cursor-pointer">
+<span class="material-symbols-outlined text-ludo-blue scale-150 absolute inset-0 m-auto token-glow-blue animate-bounce" style="font-variation-settings: 'FILL' 1;">token</span>
+</div>
+</div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-ludo-blue/40 rounded-sm border border-ludo-blue/60"></div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-surface-glass rounded-sm border border-white/5 flex items-center justify-center">
+<div class="w-full h-full relative">
+<span class="material-symbols-outlined text-ludo-red scale-150 absolute inset-0 m-auto token-glow-red" style="font-variation-settings: 'FILL' 1;">token</span>
+</div>
+</div>
+<div class="bg-ludo-blue/40 rounded-sm border border-ludo-blue/60"></div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-ludo-blue/40 rounded-sm border border-ludo-blue/60"></div>
+<div class="bg-ludo-blue/40 rounded-sm border border-ludo-blue/60 flex items-center justify-center">
+<span class="material-symbols-outlined text-ludo-blue text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+<div class="bg-surface-glass rounded-sm border border-white/5"></div>
+</div>
+<!-- BLUE HOME (Bottom Right) -->
+<div class="col-span-6 row-span-6 bg-ludo-blue/10 rounded-xl border-2 border-ludo-blue/30 p-4 grid grid-cols-2 gap-4">
+<div class="bg-ludo-blue/20 rounded-full border-2 border-ludo-blue/40 flex items-center justify-center">
+<span class="material-symbols-outlined text-ludo-blue scale-150 token-glow-blue" style="font-variation-settings: 'FILL' 1;">token</span>
+</div>
+<div class="bg-ludo-blue/20 rounded-full border-2 border-ludo-blue/40 flex items-center justify-center">
+<span class="material-symbols-outlined text-ludo-blue scale-150 token-glow-blue" style="font-variation-settings: 'FILL' 1;">token</span>
+</div>
+<div class="bg-ludo-blue/20 rounded-full border-2 border-ludo-blue/40 flex items-center justify-center">
+<span class="material-symbols-outlined text-ludo-blue scale-150 token-glow-blue" style="font-variation-settings: 'FILL' 1;">token</span>
+</div>
+<div class="bg-ludo-blue/20 rounded-full border-2 border-ludo-blue/40 flex items-center justify-center opacity-20"></div>
+</div>
+</div>
+</div>
+<!-- Dice Roll Interaction -->
+<div class="absolute bottom-10 right-10 z-30 flex flex-col items-center">
+<button class="group relative w-24 h-24 bg-surface-container-high rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(59,130,246,0.3)] border-2 border-ludo-blue transition-all active:scale-90 overflow-hidden" id="diceBtn">
+<div class="absolute inset-0 bg-gradient-to-tr from-ludo-blue/20 to-transparent group-hover:opacity-100 opacity-50 transition-opacity"></div>
+<div class="relative z-10 transition-transform duration-300" id="diceFace">
+<span class="material-symbols-outlined text-6xl text-white font-bold">casino</span>
+</div>
+<div class="absolute -bottom-1 w-full text-center">
+<span class="font-label-caps text-[10px] text-ludo-blue animate-pulse">TAP TO ROLL</span>
+</div>
+</button>
+<div class="mt-4 bg-primary-container/80 backdrop-blur-md px-6 py-2 rounded-full border border-primary/30 hidden" id="diceResult">
+<span class="text-white font-stat-value">Rolled a <span id="rollValue">6</span>!</span>
+</div>
+</div>
+<!-- Quick Controls -->
+<div class="absolute bottom-10 left-10 z-30 flex items-center gap-4">
+<button class="w-14 h-14 rounded-full bg-surface-glass border border-white/10 flex items-center justify-center hover:bg-surface-bright/20 transition-all active:scale-95 shadow-lg group" onclick="GV.toast('😄 Emote sent')">
+<span class="material-symbols-outlined text-primary group-hover:scale-110">mood</span>
+</button>
+<button class="w-14 h-14 rounded-full bg-surface-glass border border-white/10 flex items-center justify-center hover:bg-surface-bright/20 transition-all active:scale-95 shadow-lg group" onclick="GV.toast('Match chat — coming soon')">
+<span class="material-symbols-outlined text-primary group-hover:scale-110">chat</span>
+</button>
+<button class="w-14 h-14 rounded-full bg-surface-glass border border-white/10 flex items-center justify-center hover:bg-surface-bright/20 transition-all active:scale-95 shadow-lg group" onclick="if(confirm('Leave the match?')) location.href='ludo-home.html'"><span class="material-symbols-outlined text-primary group-hover:scale-110">settings</span></button>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Hidden on Mobile Gameplay for Focus) -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-4 pb-safe h-20 bg-surface-glass backdrop-blur-xl border-t border-white/10 shadow-[0_-4px_20px_rgba(59,130,246,0.3)] md:hidden">
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all cursor-pointer" onclick="location.href='ludo-home.html'">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-caps text-label-caps">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all cursor-pointer" onclick="location.href='ludo-shop.html'">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="font-label-caps text-label-caps">Shop</span>
+</div>
+<div class="flex flex-col items-center justify-center text-primary font-bold bg-primary-container/30 rounded-full py-1 px-4 active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined">extension</span>
+<span class="font-label-caps text-label-caps">Play</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all cursor-pointer" onclick="location.href='ludo-leaderboards.html'">
+<span class="material-symbols-outlined">emoji_events</span>
+<span class="font-label-caps text-label-caps">Events</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all cursor-pointer" onclick="location.href='profile.html'">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-caps text-label-caps">Profile</span>
+</div>
+</nav>
+<script>
+        // Dice Rolling Logic
+        const diceBtn = document.getElementById('diceBtn');
+        const diceFace = document.getElementById('diceFace');
+        const diceResult = document.getElementById('diceResult');
+        const rollValueSpan = document.getElementById('rollValue');
+
+        diceBtn.addEventListener('click', () => {
+            if (diceFace.classList.contains('dice-roll-animation')) return;
+
+            diceFace.classList.add('dice-roll-animation');
+            diceResult.classList.add('hidden');
+
+            setTimeout(() => {
+                diceFace.classList.remove('dice-roll-animation');
+                const roll = Math.floor(Math.random() * 6) + 1;
+                rollValueSpan.innerText = roll;
+                diceResult.classList.remove('hidden');
+                
+                // Add temporary scale effect to active tokens
+                const activeTokens = document.querySelectorAll('.animate-bounce');
+                activeTokens.forEach(token => {
+                    token.classList.add('scale-150');
+                    setTimeout(() => token.classList.remove('scale-150'), 500);
+                });
+            }, 800);
+        });
+
+        // Particle Starfield Background
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2;
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.speedY = (Math.random() - 0.5) * 0.5;
+                this.opacity = Math.random();
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                    this.reset();
+                }
+            }
+            draw() {
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < 100; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+        initParticles();
+        animate();
+
+        // Turn Timer Animation Simulation
+        let timeLeft = 100;
+        const ring = document.querySelector('.turn-timer-ring');
+        setInterval(() => {
+            timeLeft -= 1;
+            if (timeLeft < 0) timeLeft = 100;
+            ring.style.strokeDashoffset = timeLeft;
+        }, 300);
+    </script>
+<script src="app.js"></script>
+</body></html>

@@ -1,0 +1,16 @@
+{
+  "name": "chess-fullstack",
+  "version": "1.0.0",
+  "description": "Full-stack Chess board game with multiplayer Socket.IO backend and test suites",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "test": "node test.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5"
+  },
+  "author": "Game Source Generator",
+  "license": "MIT"
+}

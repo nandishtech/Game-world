@@ -1,0 +1,506 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>CYBER-NEXUS | Global Live Ops</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#571bc1",
+                    "on-primary-fixed-variant": "#004395",
+                    "on-primary": "#002e6a",
+                    "on-surface-variant": "#c2c6d6",
+                    "tertiary": "#4cd7f6",
+                    "on-secondary-fixed": "#23005c",
+                    "on-primary-fixed": "#001a42",
+                    "inverse-on-surface": "#313030",
+                    "tertiary-fixed-dim": "#4cd7f6",
+                    "on-secondary-container": "#c4abff",
+                    "primary-fixed-dim": "#adc6ff",
+                    "surface-container-highest": "#353534",
+                    "outline-variant": "#424754",
+                    "surface-container": "#201f1f",
+                    "primary": "#adc6ff",
+                    "on-primary-container": "#00285d",
+                    "surface-tint": "#adc6ff",
+                    "error": "#ffb4ab",
+                    "surface": "#131313",
+                    "on-tertiary-fixed-variant": "#004e5c",
+                    "background": "#131313",
+                    "surface-variant": "#353534",
+                    "inverse-primary": "#005ac2",
+                    "tertiary-fixed": "#acedff",
+                    "surface-container-lowest": "#0e0e0e",
+                    "surface-container-low": "#1c1b1b",
+                    "secondary": "#d0bcff",
+                    "outline": "#8c909f",
+                    "on-error-container": "#ffdad6",
+                    "secondary-fixed": "#e9ddff",
+                    "primary-container": "#4d8eff",
+                    "secondary-fixed-dim": "#d0bcff",
+                    "on-background": "#e5e2e1",
+                    "on-secondary": "#3c0091",
+                    "on-tertiary": "#003640",
+                    "error-container": "#93000a",
+                    "surface-bright": "#3a3939",
+                    "tertiary-container": "#009eb9",
+                    "on-tertiary-container": "#002f38",
+                    "surface-container-high": "#2a2a2a",
+                    "on-surface": "#e5e2e1",
+                    "on-secondary-fixed-variant": "#5516be",
+                    "on-error": "#690005",
+                    "on-tertiary-fixed": "#001f26",
+                    "surface-dim": "#131313",
+                    "primary-fixed": "#d8e2ff",
+                    "inverse-surface": "#e5e2e1"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max": "1440px",
+                    "margin-mobile": "16px",
+                    "unit": "4px",
+                    "gutter": "24px",
+                    "margin-desktop": "48px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "headline-sm": ["Space Grotesk"],
+                    "display-lg-mobile": ["Space Grotesk"],
+                    "label-sm": ["Inter"],
+                    "display-lg": ["Space Grotesk"],
+                    "body-md": ["Inter"],
+                    "headline-xl": ["Space Grotesk"],
+                    "label-md": ["Inter"],
+                    "headline-lg": ["Space Grotesk"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                    "display-lg-mobile": ["40px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "1", "fontWeight": "500"}],
+                    "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-xl": ["40px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        @keyframes pulse-neon {
+            0% { box-shadow: 0 0 5px rgba(173, 198, 255, 0.2), inset 0 0 5px rgba(173, 198, 255, 0.1); }
+            50% { box-shadow: 0 0 15px rgba(173, 198, 255, 0.6), inset 0 0 10px rgba(173, 198, 255, 0.3); }
+            100% { box-shadow: 0 0 5px rgba(173, 198, 255, 0.2), inset 0 0 5px rgba(173, 198, 255, 0.1); }
+        }
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+        .scanline-effect::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.03), transparent);
+            height: 100%;
+            pointer-events: none;
+            animation: scanline 4s linear infinite;
+        }
+        .glass-panel {
+            backdrop-filter: blur(24px);
+            background: rgba(19, 19, 19, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .neon-border-primary {
+            border: 1px solid rgba(173, 198, 255, 0.3);
+            box-shadow: 0 0 10px rgba(173, 198, 255, 0.1);
+        }
+        .status-optimal {
+            background-color: #4cd7f6;
+            box-shadow: 0 0 8px #4cd7f6;
+            animation: pulse-neon 2s infinite ease-in-out;
+        }
+        .status-incident {
+            background-color: #ffb4ab;
+            box-shadow: 0 0 8px #ffb4ab;
+            animation: pulse-neon 1s infinite ease-in-out;
+        }
+        .chart-path {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: draw 3s forwards ease-out;
+        }
+        @keyframes draw { to { stroke-dashoffset: 0; } }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md overflow-x-hidden">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 bg-surface/40 backdrop-blur-3xl border-b border-white/10">
+<div class="flex items-center gap-8">
+<span class="font-display-lg text-display-lg-mobile md:text-display-lg tracking-tighter text-primary brightness-125">CYBER-NEXUS</span>
+<nav class="hidden lg:flex items-center gap-6">
+<a class="font-headline-sm text-headline-sm md:font-headline-lg md:text-headline-lg text-on-surface-variant/70 hover:text-on-surface transition-colors" href="#">Arena</a>
+<a class="font-headline-sm text-headline-sm md:font-headline-lg md:text-headline-lg text-on-surface-variant/70 hover:text-on-surface transition-colors" href="#">Legions</a>
+<a class="font-headline-sm text-headline-sm md:font-headline-lg md:text-headline-lg text-on-surface-variant/70 hover:text-on-surface transition-colors" href="#">Vault</a>
+<a class="font-headline-sm text-headline-sm md:font-headline-lg md:text-headline-lg text-on-surface-variant/70 hover:text-on-surface transition-colors" href="#">Battlepass</a>
+<a class="font-headline-sm text-headline-sm md:font-headline-lg md:text-headline-lg text-primary border-b-2 border-primary brightness-110 drop-shadow-[0_0_10px_rgba(173,198,255,0.5)]" href="#">Intelligence</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-all">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-all">settings</button>
+<button class="bg-primary text-on-primary px-6 py-2 font-label-md rounded-lg hover:brightness-125 hover:scale-[1.02] transition-all active:scale-95">Connect</button>
+</div>
+</header>
+<!-- SideNavBar (Hidden on Mobile) -->
+<aside class="fixed left-0 top-0 h-screen hidden lg:flex flex-col z-40 bg-surface-container/30 backdrop-blur-2xl border-r border-white/5 w-64 pt-24 pb-8 px-4">
+<div class="mb-8 px-4">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-10 h-10 rounded-full bg-secondary-container/40 border border-secondary/30 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A high-tech digital portrait of a futuristic military commander wearing a sleek obsidian-colored helmet with glowing blue visors. The character is set against a backdrop of complex holographic interfaces and flickering data streams. The lighting is dramatic, with cold cyan highlights reflecting off the metallic surfaces of the armor." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtWZl_ZM5jVtHXFcH3zN97gZuCAdrvnLeYZNB8hqgMtPkRKFmxjrHsx-05DSwqFyAtWKQ4vsTX4sqGAeOPfxjNGMFiAUbgxZHUeKYqHz3zPpRMOkarWr0hDKbeBM85EFJY--bc8DMaEVj5ir3iIEbb-VIBrWkUOfDEVWX7RRVJ5fzS--gDeAVpdvKqv3uNG9qtBpjuNfj_5-wUFdRjuB6bv0VNRm3_HFWlAAzlaK7jGQhpchB__rj-Vc9VfdXWO0fXpIXJE_VvQLs">
+</div>
+<div>
+<p class="font-headline-sm text-primary text-sm leading-tight">STRAT-COM</p>
+<p class="text-[10px] text-tertiary uppercase tracking-widest opacity-80">Optimal Status</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-2">
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-white/5 hover:text-white transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:text-secondary">grid_view</span>
+<span class="font-label-md uppercase tracking-widest text-xs">Home</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-white/5 hover:text-white transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:text-secondary">sports_esports</span>
+<span class="font-label-md uppercase tracking-widest text-xs">Battles</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-white/5 hover:text-white transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:text-secondary">group</span>
+<span class="font-label-md uppercase tracking-widest text-xs">Allies</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg bg-secondary-container/20 text-secondary border-r-4 border-secondary shadow-[inset_-10px_0_20px_rgba(208,188,255,0.1)]" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span class="font-label-md uppercase tracking-widest text-xs">Data</span>
+</a>
+</nav>
+<button class="bg-secondary text-on-secondary w-full py-3 rounded-lg font-label-md uppercase tracking-widest text-xs hover:brightness-110 mb-4">Join Party</button>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-error/10 hover:text-error transition-all" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md uppercase tracking-widest text-xs">Log Out</span>
+</a>
+</aside>
+<!-- Main Content Canvas -->
+<main class="lg:ml-64 pt-24 min-h-screen px-margin-mobile md:px-margin-desktop pb-12 relative">
+<!-- Background Animation -->
+
+<!-- Dashboard Header -->
+<div class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary tracking-tighter uppercase">Live Ops Terminal</h1>
+<p class="text-on-surface-variant max-w-2xl font-body-lg">Real-time global synchronization and infrastructure health monitoring across Nexus clusters.</p>
+</div>
+<div class="flex gap-2">
+<div class="glass-panel px-4 py-2 rounded-lg flex items-center gap-3">
+<div class="w-2 h-2 rounded-full status-optimal"></div>
+<span class="font-label-md text-xs uppercase text-tertiary">Global Uptime: 99.998%</span>
+</div>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Global Server Map (Main View) -->
+<div class="col-span-12 lg:col-span-8 glass-panel rounded-xl overflow-hidden relative min-h-[500px] scanline-effect group">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent"></div>
+<div class="p-6 relative z-10 flex justify-between items-start">
+<div>
+<h2 class="font-headline-sm text-primary mb-1">Global Latency Heatmap</h2>
+<p class="text-label-sm text-on-surface-variant opacity-70">Cross-region synchronization &amp; node status</p>
+</div>
+<div class="flex gap-2">
+<span class="px-3 py-1 rounded bg-surface-container-highest text-[10px] text-primary-fixed-dim uppercase tracking-widest border border-white/10">Real-time</span>
+<span class="px-3 py-1 rounded bg-surface-container-highest text-[10px] text-tertiary uppercase tracking-widest border border-white/10">Active Nodes: 1,422</span>
+</div>
+</div>
+<!-- Map Simulation -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-50">
+<img class="w-full h-full object-contain p-12" data-alt="A stylized global digital map with a dark tech aesthetic. Continents are rendered as minimalist dots or wireframes in deep charcoal and navy. Vibrant neon blue and cyan circular heatmaps pulse over major urban centers like New York, London, Tokyo, and Singapore. Delicate glowing data lines curve across the oceans, connecting these hubs in a complex web of light." data-location="world" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZjoMP6v1BLb7-5esz16CMMvxjLYrfzrhVgmpriM7eMiYw-zM1_TdqPvPlw0ZgQzwBocHQxoDvx7ZwFHtuVMj6RQROiru4DGhY4chwTv454j9gimPiy4c0fnpyr5_uAGJhOjRXMtB0kuhVVtJ_u5qqErCx6m9oIpPBn2vbPviI5OjI9uFHCB3Ew89inAlZb_4cpi2RmhLYOkSDyWG92DudnjPGRqf-8jzJWApkvlh0FhDwzRlA8IEkfOEwW5q6Yjndz_XD7tMUXMA">
+</div>
+<!-- Floating Data Markers -->
+<div class="absolute top-1/3 left-1/4 group-hover:scale-110 transition-transform cursor-pointer">
+<div class="w-3 h-3 rounded-full status-optimal mb-1"></div>
+<div class="glass-panel px-2 py-1 rounded text-[9px] font-bold text-primary">NA-WEST: 24ms</div>
+</div>
+<div class="absolute bottom-1/3 right-1/4 group-hover:scale-110 transition-transform cursor-pointer">
+<div class="w-3 h-3 rounded-full status-optimal mb-1"></div>
+<div class="glass-panel px-2 py-1 rounded text-[9px] font-bold text-primary">EU-CENTRAL: 18ms</div>
+</div>
+<div class="absolute top-1/2 right-1/3 group-hover:scale-110 transition-transform cursor-pointer">
+<div class="w-3 h-3 rounded-full status-incident mb-1"></div>
+<div class="glass-panel px-2 py-1 rounded text-[9px] font-bold text-error">ASIA-SOUTH: 212ms</div>
+</div>
+<div class="absolute bottom-6 left-6 right-6 flex gap-4">
+<div class="flex-1 glass-panel p-3 rounded-lg border-primary/20">
+<p class="text-[10px] text-on-surface-variant uppercase mb-1">Packet Loss Avg</p>
+<p class="text-headline-sm text-primary">0.002%</p>
+</div>
+<div class="flex-1 glass-panel p-3 rounded-lg border-primary/20">
+<p class="text-[10px] text-on-surface-variant uppercase mb-1">Jitter (Global)</p>
+<p class="text-headline-sm text-primary">1.4ms</p>
+</div>
+<div class="flex-1 glass-panel p-3 rounded-lg border-primary/20">
+<p class="text-[10px] text-on-surface-variant uppercase mb-1">Traffic Vol</p>
+<p class="text-headline-sm text-primary">84.2 TB/s</p>
+</div>
+</div>
+</div>
+<!-- Service Status Grid -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-6">
+<div class="glass-panel rounded-xl p-6 flex-1 relative overflow-hidden">
+<h3 class="font-headline-sm text-on-surface mb-6 flex items-center justify-between">
+                        Service Status
+                        <span class="material-symbols-outlined text-tertiary">hub</span>
+</h3>
+<div class="space-y-4">
+<!-- Service Item -->
+<div class="flex items-center justify-between p-4 rounded-lg bg-surface-container-low border border-white/5 hover:border-primary/30 transition-colors cursor-default group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded bg-primary-container/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">key</span>
+</div>
+<div>
+<p class="font-label-md text-sm">Auth Nexus</p>
+<p class="text-[10px] text-on-surface-variant">Global Gateway</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-[10px] text-tertiary uppercase font-bold group-hover:glow">Operational</p>
+<p class="text-[10px] text-on-surface-variant opacity-60">12ms response</p>
+</div>
+</div>
+<div class="flex items-center justify-between p-4 rounded-lg bg-surface-container-low border border-white/5 hover:border-primary/30 transition-colors cursor-default group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded bg-primary-container/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">swords</span>
+</div>
+<div>
+<p class="font-label-md text-sm">Matchmaking</p>
+<p class="text-[10px] text-on-surface-variant">Queue Processor</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-[10px] text-tertiary uppercase font-bold">Operational</p>
+<p class="text-[10px] text-on-surface-variant opacity-60">0.8s avg wait</p>
+</div>
+</div>
+<div class="flex items-center justify-between p-4 rounded-lg bg-surface-container-low border border-white/5 hover:border-error/30 transition-colors cursor-default group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded bg-error-container/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-error">database</span>
+</div>
+<div>
+<p class="font-label-md text-sm">Data Vault</p>
+<p class="text-[10px] text-on-surface-variant">Postgres Cluster</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-[10px] text-error uppercase font-bold animate-pulse">Degraded</p>
+<p class="text-[10px] text-on-surface-variant opacity-60">Replica Sync lag</p>
+</div>
+</div>
+<div class="flex items-center justify-between p-4 rounded-lg bg-surface-container-low border border-white/5 hover:border-primary/30 transition-colors cursor-default group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded bg-primary-container/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">chat_bubble</span>
+</div>
+<div>
+<p class="font-label-md text-sm">Comms-Relay</p>
+<p class="text-[10px] text-on-surface-variant">WebSocket Farm</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-[10px] text-tertiary uppercase font-bold">Operational</p>
+<p class="text-[10px] text-on-surface-variant opacity-60">4.2M active subs</p>
+</div>
+</div>
+</div>
+</div>
+<!-- System Load Indicators -->
+<div class="glass-panel rounded-xl p-6 space-y-6">
+<div>
+<div class="flex justify-between items-center mb-2">
+<span class="text-[10px] uppercase text-on-surface-variant">CPU Load (Cluster-X)</span>
+<span class="text-[10px] font-bold text-primary">64%</span>
+</div>
+<div class="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-primary shadow-[0_0_8px_rgba(173,198,255,0.8)]" style="width: 64%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center mb-2">
+<span class="text-[10px] uppercase text-on-surface-variant">Memory Saturation</span>
+<span class="text-[10px] font-bold text-tertiary">42%</span>
+</div>
+<div class="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-tertiary shadow-[0_0_8px_rgba(76,215,246,0.8)]" style="width: 42%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Live Player Metrics Section -->
+<div class="col-span-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Chart 1: Concurrent Users -->
+<div class="glass-panel rounded-xl p-6 relative overflow-hidden group">
+<div class="flex justify-between items-start mb-8">
+<div>
+<h3 class="font-headline-sm text-primary uppercase text-sm tracking-widest">Concurrent Users</h3>
+<div class="flex items-baseline gap-2">
+<span class="text-headline-lg font-bold">2,481,092</span>
+<span class="text-tertiary text-xs flex items-center"><span class="material-symbols-outlined text-xs">trending_up</span> +12%</span>
+</div>
+</div>
+<div class="w-12 h-12 rounded-full border border-primary/20 flex items-center justify-center group-hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-primary">person</span>
+</div>
+</div>
+<div class="h-32 w-full relative">
+<svg class="w-full h-full" preserveAspectRatio="none" viewBox="0 0 400 100">
+<path class="chart-path" d="M0 80 Q 50 20, 100 60 T 200 40 T 300 70 T 400 30" fill="none" stroke="#adc6ff" stroke-width="2"></path>
+<path d="M0 80 Q 50 20, 100 60 T 200 40 T 300 70 T 400 30 L 400 100 L 0 100 Z" fill="url(#grad1)" opacity="0.2"></path>
+<defs>
+<linearGradient id="grad1" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#adc6ff;stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:transparent;stop-opacity:0"></stop>
+</linearGradient>
+</defs>
+</svg>
+<div class="absolute bottom-0 w-full flex justify-between px-1">
+<span class="text-[8px] text-on-surface-variant uppercase">00:00</span>
+<span class="text-[8px] text-on-surface-variant uppercase">06:00</span>
+<span class="text-[8px] text-on-surface-variant uppercase">12:00</span>
+<span class="text-[8px] text-on-surface-variant uppercase">18:00</span>
+<span class="text-[8px] text-on-surface-variant uppercase">NOW</span>
+</div>
+</div>
+</div>
+<!-- Chart 2: Matches Per Minute -->
+<div class="glass-panel rounded-xl p-6 relative overflow-hidden group">
+<div class="flex justify-between items-start mb-8">
+<div>
+<h3 class="font-headline-sm text-secondary uppercase text-sm tracking-widest">Matches Per Minute</h3>
+<div class="flex items-baseline gap-2">
+<span class="text-headline-lg font-bold">48,220</span>
+<span class="text-secondary text-xs flex items-center"><span class="material-symbols-outlined text-xs">bolt</span> PEAK</span>
+</div>
+</div>
+<div class="w-12 h-12 rounded-full border border-secondary/20 flex items-center justify-center group-hover:border-secondary transition-colors">
+<span class="material-symbols-outlined text-secondary">stadium</span>
+</div>
+</div>
+<div class="h-32 w-full relative">
+<svg class="w-full h-full" preserveAspectRatio="none" viewBox="0 0 400 100">
+<path class="chart-path" d="M0 90 L 40 70 L 80 85 L 120 40 L 160 55 L 200 20 L 240 45 L 280 15 L 320 50 L 360 30 L 400 10" fill="none" stroke="#d0bcff" stroke-width="2"></path>
+<path d="M0 90 L 40 70 L 80 85 L 120 40 L 160 55 L 200 20 L 240 45 L 280 15 L 320 50 L 360 30 L 400 10 L 400 100 L 0 100 Z" fill="url(#grad2)" opacity="0.2"></path>
+<defs>
+<linearGradient id="grad2" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#d0bcff;stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:transparent;stop-opacity:0"></stop>
+</linearGradient>
+</defs>
+</svg>
+<div class="absolute bottom-0 w-full flex justify-between px-1">
+<span class="text-[8px] text-on-surface-variant uppercase">00:00</span>
+<span class="text-[8px] text-on-surface-variant uppercase">06:00</span>
+<span class="text-[8px] text-on-surface-variant uppercase">12:00</span>
+<span class="text-[8px] text-on-surface-variant uppercase">18:00</span>
+<span class="text-[8px] text-on-surface-variant uppercase">NOW</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Detailed Event Logs -->
+<div class="col-span-12 glass-panel rounded-xl overflow-hidden">
+<div class="px-6 py-4 border-b border-white/10 flex justify-between items-center bg-white/5">
+<h3 class="font-label-md uppercase tracking-widest text-xs flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">terminal</span>
+                        Live Incident Log
+                    </h3>
+<div class="flex gap-4">
+<span class="text-[10px] text-on-surface-variant/50">Filtered by: <strong class="text-primary">Severity High</strong></span>
+<span class="text-[10px] text-on-surface-variant/50">Auto-Refresh: <strong class="text-tertiary">ON</strong></span>
+</div>
+</div>
+<div class="p-0">
+<table class="w-full text-left text-xs">
+<thead>
+<tr class="text-on-surface-variant border-b border-white/5 bg-white/2">
+<th class="px-6 py-3 font-medium">Timestamp</th>
+<th class="px-6 py-3 font-medium">Source</th>
+<th class="px-6 py-3 font-medium">Event</th>
+<th class="px-6 py-3 font-medium">Status</th>
+<th class="px-6 py-3 font-medium text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-white/5">
+<tr class="hover:bg-white/5 transition-colors group">
+<td class="px-6 py-4 text-on-surface-variant/70 font-mono">14:22:05:01</td>
+<td class="px-6 py-4"><span class="text-primary font-bold">DB-VAULT-04</span></td>
+<td class="px-6 py-4">Replica sync delay detected (&gt;500ms)</td>
+<td class="px-6 py-4"><span class="text-error flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-error"></span> Investigating</span></td>
+<td class="px-6 py-4 text-right"><button class="text-primary hover:underline uppercase text-[10px] font-bold">Reroute</button></td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors group">
+<td class="px-6 py-4 text-on-surface-variant/70 font-mono">14:21:44:92</td>
+<td class="px-6 py-4"><span class="text-primary font-bold">AUTH-GW-SEC</span></td>
+<td class="px-6 py-4">Abnormal spike in token validation failures (IP: 192.168.0.X)</td>
+<td class="px-6 py-4"><span class="text-tertiary flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> Mitigated</span></td>
+<td class="px-6 py-4 text-right"><button class="text-primary hover:underline uppercase text-[10px] font-bold">Ban Source</button></td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors group">
+<td class="px-6 py-4 text-on-surface-variant/70 font-mono">14:18:12:33</td>
+<td class="px-6 py-4"><span class="text-primary font-bold">REGION-AS-S</span></td>
+<td class="px-6 py-4">Upstream ISP failure in Mumbai node cluster</td>
+<td class="px-6 py-4"><span class="text-error flex items-center gap-1 animate-pulse"><span class="w-1.5 h-1.5 rounded-full bg-error"></span> Critical Failure</span></td>
+<td class="px-6 py-4 text-right"><button class="text-primary hover:underline uppercase text-[10px] font-bold">Emergency Failover</button></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<!-- Interactive Layer / Floating Particle script -->
+<script>
+        // Micro-interactions for dashboard elements
+        document.querySelectorAll('.glass-panel').forEach(panel => {
+            panel.addEventListener('mousemove', (e) => {
+                const rect = panel.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                panel.style.setProperty('--mouse-x', `${x}px`);
+                panel.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        // Simulating live data updates
+        setInterval(() => {
+            const statusDots = document.querySelectorAll('.status-optimal');
+            const target = statusDots[Math.floor(Math.random() * statusDots.length)];
+            if(target) {
+                target.classList.toggle('brightness-150');
+                setTimeout(() => target.classList.toggle('brightness-150'), 500);
+            }
+        }, 3000);
+    </script>
+</body></html>

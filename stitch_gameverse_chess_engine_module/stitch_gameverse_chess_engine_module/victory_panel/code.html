@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Match Victory - GameVerse Chess</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&amp;family=Inter:wght@400;500&amp;family=JetBrains+Mono:wght@500;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@100..900&amp;family=Inter:wght@100..900&amp;family=JetBrains+Mono:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        .victory-glow {
+            text-shadow: 0 0 20px rgba(238, 204, 131, 0.4);
+        }
+        .glass-panel {
+            background: rgba(21, 19, 17, 0.85);
+            backdrop-filter: blur(12px);
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "move-highlight": "rgba(209, 177, 106, 0.4)",
+                        "on-secondary-fixed-variant": "#2b5000",
+                        "surface-container-lowest": "#0f0e0c",
+                        "primary-fixed-dim": "#e4c37a",
+                        "board-light": "#EDEED1",
+                        "on-secondary": "#1c3700",
+                        "on-surface-variant": "#d0c5b4",
+                        "outline": "#999080",
+                        "on-primary": "#3f2e00",
+                        "on-background": "#e7e2dd",
+                        "surface-container": "#211f1d",
+                        "error-container": "#93000a",
+                        "tertiary-container": "#aeb5c2",
+                        "on-primary-container": "#594304",
+                        "secondary-container": "#3b6a00",
+                        "tertiary-fixed": "#dce3f1",
+                        "tertiary-fixed-dim": "#c0c7d4",
+                        "secondary": "#9fd668",
+                        "surface": "#151311",
+                        "inverse-primary": "#745b1d",
+                        "inverse-on-surface": "#32302d",
+                        "background": "#151311",
+                        "on-error": "#690005",
+                        "inverse-surface": "#e7e2dd",
+                        "primary": "#eecc83",
+                        "board-dark": "#706659",
+                        "on-secondary-fixed": "#0e2000",
+                        "surface-tint": "#e4c37a",
+                        "primary-fixed": "#ffdf9b",
+                        "surface-variant": "#373431",
+                        "secondary-fixed-dim": "#9fd668",
+                        "on-primary-fixed": "#251a00",
+                        "primary-container": "#d1b16a",
+                        "on-primary-fixed-variant": "#5a4304",
+                        "surface-bright": "#3b3936",
+                        "on-tertiary-container": "#404752",
+                        "surface-navy": "#11151C",
+                        "on-tertiary-fixed-variant": "#404752",
+                        "on-error-container": "#ffdad6",
+                        "outline-variant": "#4d4639",
+                        "surface-container-high": "#2c2a27",
+                        "surface-dim": "#151311",
+                        "text-muted": "#98A2B3",
+                        "on-surface": "#e7e2dd",
+                        "on-secondary-container": "#b1e978",
+                        "on-tertiary-fixed": "#151c26",
+                        "surface-container-highest": "#373431",
+                        "secondary-fixed": "#baf381",
+                        "on-tertiary": "#2a313b",
+                        "error": "#ffb4ab",
+                        "surface-container-low": "#1d1b19",
+                        "tertiary": "#cad0de"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "sidebar-width": "360px",
+                        "panel-padding": "1.5rem",
+                        "gutter": "1rem",
+                        "container-max": "1440px",
+                        "board-size-desktop": "min(80vh, 800px)"
+                    },
+                    "fontFamily": {
+                        "notation-log": ["JetBrains Mono"],
+                        "label-caps": ["Hanken Grotesk"],
+                        "body-sm": ["Inter"],
+                        "display-clock": ["JetBrains Mono"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "notation-log": ["13px", {"lineHeight": "18px", "fontWeight": "500"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "800"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "display-clock": ["48px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-primary selection:text-on-primary overflow-hidden">
+<!-- Background Layer with Shader -->
+<div class="fixed inset-0 z-0">
+
+<div class="absolute inset-0 bg-gradient-to-b from-transparent via-background to-background"></div>
+</div>
+<!-- Top App Bar (Shared Component Strategy) -->
+<header class="flex items-center justify-between px-4 h-16 w-full fixed top-0 z-50 bg-background/80 backdrop-blur border-b border-outline-variant">
+<div class="flex items-center gap-4">
+<button class="hover:bg-surface-container-highest transition-colors active:scale-95 duration-150 p-2 rounded-lg">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md text-primary">Match Review</h1>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-caps text-label-caps text-primary uppercase tracking-widest px-3 py-1 border border-primary/20 rounded-full">GameVerse</span>
+<button class="hover:bg-surface-container-highest transition-colors active:scale-95 duration-150 p-2 rounded-lg">
+<span class="material-symbols-outlined text-on-surface-variant">more_vert</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 pt-16 pb-24 max-w-container-max mx-auto">
+<!-- Victory Banner Section -->
+<div class="text-center mb-10 animate-float">
+<div class="inline-block mb-2">
+<span class="material-symbols-outlined text-primary text-6xl block victory-glow" style="font-variation-settings: 'FILL' 1;">emoji_events</span>
+</div>
+<h2 class="font-headline-lg text-[64px] leading-tight text-primary uppercase tracking-tighter victory-glow mb-1">VICTORY</h2>
+<p class="font-notation-log text-on-surface-variant tracking-wider uppercase">Checkmate in 42 moves</p>
+</div>
+<!-- Bento Grid Performance Metrics -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-4xl mb-12">
+<!-- Accuracy Card -->
+<div class="glass-panel border border-outline-variant p-6 rounded-xl flex flex-col justify-between group hover:border-primary transition-colors">
+<div class="flex justify-between items-start mb-4">
+<span class="text-primary material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Accuracy</span>
+</div>
+<div>
+<div class="text-4xl font-display-clock text-on-surface">94.2%</div>
+<div class="h-1 w-full bg-surface-container-highest mt-2 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[94.2%]"></div>
+</div>
+</div>
+</div>
+<!-- ELO Card -->
+<div class="glass-panel border border-outline-variant p-6 rounded-xl flex flex-col justify-between group hover:border-primary transition-colors">
+<div class="flex justify-between items-start mb-4">
+<span class="text-secondary material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">trending_up</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">ELO Progress</span>
+</div>
+<div>
+<div class="text-4xl font-display-clock text-on-surface">2864</div>
+<div class="text-secondary font-label-caps text-label-caps mt-1">+14 Rating Points</div>
+</div>
+</div>
+<!-- Best Moves Card -->
+<div class="glass-panel border border-outline-variant p-6 rounded-xl flex flex-col justify-between group hover:border-primary transition-colors">
+<div class="flex justify-between items-start mb-4">
+<span class="text-primary material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Best Moves</span>
+</div>
+<div>
+<div class="text-4xl font-display-clock text-on-surface">18</div>
+<div class="text-on-surface-variant font-body-sm text-body-sm mt-1">out of 42 played</div>
+</div>
+</div>
+</div>
+<!-- Board Preview Section -->
+<div class="relative w-full max-w-sm aspect-square mb-12 group cursor-pointer">
+<div class="absolute -inset-4 bg-primary/10 rounded-2xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+<div class="relative w-full h-full glass-panel border border-outline-variant rounded-lg overflow-hidden shadow-2xl opacity-80 group-hover:opacity-100 transition-all duration-300">
+<!-- Faded Board State -->
+<div class="grid grid-cols-8 grid-rows-8 h-full">
+<!-- Simple pattern representative of a chess board -->
+<script>
+                        const board = document.querySelector('.grid-cols-8');
+                        for(let i=0; i<64; i++) {
+                            const row = Math.floor(i/8);
+                            const col = i%8;
+                            const isDark = (row + col) % 2 === 1;
+                            const cell = document.createElement('div');
+                            cell.className = isDark ? 'bg-board-dark/40' : 'bg-board-light/40';
+                            
+                            // Mock piece markers for final state
+                            if (i === 12) cell.innerHTML = '<span class="material-symbols-outlined text-primary/60 scale-150 flex items-center justify-center h-full">chess</span>';
+                            if (i === 42) cell.innerHTML = '<span class="material-symbols-outlined text-white/40 scale-150 flex items-center justify-center h-full">chess</span>';
+                            if (i === 35) cell.className += ' bg-move-highlight/50';
+                            
+                            board.appendChild(cell);
+                        }
+                    </script>
+</div>
+<div class="absolute inset-0 flex items-center justify-center bg-background/40">
+<span class="font-label-caps text-label-caps text-on-surface bg-background/80 px-4 py-2 rounded-full border border-outline-variant">Final Board State</span>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="w-full max-w-md space-y-4">
+<div class="grid grid-cols-2 gap-4">
+<button class="bg-primary text-on-primary font-label-caps text-label-caps h-14 rounded-lg flex items-center justify-center gap-2 hover:brightness-110 active:scale-95 transition-all shadow-lg">
+<span class="material-symbols-outlined text-xl">replay</span>
+                    REMATCH
+                </button>
+<button class="border border-outline text-primary font-label-caps text-label-caps h-14 rounded-lg flex items-center justify-center gap-2 hover:bg-surface-container-highest active:scale-95 transition-all">
+<span class="material-symbols-outlined text-xl">query_stats</span>
+                    REVIEW GAME
+                </button>
+</div>
+<button class="w-full text-on-surface-variant font-label-caps text-label-caps h-12 rounded-lg flex items-center justify-center gap-2 hover:text-on-surface transition-all">
+<span class="material-symbols-outlined text-xl">home</span>
+                BACK TO LOBBY
+            </button>
+</div>
+</main>
+<!-- Bottom Navigation (Shared Component Logic) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-surface-container-low border-t border-outline-variant flex justify-around items-center px-4 py-3 pb-safe md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-caps text-[10px] uppercase mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-label-caps text-[10px] uppercase mt-1">History</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-label-caps text-[10px] uppercase mt-1">Engine</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-move-highlight text-primary rounded-full px-6 py-1 active:scale-90 duration-200" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-caps text-[10px] uppercase mt-1">Profile</span>
+</a>
+</nav>
+<!-- Subtle Particle Effect -->
+<canvas class="fixed inset-0 pointer-events-none z-0 opacity-20" id="particles"></canvas>
+<script>
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function initParticles() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            for (let i = 0; i < 50; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 2 + 1,
+                    speedY: Math.random() * -1 - 0.5,
+                    opacity: Math.random() * 0.5 + 0.2
+                });
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.y += p.speedY;
+                if (p.y < 0) p.y = canvas.height;
+                ctx.fillStyle = `rgba(238, 204, 131, ${p.opacity})`;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', initParticles);
+        initParticles();
+        animate();
+    </script>
+</body></html>

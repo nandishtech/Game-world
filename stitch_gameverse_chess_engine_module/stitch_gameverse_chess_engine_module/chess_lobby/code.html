@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GameVerse Chess Lobby</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed-variant": "#2b5000",
+                    "surface": "#151311",
+                    "surface-container-high": "#2c2a27",
+                    "on-surface-variant": "#d0c5b4",
+                    "surface-tint": "#e4c37a",
+                    "board-dark": "#706659",
+                    "on-primary-fixed": "#251a00",
+                    "outline": "#999080",
+                    "on-surface": "#e7e2dd",
+                    "surface-dim": "#151311",
+                    "move-highlight": "rgba(209, 177, 106, 0.4)",
+                    "tertiary-container": "#aeb5c2",
+                    "on-primary-container": "#594304",
+                    "on-secondary": "#1c3700",
+                    "surface-navy": "#11151C",
+                    "on-primary": "#3f2e00",
+                    "on-primary-fixed-variant": "#5a4304",
+                    "tertiary": "#cad0de",
+                    "primary-container": "#d1b16a",
+                    "error": "#ffb4ab",
+                    "secondary-container": "#3b6a00",
+                    "on-tertiary": "#2a313b",
+                    "on-secondary-container": "#b1e978",
+                    "inverse-surface": "#e7e2dd",
+                    "on-secondary-fixed": "#0e2000",
+                    "on-tertiary-container": "#404752",
+                    "surface-container-highest": "#373431",
+                    "on-error": "#690005",
+                    "surface-container-lowest": "#0f0e0c",
+                    "text-muted": "#98A2B3",
+                    "board-light": "#EDEED1",
+                    "primary": "#eecc83",
+                    "outline-variant": "#4d4639",
+                    "surface-container-low": "#1d1b19",
+                    "on-tertiary-fixed": "#151c26",
+                    "on-background": "#e7e2dd",
+                    "on-error-container": "#ffdad6",
+                    "surface-container": "#211f1d",
+                    "secondary-fixed-dim": "#9fd668",
+                    "tertiary-fixed": "#dce3f1",
+                    "secondary-fixed": "#baf381",
+                    "on-tertiary-fixed-variant": "#404752",
+                    "tertiary-fixed-dim": "#c0c7d4",
+                    "secondary": "#9fd668",
+                    "inverse-on-surface": "#32302d",
+                    "primary-fixed": "#ffdf9b",
+                    "surface-bright": "#3b3936",
+                    "background": "#151311",
+                    "error-container": "#93000a",
+                    "primary-fixed-dim": "#e4c37a",
+                    "surface-variant": "#373431",
+                    "inverse-primary": "#745b1d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "panel-padding": "1.5rem",
+                    "gutter": "1rem",
+                    "container-max": "1440px",
+                    "sidebar-width": "360px",
+                    "board-size-desktop": "min(80vh, 800px)"
+            },
+            "fontFamily": {
+                    "label-caps": ["Hanken Grotesk"],
+                    "body-sm": ["Inter"],
+                    "headline-lg": ["Hanken Grotesk"],
+                    "notation-log": ["JetBrains Mono"],
+                    "headline-md": ["Hanken Grotesk"],
+                    "body-md": ["Inter"],
+                    "display-clock": ["JetBrains Mono"]
+            },
+            "fontSize": {
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "800"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "notation-log": ["13px", {"lineHeight": "18px", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-clock": ["48px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #151311;
+            color: #e7e2dd;
+            overflow-x: hidden;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #4d4639; border-radius: 2px; }
+        .glass-panel {
+            background: rgba(33, 31, 29, 0.7);
+            backdrop-filter: blur(8px);
+            border: 1px solid #4d4639;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1.5rem;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-body-md">
+<!-- TopAppBar Navigation Shell -->
+<header class="fixed top-0 w-full bg-surface dark:bg-surface border-b border-outline-variant dark:border-outline-variant z-50 flex justify-between items-center px-panel-padding h-16 w-full">
+<div class="flex items-center gap-4">
+<div class="lg:hidden text-primary">
+<span class="material-symbols-outlined cursor-pointer">menu</span>
+</div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary">GameVerse Chess</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center gap-6 px-4">
+<span class="text-primary font-bold cursor-pointer transition-colors duration-200">Lobby</span>
+<span class="text-on-surface-variant hover:text-on-surface cursor-pointer transition-colors duration-200">Tournaments</span>
+<span class="text-on-surface-variant hover:text-on-surface cursor-pointer transition-colors duration-200">Leaderboard</span>
+</div>
+<span class="material-symbols-outlined text-primary dark:text-primary cursor-pointer hover:bg-surface-container-high p-2 rounded-full transition-colors duration-200">settings</span>
+<img class="w-8 h-8 rounded-full border border-primary" data-alt="A close-up, high-quality profile portrait of a professional chess player, Magnus Lite, with sharp features and thoughtful expression. The lighting is dramatic, high-contrast, fitting a dark-mode elite gaming aesthetic. Background is a blurred tournament hall with golden accents and dark charcoal tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDthiPpBVR4WpvCGRT2jOREx0_KSLYg00NTYCApl_gBxnxR6O9Ne1C3LZh1mYtdvlJZqois4h6wz13rYFl3FbKbojnBW_dlKrGLNSz-H8LYScoD1yGCL0grQ54ZmWuN2Q25MjiBHa-BXUqxS_9CKV3N83Kw43kO2epEOGWuAaLP0zT8p09giAHDK7xnZzl2-P4Ud866UbC-vSbZCFmCgvxc20WMO4um-xo5GVvE59M5gBNF4jQfCpaYhA"/>
+</div>
+</header>
+<!-- Sidebar Navigation Shell -->
+<nav class="hidden lg:flex flex-col fixed left-0 top-0 h-full p-4 bg-surface-container dark:bg-surface-container border-r border-outline-variant dark:border-outline-variant w-sidebar-width pt-20 z-40">
+<div class="flex flex-col gap-2 mb-8 px-2">
+<div class="flex items-center gap-4 p-3 bg-surface-container-high rounded-xl">
+<img class="w-12 h-12 rounded-full border-2 border-primary" data-alt="A professional circular avatar icon of a Grandmaster chess player with a sleek, minimalist aesthetic. The character has silver hair and wears a sharp tailored suit. The background features a subtle hex pattern in dark navy and gold." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqPhUYpEMfVLTVpg6PjTHOkvAQqtsd8j19Bige3CsbFvSiuxRL9Q7RqKo0Lgi9VrcG935w8r7xFrwnvgdWy3FHZmUqfRkUfihqcGqoMpsr-ufTqLCj3789ntDc9i427Q6S2e2cgN2kk_wPe9BuLNLlLPtTq1iKzVpNyE9S-UhPaGYQnJMwqvSuwy-2dUf0gwidh7ptYJUqvRuuR5OC7Zdiaz0cgxSsXzDj_7cvK542FKZFseKmlEerjw"/>
+<div>
+<h3 class="font-headline-md text-body-md font-bold text-primary">Magnus Lite</h3>
+<p class="text-on-surface-variant font-notation-log text-xs uppercase tracking-wider">ELO 2850 • Online</p>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:text-on-surface transition-all duration-150 ease-in-out cursor-pointer hover:bg-surface-variant rounded-xl group">
+<span class="material-symbols-outlined group-hover:text-primary">grid_view</span>
+<span class="font-body-md text-body-md">Play</span>
+</div>
+<div class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:text-on-surface transition-all duration-150 ease-in-out cursor-pointer hover:bg-surface-variant rounded-xl group">
+<span class="material-symbols-outlined group-hover:text-primary">extension</span>
+<span class="font-body-md text-body-md">Puzzles</span>
+</div>
+<div class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:text-on-surface transition-all duration-150 ease-in-out cursor-pointer hover:bg-surface-variant rounded-xl group">
+<span class="material-symbols-outlined group-hover:text-primary">school</span>
+<span class="font-body-md text-body-md">Learn</span>
+</div>
+<div class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:text-on-surface transition-all duration-150 ease-in-out cursor-pointer hover:bg-surface-variant rounded-xl group">
+<span class="material-symbols-outlined group-hover:text-primary">monitoring</span>
+<span class="font-body-md text-body-md">Analysis</span>
+</div>
+<div class="flex items-center gap-4 px-4 py-3 bg-primary-container dark:bg-primary-container text-on-primary-container dark:text-on-primary-container font-bold rounded-xl cursor-pointer">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-body-md text-body-md">Social</span>
+</div>
+</div>
+<!-- Social Integration Section in Sidebar -->
+<div class="mt-auto pt-6 border-t border-outline-variant">
+<h4 class="px-4 font-label-caps text-label-caps text-on-surface-variant mb-4">FRIENDS ONLINE</h4>
+<div class="space-y-3 px-2">
+<div class="flex items-center justify-between p-2 rounded-lg hover:bg-surface-variant cursor-pointer transition-colors">
+<div class="flex items-center gap-3">
+<div class="relative">
+<img class="w-8 h-8 rounded-full border border-secondary" data-alt="A stylized portrait of a female chess enthusiast with colorful hair and headphones. Modern digital art style, using a vibrant color palette of neon greens and deep blacks. She has a confident smirk and professional studio lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmWoKleqB8WUx10z4okViuYYq5aX3O_lLuTp5kM4NIVDuKLwEzpDOLXdVw_s7miywlMyhc6fnUVJmLMegtYAQpKap5C4cYmn2JPFfMsBshX9GanvDsXHaiEUQI46dsYAZ906vlyXHbIU81hdh6iOIsnO7vtQ0riajLeVVuVuQ9Xt8qH9Ds6WFgI2UowbjcnG7m8qM09WN1zRBT-WzGy5tKQF8FKGh4SsWE4gp2DZZbmPcwFSzAN7_07A"/>
+<div class="absolute bottom-0 right-0 w-2 h-2 bg-secondary rounded-full border border-surface"></div>
+</div>
+<span class="text-sm font-medium">QueenGambit_92</span>
+</div>
+<span class="text-[10px] bg-secondary-container text-on-secondary-container px-1.5 py-0.5 rounded font-bold">2410</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded-lg hover:bg-surface-variant cursor-pointer transition-colors opacity-80">
+<div class="flex items-center gap-3">
+<div class="relative">
+<img class="w-8 h-8 rounded-full border border-outline" data-alt="A digital avatar of an elderly chess master with a distinguished beard and monocle. Intellectual and sharp aesthetic, set in a library with mahogany tones and golden lighting. Professional 3D render style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCRB5hsnDcIygs8XaB56PkacoSBIIi0iFr883cy2YOiPwiIkhvAhOSJI7Pyx8sq5CfgpFSBsUyFTRwrLsYDsnhjcqxzDek1etKbYtzTymWgCf6VbtAQv7KPnsMtUeO_usN9E1HzmnciYQzo3mRKcsLaRSGVDRjlM3mlph-mi_cUM50HMxhAbU2V_jzO9bzzHIAK9Li1uMamLqLNz7NbjFZUYl2s7xzLB6WZewSywKdRr-VZIycDeMpZw"/>
+<div class="absolute bottom-0 right-0 w-2 h-2 bg-secondary rounded-full border border-surface"></div>
+</div>
+<span class="text-sm font-medium">CastleKing</span>
+</div>
+<span class="text-[10px] bg-primary-container text-on-primary-container px-1.5 py-0.5 rounded font-bold">2685</span>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="lg:ml-sidebar-width pt-20 pb-24 lg:pb-8 px-4 lg:px-panel-padding max-w-7xl mx-auto">
+<div class="bento-grid">
+<!-- Quick Play Grid (Hero Section) -->
+<section class="col-span-12 lg:col-span-8 flex flex-col gap-6">
+<div class="flex items-baseline justify-between">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Matchmaking</h2>
+<p class="text-on-surface-variant font-body-sm">4,281 games in progress</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<!-- Blitz Card -->
+<button class="flex flex-col items-center justify-center p-8 rounded-xl bg-surface-container hover:bg-primary-container group transition-all duration-300 border border-outline-variant hover:border-primary active:scale-95">
+<span class="material-symbols-outlined text-4xl mb-4 text-primary group-hover:text-on-primary-container">bolt</span>
+<span class="font-headline-md text-headline-md font-bold mb-1 group-hover:text-on-primary-container">Blitz</span>
+<span class="text-on-surface-variant group-hover:text-on-primary-container font-label-caps text-label-caps">3 MIN</span>
+</button>
+<!-- Rapid Card -->
+<button class="flex flex-col items-center justify-center p-8 rounded-xl bg-primary hover:bg-primary-fixed group transition-all duration-300 border border-transparent active:scale-95">
+<span class="material-symbols-outlined text-4xl mb-4 text-on-primary">timer</span>
+<span class="font-headline-md text-headline-md font-bold mb-1 text-on-primary">Rapid</span>
+<span class="text-on-primary-container font-label-caps text-label-caps opacity-80">10 MIN</span>
+</button>
+<!-- Classical Card -->
+<button class="flex flex-col items-center justify-center p-8 rounded-xl bg-surface-container hover:bg-primary-container group transition-all duration-300 border border-outline-variant hover:border-primary active:scale-95">
+<span class="material-symbols-outlined text-4xl mb-4 text-primary group-hover:text-on-primary-container">history_edu</span>
+<span class="font-headline-md text-headline-md font-bold mb-1 group-hover:text-on-primary-container">Classical</span>
+<span class="text-on-surface-variant group-hover:text-on-primary-container font-label-caps text-label-caps">30 MIN</span>
+</button>
+</div>
+<!-- Secondary Actions Row -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="glass-panel p-6 rounded-xl flex items-center justify-between group cursor-pointer hover:border-primary transition-colors">
+<div class="flex items-center gap-4">
+<div class="p-3 rounded-full bg-secondary-container text-on-secondary-container">
+<span class="material-symbols-outlined">person_add</span>
+</div>
+<div>
+<h4 class="font-bold">Play Friend</h4>
+<p class="text-xs text-on-surface-variant">Send a challenge link</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</div>
+<div class="glass-panel p-6 rounded-xl flex items-center justify-between group cursor-pointer hover:border-primary transition-colors">
+<div class="flex items-center gap-4">
+<div class="p-3 rounded-full bg-tertiary-container text-on-tertiary-container">
+<span class="material-symbols-outlined">downloading</span>
+</div>
+<div>
+<h4 class="font-bold">Custom Game</h4>
+<p class="text-xs text-on-surface-variant">Choose variants &amp; rules</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</div>
+</div>
+<!-- ELO Ratings Section -->
+<div class="mt-4 flex flex-col gap-4">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant">YOUR RATINGS</h3>
+<div class="grid grid-cols-3 gap-4">
+<div class="bg-surface-container-low p-4 rounded-xl border-l-4 border-secondary">
+<p class="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest">Blitz</p>
+<p class="text-2xl font-display-clock text-secondary">2740</p>
+<p class="text-[10px] text-secondary font-bold">+12 today</p>
+</div>
+<div class="bg-surface-container-low p-4 rounded-xl border-l-4 border-primary">
+<p class="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest">Rapid</p>
+<p class="text-2xl font-display-clock text-primary">2850</p>
+<p class="text-[10px] text-primary font-bold">-4 today</p>
+</div>
+<div class="bg-surface-container-low p-4 rounded-xl border-l-4 border-outline">
+<p class="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest">Classical</p>
+<p class="text-2xl font-display-clock text-on-surface">2610</p>
+<p class="text-[10px] text-on-surface-variant font-bold">Stable</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Sidebar Content -->
+<aside class="col-span-12 lg:col-span-4 space-y-6">
+<!-- Daily Puzzle Card -->
+<div class="glass-panel p-6 rounded-xl relative overflow-hidden">
+<div class="absolute top-0 right-0 p-3">
+<span class="bg-error text-on-error font-label-caps text-[10px] px-2 py-1 rounded-full">TACTIC OF THE DAY</span>
+</div>
+<h3 class="font-bold mb-4">Daily Puzzle</h3>
+<div class="aspect-square w-full rounded bg-surface-container relative mb-4">
+<img class="w-full h-full object-cover rounded-lg border border-outline-variant" data-alt="A top-down view of a complex chess middle-game position. The pieces are sleek, modern minimalist design with matte black and white finishes. The board has deep walnut and cream squares. A subtle golden highlight glows on a white Knight attacking the black King. Atmospheric lighting with soft shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-oXBuadfeXFWxzaW6iTggsEFU-qJWNuNTi-ddwRwqz81gHNW8nfVGI9VJdI9Bn_cJrwh3If1EOoh7L_MWz4wEGfbH_wjnSzrMwpF4W-qqpuaheAFBqBJ1lrZ-EnVWzQ-eyMXER0OXkPJZ1VcmSYDryO2QHSJDN4FsVCAlAIWGGrqSZZAZLBl6T5FZGrV0um9mUeUYGZZ7ZOAVxihqP4Nai4Ktw8YE0PvkLUo9u3f6hH4zgcZ0PRTjrg"/>
+</div>
+<div class="flex justify-between items-center">
+<div>
+<p class="text-xs text-on-surface-variant">White to move</p>
+<p class="font-bold text-primary">Mate in 3</p>
+</div>
+<button class="bg-on-surface text-inverse-surface font-label-caps text-label-caps px-4 py-2 rounded-full hover:bg-primary transition-colors">Solve</button>
+</div>
+</div>
+<!-- Current Tournaments -->
+<div class="glass-panel p-6 rounded-xl">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-bold">Tournaments</h3>
+<span class="material-symbols-outlined text-primary cursor-pointer">open_in_new</span>
+</div>
+<div class="space-y-4">
+<div class="flex items-center gap-4 group cursor-pointer">
+<div class="w-12 h-12 bg-surface-container-highest rounded flex items-center justify-center font-bold text-primary border border-outline-variant group-hover:border-primary transition-colors">
+<span class="material-symbols-outlined">emoji_events</span>
+</div>
+<div class="flex-1">
+<h4 class="text-sm font-bold truncate">Grandmaster Blitz Arena</h4>
+<p class="text-xs text-on-surface-variant">Starts in 14:02 • 1.2k joined</p>
+</div>
+</div>
+<div class="flex items-center gap-4 group cursor-pointer">
+<div class="w-12 h-12 bg-surface-container-highest rounded flex items-center justify-center font-bold text-on-surface-variant border border-outline-variant group-hover:border-primary transition-colors">
+<span class="material-symbols-outlined">rocket_launch</span>
+</div>
+<div class="flex-1">
+<h4 class="text-sm font-bold truncate">Bullet Speed Shield</h4>
+<p class="text-xs text-on-surface-variant">Live Now • 84 players</p>
+</div>
+</div>
+<div class="flex items-center gap-4 group cursor-pointer">
+<div class="w-12 h-12 bg-surface-container-highest rounded flex items-center justify-center font-bold text-on-surface-variant border border-outline-variant group-hover:border-primary transition-colors">
+<span class="material-symbols-outlined">workspace_premium</span>
+</div>
+<div class="flex-1">
+<h4 class="text-sm font-bold truncate">Under 2200 Rapid Cup</h4>
+<p class="text-xs text-on-surface-variant">Starts in 2h 45m • 210 joined</p>
+</div>
+</div>
+</div>
+<button class="w-full mt-6 border border-outline-variant text-on-surface-variant font-label-caps text-label-caps py-3 rounded-lg hover:border-primary hover:text-primary transition-all">VIEW ALL EVENTS</button>
+</div>
+</aside>
+</div>
+</main>
+<!-- BottomNavBar Navigation Shell (Mobile Only) -->
+<nav class="lg:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center py-2 px-4 bg-surface-container-lowest dark:bg-surface-container-lowest border-t border-outline-variant dark:border-outline-variant shadow-lg rounded-t-xl">
+<div class="flex flex-col items-center justify-center text-primary dark:text-primary font-bold active:scale-95 transition-transform cursor-pointer">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">chess</span>
+<span class="font-label-caps text-[10px] uppercase">Play</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant active:scale-95 transition-transform cursor-pointer">
+<span class="material-symbols-outlined">visibility</span>
+<span class="font-label-caps text-[10px] uppercase">Watch</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant active:scale-95 transition-transform cursor-pointer">
+<span class="material-symbols-outlined">forum</span>
+<span class="font-label-caps text-[10px] uppercase">Lobby</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant active:scale-95 transition-transform cursor-pointer">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-caps text-[10px] uppercase">Profile</span>
+</div>
+</nav>
+<script>
+        // Simple Micro-interaction for hover states
+        document.querySelectorAll('button, .glass-panel').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                // Subtle feedback could be added here
+            });
+        });
+    </script>
+</body></html>

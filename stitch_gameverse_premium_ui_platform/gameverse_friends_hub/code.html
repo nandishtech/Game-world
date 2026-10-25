@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GameVerse | Social Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;family=Orbitron:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Theme Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-container": "#002f38",
+                    "on-tertiary": "#003640",
+                    "on-error-container": "#ffdad6",
+                    "on-secondary-fixed-variant": "#5516be",
+                    "on-tertiary-fixed-variant": "#004e5c",
+                    "on-secondary-container": "#c4abff",
+                    "on-secondary": "#3c0091",
+                    "surface-dim": "#131313",
+                    "surface-container-lowest": "#0e0e0e",
+                    "surface-container-low": "#1c1b1b",
+                    "outline": "#8c909f",
+                    "primary-fixed": "#d8e2ff",
+                    "surface-container-highest": "#353534",
+                    "primary-container": "#4d8eff",
+                    "on-primary": "#002e6a",
+                    "on-background": "#e5e2e1",
+                    "secondary-container": "#571bc1",
+                    "outline-variant": "#424754",
+                    "error": "#ffb4ab",
+                    "surface-variant": "#353534",
+                    "inverse-on-surface": "#313030",
+                    "surface-tint": "#adc6ff",
+                    "on-primary-fixed-variant": "#004395",
+                    "on-primary-fixed": "#001a42",
+                    "surface": "#131313",
+                    "tertiary-container": "#009eb9",
+                    "inverse-primary": "#005ac2",
+                    "background": "#131313",
+                    "secondary-fixed": "#e9ddff",
+                    "primary-fixed-dim": "#adc6ff",
+                    "inverse-surface": "#e5e2e1",
+                    "secondary-fixed-dim": "#d0bcff",
+                    "on-tertiary-fixed": "#001f26",
+                    "on-error": "#690005",
+                    "tertiary-fixed-dim": "#4cd7f6",
+                    "on-surface-variant": "#c2c6d6",
+                    "tertiary": "#4cd7f6",
+                    "surface-bright": "#3a3939",
+                    "on-primary-container": "#00285d",
+                    "on-surface": "#e5e2e1",
+                    "primary": "#adc6ff",
+                    "surface-container-high": "#2a2a2a",
+                    "secondary": "#d0bcff",
+                    "tertiary-fixed": "#acedff",
+                    "on-secondary-fixed": "#23005c",
+                    "error-container": "#93000a",
+                    "surface-container": "#201f1f"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "headline-sm": ["Space Grotesk"],
+                    "body-lg": ["Inter"],
+                    "headline-lg": ["Space Grotesk"],
+                    "headline-xl": ["Space Grotesk"],
+                    "body-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "display-lg": ["Space Grotesk"],
+                    "orbitron": ["Orbitron"]
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "unit": "4px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "48px",
+                    "container-max": "1440px"
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(32, 31, 31, 0.4);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .neon-glow-primary {
+            box-shadow: 0 0 15px rgba(173, 198, 255, 0.2);
+        }
+        .status-online {
+            filter: drop-shadow(0 0 4px #4ade80);
+        }
+        .status-offline {
+            filter: grayscale(1);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(173, 198, 255, 0.3);
+            border-radius: 10px;
+        }
+        .orbitron-title {
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+        .ripple::after {
+            content: "";
+            display: block;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+            background-repeat: no-repeat;
+            background-position: 50%;
+            transform: scale(10, 10);
+            opacity: 0;
+            transition: transform .5s, opacity 1s;
+        }
+        .ripple:active::after {
+            transform: scale(0, 0);
+            opacity: .3;
+            transition: 0s;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface selection:bg-primary selection:text-on-primary-container custom-scrollbar">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-surface/40 dark:bg-surface-container/40 backdrop-blur-3xl border-b border-white/10 shadow-xl">
+<nav class="flex justify-between items-center px-margin-desktop py-4 max-w-container-max mx-auto">
+<div class="font-headline-sm text-headline-sm font-bold text-primary tracking-tighter flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">rocket_launch</span>
+                GameVerse
+            </div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md" href="#">Home</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md" href="#">Games</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-label-md text-label-md" href="#">Community</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md" href="#">Leaderboards</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md" href="#">Tournaments</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors cursor-pointer">search</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors cursor-pointer relative">
+                    notifications
+                    <span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<div class="h-8 w-[1px] bg-white/10 mx-2"></div>
+<button class="px-6 py-2 bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:scale-105 transition-all active:scale-95">Sign Up</button>
+</div>
+</nav>
+</header>
+<!-- SideNavBar (Ghost Sidebar) -->
+<aside class="fixed left-0 top-0 h-full w-20 md:w-64 z-40 bg-surface-container-low dark:bg-surface-container-low/60 backdrop-blur-xl border-r border-white/5 shadow-2xl flex flex-col py-24 gap-4 px-4">
+<div class="flex items-center gap-4 mb-8 px-2">
+<div class="w-10 h-10 rounded-full overflow-hidden border border-primary/30">
+<img class="w-full h-full object-cover" data-alt="A portrait of a professional gamer wearing a futuristic high-fidelity headset with blue neon glowing accents. The lighting is dramatic and moody, reflecting a high-end cyber-nexus aesthetic with sharp focus on the metallic details of the gear. Deep blacks and vibrant blues dominate the frame." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPCkWnEwD1IcpYCBeZB0tdrFu0oaqEXJk9X6E9F5XgOlt_hGPGOxQSOcZg4d25qC4sMgsB2BG0HqXTc508RwtFFCxxmVBGleyZbfmmEX_Cs5Sl-3dCXOeqCZJfabYVJrSXrch0lvW0-4YIaR2rmmo9aN7c_sV5vm_6tFNL8ekfWooJhj3cYuBZ22urSVXErKikv7DENa9zM9JqCPxoE-KEMjmWgmHeLb4VHAfw50r5GxBs-Fj2bYU6_7MnJNNT9_FYQljw6gyy4rI"/>
+</div>
+<div class="hidden md:block">
+<p class="font-label-md text-label-md text-primary font-bold">Pro Gamer</p>
+<p class="text-xs text-on-surface-variant">Level 42 Elite</p>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<button class="flex items-center gap-4 px-3 py-3 rounded-xl transition-all hover:bg-white/5 group bg-primary/10 text-primary border-r-4 border-primary">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">group</span>
+<span class="hidden md:block font-label-md">Friends</span>
+</button>
+<button class="flex items-center gap-4 px-3 py-3 rounded-xl transition-all hover:bg-white/5 group text-on-surface-variant">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">military_tech</span>
+<span class="hidden md:block font-label-md">Achievements</span>
+</button>
+<button class="flex items-center gap-4 px-3 py-3 rounded-xl transition-all hover:bg-white/5 group text-on-surface-variant">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">history</span>
+<span class="hidden md:block font-label-md">History</span>
+</button>
+<button class="flex items-center gap-4 px-3 py-3 rounded-xl transition-all hover:bg-white/5 group text-on-surface-variant">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">settings</span>
+<span class="hidden md:block font-label-md">Settings</span>
+</button>
+</div>
+<div class="mt-auto flex flex-col gap-2">
+<button class="flex items-center gap-4 px-3 py-3 rounded-xl transition-all hover:bg-white/5 group text-on-surface-variant">
+<span class="material-symbols-outlined">help</span>
+<span class="hidden md:block font-label-md">Support</span>
+</button>
+<button class="flex items-center gap-4 px-3 py-3 rounded-xl transition-all hover:bg-white/5 group text-error/80">
+<span class="material-symbols-outlined">logout</span>
+<span class="hidden md:block font-label-md">Sign Out</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-20 md:ml-64 pt-24 pb-12 px-margin-desktop min-h-screen grid grid-cols-12 gap-gutter">
+<!-- Left Column: Categorized Friend List -->
+<section class="col-span-12 lg:col-span-3 flex flex-col gap-6">
+<div class="glass-card rounded-2xl p-6 h-full flex flex-col gap-6 border border-white/5">
+<div class="flex items-center justify-between">
+<h2 class="orbitron-title text-primary text-sm font-bold">Social Deck</h2>
+<span class="material-symbols-outlined text-on-surface-variant text-xl">filter_list</span>
+</div>
+<div class="space-y-6 overflow-y-auto custom-scrollbar pr-2">
+<!-- Online -->
+<div>
+<div class="flex items-center gap-2 mb-4">
+<span class="w-2 h-2 rounded-full bg-green-500 status-online"></span>
+<span class="font-label-sm text-on-surface-variant uppercase tracking-widest text-[10px]">Online — 12</span>
+</div>
+<div class="flex flex-col gap-3">
+<!-- Friend Item -->
+<div class="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 cursor-pointer transition-colors border border-transparent hover:border-white/5 group">
+<div class="relative">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Close up avatar of a digital character with silver hair and luminous cyan eyes. High-detail 3D render style with soft bokeh background. Part of a premium dark-themed gaming UI with subtle metallic textures and sharp contrasting edges." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLyO0-4VwySOathUO23IUNhpv2INdx99j-N0CyjB_FN8Aw6-M-8nnNsLRrfESSMDhjqh7WNKm-4pRHhvnnJsET8PPbijRdorcoisWXdhUL16plF3SzToDbeMXYnPLF7j8X0hWWQ_I0oI3Zdx2vPE0mVuFyV6diEMB7u2pYKTWlWAuiiNyLQQNFI8Grtoy1Jm1Ue4nuDq6YTCUel1O6feyqvmF4l-p-AxxP988fMtaMUuEfc6jsGLyYwJc7Kck4JeZB0RVFMlq0KZY"/>
+<span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-surface"></span>
+</div>
+<div class="flex-1 overflow-hidden">
+<p class="font-label-md text-on-surface truncate">Shadow_Stalker</p>
+<p class="text-[11px] text-primary truncate">Playing Cyber Odyssey</p>
+</div>
+</div>
+<div class="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 cursor-pointer transition-colors border border-transparent hover:border-white/5 group">
+<div class="relative">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Stylized portrait of a female sci-fi pilot with a translucent visor reflecting data streams. Vibrant purple and orange lighting, cinematic rendering, high definition. Designed for a high-fidelity gaming community dashboard." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAndph53tpRSM3896VSC_j9zzm7XLltvqXrei5QTVUpoFlFVU58ABmuZeYw_XsncL5kG9QZMURKUQ_Is538X6ESJN7687iGMSFQ5YSTe6YcmoUn9qvAH-OSCbR8twx0QSTIubkLtuN-hJCgrqJ2YaSycyv0_FDu9rDnemC_b5EVJ89bk06pOQb1WzyoRblWMmN_1vkGTOEpWrTkLPeuL36Jgpjuha_9b7kE9jWekDs1qG4IJLG02BK6esjwHXSRonhpgkzHG6Q7ktk"/>
+<span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-surface"></span>
+</div>
+<div class="flex-1 overflow-hidden">
+<p class="font-label-md text-on-surface truncate">Valkyrie_7</p>
+<p class="text-[11px] text-primary truncate">In Main Menu</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Pending -->
+<div>
+<div class="flex items-center gap-2 mb-4">
+<span class="w-2 h-2 rounded-full bg-primary/40"></span>
+<span class="font-label-sm text-on-surface-variant uppercase tracking-widest text-[10px]">Requests — 2</span>
+</div>
+<div class="flex flex-col gap-3">
+<div class="flex items-center gap-3 p-2 rounded-lg bg-primary/5 border border-primary/20">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Futuristic cyborg portrait with gold circuit patterns on a matte black faceplate. Professional digital art, dramatic low-key lighting, intricate mechanical details. Cohesive with a luxury gaming aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOZHBixoZjd-HPCaLV8AEHHlQlMN8Bi7bO-pZxS-qAxYz1uECODoJdyRiF5f96Z_ccXMmQR_F77QjbWh_Z8TFT-fu_Q5KLSdF2i39np5HntgUOb8BYBQRk5Nr375Xb9ocdogdhlnDFT5aPJQ4ibxwqU3iujxyvEbXVqdOXyHw8aklvAQz33vEKEU8rmJwy56xI0F-i8jfzQvAG58yiCreD1URPDUqhAZnM5Z9lpcoXfVSXruh69b4h3UffZyjY8GEBT2WTqCNaStk"/>
+<div class="flex-1 overflow-hidden">
+<p class="font-label-md text-on-surface truncate">X-Neon-X</p>
+<div class="flex gap-2 mt-1">
+<button class="text-[10px] px-2 py-0.5 bg-primary text-on-primary rounded">Accept</button>
+<button class="text-[10px] px-2 py-0.5 bg-white/10 text-on-surface-variant rounded">Ignore</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Offline -->
+<div>
+<div class="flex items-center gap-2 mb-4">
+<span class="w-2 h-2 rounded-full bg-white/20"></span>
+<span class="font-label-sm text-on-surface-variant uppercase tracking-widest text-[10px]">Offline — 42</span>
+</div>
+<div class="flex flex-col gap-3 opacity-60">
+<div class="flex items-center gap-3 p-2 grayscale">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Abstract minimalist gamer avatar featuring a geometric helmet design in white and charcoal. High-end procedural texture, subtle studio lighting, professional e-sports branding vibe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-Tukl_ptQeYGkVhcd-iwrj_g6Q65o_yQH5425gwpuPuAjQC3P0xohubFbboIdTN1Nr_GluWc-PzVAK3W8hXRYg02e4ujcN-APGFlZxl-dsg6opr5huP0Pa18yHiP4j5ymlm-EcqFjr6Wx245fN6CcxyIDkkihfMHN52BFR_3XqIwUtBMS8GiZOICj45bEeS-QyVA6fVynFI5VVeCMI_g-gN-LpyA896oZrjjcpCkZOzB8lWhlvuvhY68Ahw7Y8t37BsFhoyrWSsU"/>
+<div class="flex-1 overflow-hidden">
+<p class="font-label-md text-on-surface truncate">DriftKing</p>
+<p class="text-[11px] text-on-surface-variant truncate">Last seen 4h ago</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Center: Active Chat / Community Feed -->
+<section class="col-span-12 lg:col-span-6 flex flex-col gap-6">
+<!-- Feed Header -->
+<div class="glass-card rounded-2xl p-4 flex items-center justify-between border-b-0">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-secondary-container flex items-center justify-center shadow-lg neon-glow-primary">
+<span class="material-symbols-outlined text-on-primary" style="font-variation-settings: 'FILL' 1;">groups</span>
+</div>
+<div>
+<h1 class="orbitron-title text-lg font-bold text-on-surface">Global Lobby</h1>
+<p class="text-xs text-primary flex items-center gap-1">
+<span class="inline-block w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                            1,204 Players actively chatting
+                        </p>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="p-2 rounded-full hover:bg-white/10 text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Chat Window -->
+<div class="glass-card rounded-2xl flex-1 flex flex-col overflow-hidden relative border-white/10">
+<!-- Background Atmospheric Shader (Placeholder) -->
+
+<!-- Messages -->
+<div class="flex-1 p-6 space-y-6 overflow-y-auto custom-scrollbar z-10">
+<!-- Other User Message -->
+<div class="flex items-end gap-3 max-w-[80%]">
+<img class="w-8 h-8 rounded-full" data-alt="A small avatar icon of a futuristic robot with glowing red optic sensors. The style is gritty and detailed, like a high-end FPS character. Deep shadow environments, sharp mechanical edges, dark color palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFW-We6pC1HCv8eCOaLtzntBOdcuVdv1yR8JTq7ViCRqhHfbYqjwRQV83e4QPZ_OSURX0MXir551AmhPBT2HZv3pqJEPuzjWzCfiQpm2pmBwZUygMull8uLFNOCn_0OvqEMzIJ-pmXWfMXVQbFJSgVVtdBMv1uwzsUizwF42HFZF0IykZrE27y2rbV8IgHHKQDAKySmmWiKLiyMH34Wm7e-rtWS2Ab-0yHPX-fHs4FOj-2XPpBRrsi0UdurOlHXE5jgX9-Lc1pRjc"/>
+<div class="bg-surface-container-high/60 backdrop-blur-md p-4 rounded-2xl rounded-bl-none border border-white/5">
+<p class="text-xs text-secondary mb-1 font-bold">Valkyrie_7</p>
+<p class="font-body-md text-on-surface">Anyone up for the Diamond League tournament tonight? We need a solid Tank. 🛡️</p>
+<p class="text-[10px] text-on-surface-variant mt-2 text-right">18:42</p>
+</div>
+</div>
+<!-- Other User Message -->
+<div class="flex items-end gap-3 max-w-[80%]">
+<img class="w-8 h-8 rounded-full" data-alt="Highly detailed 3D avatar of a stylized female character with neon pink hair and tactical gear. Cyberpunk aesthetics, high-key accent lighting against a dark background, professional concept art quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6PQ4IaPmkdqUX25iKXR2w9p2XuGXAV4REtkGYL_3YAU89_D6yNMWWYGlcX_OoTeREhKWzC_IupvQwY_6t9DNArJnxJoADV6Ne9OVKFVqI8Uxg6tp5axs58_vdlimPDa7jC2ZNTLxvC_G-HyT5XDBskQw6pj7NWeqp-Rbyj16Ysuugr_4znNzkBvPVHKtw4BPVWVeLQPjyLV8feh9RuuzlCbDPdhKKP-sziL2ZINiT-9L-UJxHmwcJUPazBR_Dn8DvTuc5k8ucyls"/>
+<div class="bg-surface-container-high/60 backdrop-blur-md p-4 rounded-2xl rounded-bl-none border border-white/5">
+<p class="text-xs text-secondary mb-1 font-bold">Shadow_Stalker</p>
+<p class="font-body-md text-on-surface">I'm down! Just finished my warm-up rounds. Level 45 Guardian here.</p>
+<p class="text-[10px] text-on-surface-variant mt-2 text-right">18:44</p>
+</div>
+</div>
+<!-- System Message -->
+<div class="flex justify-center">
+<div class="px-4 py-1 bg-primary/10 border border-primary/20 rounded-full text-[10px] text-primary uppercase tracking-widest font-bold">
+                            Match Found: Tournament Queue (Standard)
+                        </div>
+</div>
+<!-- Self Message -->
+<div class="flex flex-row-reverse items-end gap-3 max-w-[80%] ml-auto">
+<div class="bg-primary/20 backdrop-blur-md p-4 rounded-2xl rounded-br-none border border-primary/30 neon-glow-primary">
+<p class="text-xs text-primary mb-1 font-bold text-right">You</p>
+<p class="font-body-md text-on-surface">Sent the invites. Let's dominate this lobby! 🚀</p>
+<p class="text-[10px] text-on-surface-variant mt-2">18:45</p>
+</div>
+</div>
+</div>
+<!-- Input Area -->
+<div class="p-4 bg-surface-container-low/80 backdrop-blur-3xl border-t border-white/10 z-10">
+<div class="flex items-center gap-3 bg-black/40 border border-white/10 rounded-xl px-4 py-2 focus-within:border-primary transition-all shadow-inner">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">add_circle</button>
+<input class="bg-transparent border-none focus:ring-0 w-full text-on-surface font-body-md placeholder:text-on-surface-variant/50" placeholder="Send a message to the Nexus..." type="text"/>
+<div class="flex gap-2">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">sentiment_satisfied</button>
+<button class="ripple p-2 bg-primary text-on-primary rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">send</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Column: Search, Suggestions, Activity -->
+<section class="col-span-12 lg:col-span-3 flex flex-col gap-6">
+<!-- Search & Add Friend -->
+<div class="glass-card rounded-2xl p-6 border border-white/5">
+<h3 class="orbitron-title text-sm text-primary font-bold mb-4">Expand Network</h3>
+<div class="relative">
+<input class="w-full bg-surface-container/60 border border-white/10 rounded-xl py-2 pl-4 pr-10 text-sm focus:border-primary focus:ring-0 transition-all" placeholder="Search Player ID..." type="text"/>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant">person_add</span>
+</div>
+</div>
+<!-- Suggested Players (Bento Style) -->
+<div class="glass-card rounded-2xl p-6 border border-white/5">
+<h3 class="orbitron-title text-sm text-primary font-bold mb-4">Recruits</h3>
+<div class="space-y-4">
+<div class="p-3 bg-white/5 rounded-xl border border-white/5 hover:border-primary/30 transition-all group">
+<div class="flex items-center gap-3 mb-2">
+<img class="w-8 h-8 rounded-full" data-alt="Intense close-up of a digital soldier wearing a high-tech chrome helmet with red lenses. Dramatic lighting creates highlights on the metallic surface. High-quality game character design for a social platform UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAma4N5zhKapvS5tlruV-zDTRRhxr_UCob_x9pAtd0-mr8eB33XyPr9BCXnzrCrf-gyuplsQyaY6fMsDvFNWdPMPIz-F370bEGvMuFnVCLY_Xf-1iKtnKHh8lIm8_72b_tCbA7S1uuUBvTIIuW7jakaa1sPSDiSUFGjEXX_7Ok36ihGRsNrEJGPIXs80n1rFp4MPxuwJza67_hRN-Xv1dp1sxphxIXm2nuq1u0H8RUSyk7jGPLKGgkRIrgBQYSCJFlOMRGhdKjO7YM"/>
+<div>
+<p class="text-xs font-bold text-on-surface group-hover:text-primary transition-colors">Ghost_Unit_X</p>
+<p class="text-[10px] text-on-surface-variant">Plays Overwatch, Valorant</p>
+</div>
+</div>
+<button class="w-full py-1.5 text-[10px] uppercase font-bold border border-primary/40 rounded text-primary hover:bg-primary hover:text-on-primary transition-all">Add Recruit</button>
+</div>
+<div class="p-3 bg-white/5 rounded-xl border border-white/5 hover:border-primary/30 transition-all group">
+<div class="flex items-center gap-3 mb-2">
+<img class="w-8 h-8 rounded-full" data-alt="A portrait of a fantasy sorceress character with glowing purple magical aura. Highly detailed 3D modeling, ethereal lighting, sharp focus on magical elements. Perfect for a profile suggestion card in a dark mode UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuChS2SNEQ1nfxnZgbzyphEzego47y0UuYWgXd387JpIAXS-MSdkV04QQlE6wE9q9Ba5ZhelMTGoh0A0ezECE-G-8Zl1Z-CUpte4u9AyCVnZoh6zGrXXlkTWr_YtecSGRgjipylMtNlpKQpZPz0Rgn4mpO0TXuPvjotmRutYBni0SxXnrQOsnJEsbqRzUlf1B2pyHKCKUkKbglKuo474WNNKP_P1euJMz4LyBbSbzYqlYZE-toFQhtzLIQ7D0B56Nyk1eDy_p4RyZss"/>
+<div>
+<p class="text-xs font-bold text-on-surface group-hover:text-primary transition-colors">Mystic_Mage</p>
+<p class="text-[10px] text-on-surface-variant">Plays League, DOTA 2</p>
+</div>
+</div>
+<button class="w-full py-1.5 text-[10px] uppercase font-bold border border-primary/40 rounded text-primary hover:bg-primary hover:text-on-primary transition-all">Add Recruit</button>
+</div>
+</div>
+</div>
+<!-- Recent Activity Timeline -->
+<div class="glass-card rounded-2xl p-6 border border-white/5 flex-1 overflow-hidden flex flex-col">
+<h3 class="orbitron-title text-sm text-primary font-bold mb-4">Nexus Pulse</h3>
+<div class="space-y-6 flex-1 overflow-y-auto custom-scrollbar">
+<div class="relative pl-6 border-l border-white/10 group">
+<div class="absolute left-[-5px] top-1 w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_8px_rgba(173,198,255,0.8)]"></div>
+<p class="text-[11px] text-on-surface-variant">10m ago</p>
+<p class="text-xs text-on-surface mt-1 leading-relaxed"><span class="text-primary font-bold">Valkyrie_7</span> achieved <span class="italic">"Untouchable"</span> in Cyber Odyssey.</p>
+</div>
+<div class="relative pl-6 border-l border-white/10">
+<div class="absolute left-[-5px] top-1 w-2.5 h-2.5 rounded-full bg-secondary shadow-[0_0_8px_rgba(208,188,255,0.8)]"></div>
+<p class="text-[11px] text-on-surface-variant">45m ago</p>
+<p class="text-xs text-on-surface mt-1 leading-relaxed"><span class="text-secondary font-bold">Shadow_Stalker</span> uploaded a new <span class="text-primary hover:underline cursor-pointer">gameplay clip</span>.</p>
+</div>
+<div class="relative pl-6 border-l border-white/10">
+<div class="absolute left-[-5px] top-1 w-2.5 h-2.5 rounded-full bg-tertiary"></div>
+<p class="text-[11px] text-on-surface-variant">2h ago</p>
+<p class="text-xs text-on-surface mt-1 leading-relaxed"><span class="font-bold">Ghost_Unit_X</span> joined the <span class="text-tertiary">GameVerse Pro</span> tier.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-background border-t border-outline-variant/20 relative z-50">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-desktop py-16 max-w-container-max mx-auto">
+<div class="col-span-1 md:col-span-1">
+<div class="font-headline-sm text-headline-sm font-bold text-on-surface mb-4">GameVerse</div>
+<p class="text-on-surface-variant font-body-md text-body-md">Empowering the next generation of AAA gaming experiences through community and performance.</p>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-primary uppercase tracking-widest mb-6">Nexus</h4>
+<ul class="space-y-3">
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-label-sm font-label-sm" href="#">Discord</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-label-sm font-label-sm" href="#">YouTube</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-label-sm font-label-sm" href="#">Tournaments</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-primary uppercase tracking-widest mb-6">Platform</h4>
+<ul class="space-y-3">
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-label-sm font-label-sm" href="#">Terms of Service</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-label-sm font-label-sm" href="#">Privacy Policy</a></li>
+<li><a class="text-on-surface-variant hover:text-primary transition-colors text-label-sm font-label-sm" href="#">Contact Support</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-primary uppercase tracking-widest mb-6">Stay Connected</h4>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer">public</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer">sports_esports</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer">podcasts</span>
+</div>
+</div>
+</div>
+<div class="text-center py-8 border-t border-white/5">
+<p class="text-on-surface-variant font-label-sm text-label-sm opacity-50">© 2024 GameVerse Nexus. All rights reserved. Precise. Responsive. Powerful.</p>
+</div>
+</footer>
+<script>
+        // Micro-interactions and Atmospheric Effects
+        document.addEventListener('DOMContentLoaded', () => {
+            const rippleButtons = document.querySelectorAll('.ripple');
+            
+            rippleButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const rect = button.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    // Ripple effect handling is largely CSS-based via active state, 
+                    // but we could extend here for custom JS-driven ripples if needed.
+                });
+            });
+
+            // Status Indicator random pulse
+            const onlineDots = document.querySelectorAll('.status-online');
+            setInterval(() => {
+                const randomDot = onlineDots[Math.floor(Math.random() * onlineDots.length)];
+                randomDot.classList.add('brightness-125');
+                setTimeout(() => randomDot.classList.remove('brightness-125'), 500);
+            }, 3000);
+
+            // Smooth scroll for chat
+            const chatWindow = document.querySelector('.overflow-y-auto');
+            if(chatWindow) {
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            }
+        });
+    </script>
+</body></html>

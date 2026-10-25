@@ -1,0 +1,264 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>Flappy Clone - Start Screen</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&amp;family=Rubik:wght@400;700&amp;family=Space+Mono:wght@700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary": "#ffffff",
+                      "on-tertiary-fixed": "#0d2000",
+                      "surface-container": "#f0eded",
+                      "on-primary-fixed": "#221b00",
+                      "surface-bright": "#fcf9f8",
+                      "surface": "#fcf9f8",
+                      "secondary-container": "#9bf0f9",
+                      "surface-tint": "#6f5d00",
+                      "primary-fixed-dim": "#e7c500",
+                      "inverse-surface": "#303030",
+                      "on-error": "#ffffff",
+                      "tertiary-container": "#9aea55",
+                      "inverse-on-surface": "#f3f0f0",
+                      "error": "#ba1a1a",
+                      "primary-fixed": "#ffe262",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container-low": "#f6f3f2",
+                      "on-primary-container": "#6c5b00",
+                      "on-tertiary-container": "#366800",
+                      "secondary-fixed-dim": "#7fd4dd",
+                      "on-background": "#1b1c1c",
+                      "primary-container": "#f7d308",
+                      "surface-variant": "#e4e2e1",
+                      "outline-variant": "#cfc6ab",
+                      "primary": "#6f5d00",
+                      "tertiary": "#376b00",
+                      "tertiary-fixed-dim": "#8cdb48",
+                      "surface-container-high": "#eae7e7",
+                      "secondary-fixed": "#9bf0f9",
+                      "on-error-container": "#93000a",
+                      "tertiary-fixed": "#a7f862",
+                      "on-primary-fixed-variant": "#534600",
+                      "on-primary": "#ffffff",
+                      "on-surface": "#1b1c1c",
+                      "on-surface-variant": "#4c4732",
+                      "inverse-primary": "#e7c500",
+                      "outline": "#7e775f",
+                      "error-container": "#ffdad6",
+                      "surface-container-highest": "#e4e2e1",
+                      "on-secondary-container": "#006f78",
+                      "on-secondary-fixed-variant": "#004f55",
+                      "secondary": "#006971",
+                      "on-secondary-fixed": "#002022",
+                      "on-tertiary-fixed-variant": "#285000",
+                      "background": "#fcf9f8",
+                      "surface-dim": "#dcd9d9",
+                      "on-tertiary": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "unit": "4px",
+                      "stack-md": "16px",
+                      "stack-lg": "32px",
+                      "gutter": "16px",
+                      "margin-mobile": "20px",
+                      "stack-sm": "8px"
+              },
+              "fontFamily": {
+                      "body-md": [
+                              "Rubik"
+                      ],
+                      "headline-lg": [
+                              "Bricolage Grotesque"
+                      ],
+                      "display-arcade": [
+                              "Bricolage Grotesque"
+                      ],
+                      "body-bold": [
+                              "Rubik"
+                      ],
+                      "label-mono": [
+                              "Space Mono"
+                      ],
+                      "headline-lg-mobile": [
+                              "Bricolage Grotesque"
+                      ]
+              },
+              "fontSize": {
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "800"
+                              }
+                      ],
+                      "display-arcade": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "800"
+                              }
+                      ],
+                      "body-bold": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-mono": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.0",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "800"
+                              }
+                      ]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        /* Custom Styles for Neo-Retro Arcade Feel */
+        .arcade-border {
+            border: 4px solid #1b1c1c; /* on-background */
+        }
+        
+        .arcade-shadow {
+            box-shadow: 4px 4px 0px #1b1c1c; /* on-background */
+        }
+        
+        .arcade-btn-active:active {
+            box-shadow: 1px 1px 0px #1b1c1c;
+            transform: translate(3px, 3px);
+        }
+
+        .arcade-btn-hover:hover {
+            box-shadow: 0px 0px 0px #1b1c1c;
+            transform: translate(4px, 4px);
+        }
+
+        /* Bounce Animation for PLAY button */
+        @keyframes bounce-subtle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        .animate-bounce-subtle {
+            animation: bounce-subtle 2s infinite ease-in-out;
+        }
+
+        /* Cloud Drift Animation */
+        @keyframes drift {
+            from { transform: translateX(100vw); }
+            to { transform: translateX(-100%); }
+        }
+        .cloud-drift-1 { animation: drift 40s linear infinite; }
+        .cloud-drift-2 { animation: drift 30s linear infinite; }
+        .cloud-drift-3 { animation: drift 50s linear infinite; }
+    </style>
+</head>
+<body class="bg-secondary-container text-on-background h-screen w-screen overflow-hidden flex flex-col relative selection:bg-primary-container selection:text-on-primary-container">
+<!-- Scenic Background Elements -->
+<div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+<!-- Clouds -->
+<div class="absolute top-20 w-32 h-16 bg-white rounded-full opacity-80 cloud-drift-1 arcade-border" style="top: 15%;"></div>
+<div class="absolute w-48 h-20 bg-white rounded-full opacity-60 cloud-drift-2 arcade-border" style="top: 35%; animation-delay: -15s;"></div>
+<div class="absolute w-24 h-12 bg-white rounded-full opacity-90 cloud-drift-3 arcade-border" style="top: 55%; animation-delay: -30s;"></div>
+<!-- Distant Pipes (Silhouettes) -->
+<div class="absolute bottom-0 left-[10%] w-16 h-48 bg-tertiary-container arcade-border" style="opacity: 0.5;"></div>
+<div class="absolute bottom-0 right-[20%] w-16 h-32 bg-tertiary-container arcade-border" style="opacity: 0.5;"></div>
+</div>
+<!-- TopAppBar (From JSON) -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-mobile pt-stack-md bg-transparent">
+<button aria-label="Settings" class="w-12 h-12 flex items-center justify-center bg-surface rounded-full arcade-border arcade-shadow arcade-btn-hover arcade-btn-active transition-all">
+<span class="material-symbols-outlined text-primary" style="font-size: 24px;">settings</span>
+</button>
+<h1 class="font-display-arcade text-display-arcade md:text-[64px] text-primary-container drop-shadow-[4px_4px_0px_#1b1c1c] uppercase text-center flex-1">
+            FLAPPY CLONE
+        </h1>
+<!-- Invisible spacer to keep title centered -->
+<div class="w-12 h-12"></div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col items-center justify-center z-10 relative px-gutter mt-24">
+<!-- Play Button Area -->
+<div class="relative mb-stack-lg animate-bounce-subtle">
+<!-- Decorative shadow element to maintain position during bounce hover -->
+<div class="absolute inset-0 bg-transparent pointer-events-none"></div>
+<button class="bg-primary-container text-on-primary-container font-headline-lg text-headline-lg uppercase px-12 py-8 rounded-2xl arcade-border arcade-shadow hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none active:translate-x-[3px] active:translate-y-[3px] active:shadow-none transition-all flex flex-col items-center gap-2 relative z-20 group">
+<span class="material-symbols-outlined text-[64px] group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+<span class="">PLAY</span>
+</button>
+</div>
+<!-- Library/Skins Button Area -->
+<div class="w-full max-w-sm flex flex-col gap-unit">
+<button class="w-full bg-surface text-on-surface font-body-bold text-body-bold uppercase px-6 py-4 rounded-xl arcade-border arcade-shadow hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none active:translate-x-[3px] active:translate-y-[3px] active:shadow-none transition-all flex items-center justify-center gap-3">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">potted_plant</span>
+<span class="">LIBRARY</span>
+</button><div class="mt-stack-md bg-surface p-4 rounded-xl arcade-border arcade-shadow w-full flex justify-between items-center rotate-[-2deg]"><div class="flex flex-col"><span class="font-label-mono text-label-mono text-on-surface-variant uppercase">Best Score</span><span class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">42</span></div><div class="bg-tertiary-container px-3 py-1 rounded-full arcade-border"><span class="font-label-mono text-label-mono text-on-tertiary-container uppercase">New</span></div></div>
+</div>
+<!-- Floating Stats Card -->
+
+</main>
+<!-- Foreground Scenery (Ground) -->
+<div class="w-full h-16 bg-surface-tint border-t-4 border-on-background relative z-10 z-[5] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PHBhdGggZD0iTTAgMGg0MHY0MEgweiIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0wIDIwaDQwdjIwSDB6IiBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMSkiLz48L3N2Zz4=')]">
+<!-- Stripe overlay to simulate moving ground could go here via JS -->
+</div>
+<!-- BottomNavBar (From JSON) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 pb-8 bg-surface border-t-4 border-on-background md:hidden">
+<!-- SKINS (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 font-label-mono text-label-mono hover:bg-primary-fixed active:scale-95 transition-transform rounded-xl" href="#">
+<span class="material-symbols-outlined mb-1">potted_plant</span>
+<span class="">SKINS</span>
+</a>
+<!-- PLAY (Active Navigation - Based on Start Screen intent) -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container border-2 border-on-background shadow-[2px_2px_0px_#1b1c1c] rounded-xl p-2 font-label-mono text-label-mono hover:bg-primary-fixed active:scale-95 transition-transform w-20" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+<span class="">PLAY</span>
+</a>
+<!-- SCORES (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 font-label-mono text-label-mono hover:bg-primary-fixed active:scale-95 transition-transform rounded-xl" href="#">
+<span class="material-symbols-outlined mb-1">leaderboard</span>
+<span class="">SCORES</span>
+</a>
+</nav>
+<!-- Desktop nav equivalent (hidden on mobile, required by responsive pivot rule but design is mobile-first, integrating into top bar or side isn't strictly requested for main canvas, leaving out to focus on the arcade feel, but usually top bar handles it on web) -->
+<script>
+        // Simple script to animate the ground stripes if desired, though CSS is preferred.
+        // Keeping it purely visual for now.
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add slight parallax to background elements based on device orientation if available
+        });
+    </script>
+
+
+</body></html>

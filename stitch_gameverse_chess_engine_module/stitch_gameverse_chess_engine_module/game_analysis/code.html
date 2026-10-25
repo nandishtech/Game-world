@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Post-Game Analysis | GameVerse Chess</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&family=Inter:wght@400;500&family=JetBrains+Mono:wght@500;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@100..900&family=Inter:wght@100..900&family=JetBrains+Mono:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed-variant": "#2b5000",
+                    "surface": "#151311",
+                    "surface-container-high": "#2c2a27",
+                    "on-surface-variant": "#d0c5b4",
+                    "surface-tint": "#e4c37a",
+                    "board-dark": "#706659",
+                    "on-primary-fixed": "#251a00",
+                    "outline": "#999080",
+                    "on-surface": "#e7e2dd",
+                    "surface-dim": "#151311",
+                    "move-highlight": "rgba(209, 177, 106, 0.4)",
+                    "tertiary-container": "#aeb5c2",
+                    "on-primary-container": "#594304",
+                    "on-secondary": "#1c3700",
+                    "surface-navy": "#11151C",
+                    "on-primary": "#3f2e00",
+                    "on-primary-fixed-variant": "#5a4304",
+                    "tertiary": "#cad0de",
+                    "primary-container": "#d1b16a",
+                    "error": "#ffb4ab",
+                    "secondary-container": "#3b6a00",
+                    "on-tertiary": "#2a313b",
+                    "on-secondary-container": "#b1e978",
+                    "inverse-surface": "#e7e2dd",
+                    "on-secondary-fixed": "#0e2000",
+                    "on-tertiary-container": "#404752",
+                    "surface-container-highest": "#373431",
+                    "on-error": "#690005",
+                    "surface-container-lowest": "#0f0e0c",
+                    "text-muted": "#98A2B3",
+                    "board-light": "#EDEED1",
+                    "primary": "#eecc83",
+                    "outline-variant": "#4d4639",
+                    "surface-container-low": "#1d1b19",
+                    "on-tertiary-fixed": "#151c26",
+                    "on-background": "#e7e2dd",
+                    "on-error-container": "#ffdad6",
+                    "surface-container": "#211f1d",
+                    "secondary-fixed-dim": "#9fd668",
+                    "tertiary-fixed": "#dce3f1",
+                    "secondary-fixed": "#baf381",
+                    "on-tertiary-fixed-variant": "#404752",
+                    "tertiary-fixed-dim": "#c0c7d4",
+                    "secondary": "#9fd668",
+                    "inverse-on-surface": "#32302d",
+                    "primary-fixed": "#ffdf9b",
+                    "surface-bright": "#3b3936",
+                    "background": "#151311",
+                    "error-container": "#93000a",
+                    "primary-fixed-dim": "#e4c37a",
+                    "surface-variant": "#373431",
+                    "inverse-primary": "#745b1d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "panel-padding": "1.5rem",
+                    "gutter": "1rem",
+                    "container-max": "1440px",
+                    "sidebar-width": "360px",
+                    "board-size-desktop": "min(80vh, 800px)"
+            },
+            "fontFamily": {
+                    "label-caps": ["Hanken Grotesk"],
+                    "body-sm": ["Inter"],
+                    "headline-lg": ["Hanken Grotesk"],
+                    "notation-log": ["JetBrains Mono"],
+                    "headline-md": ["Hanken Grotesk"],
+                    "body-md": ["Inter"],
+                    "display-clock": ["JetBrains Mono"]
+            },
+            "fontSize": {
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "800"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "notation-log": ["13px", {"lineHeight": "18px", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-clock": ["48px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .chess-board-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            grid-template-rows: repeat(8, 1fr);
+            aspect-ratio: 1 / 1;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #4d4639;
+            border-radius: 2px;
+        }
+        .glass-panel {
+            background: rgba(33, 31, 29, 0.7);
+            backdrop-filter: blur(12px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top App Bar (Shared Component Logic) -->
+<header class="fixed top-0 w-full flex justify-between items-center px-panel-padding h-16 w-full z-50 bg-surface text-primary border-b border-outline-variant transition-colors duration-200">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-xl overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A cinematic, high-detail portrait of a professional chess player, Magnus Lite, wearing a sharp charcoal suit in a dimly lit, modern studio setting. Soft rim lighting emphasizes his focused expression against a dark, minimalist background. The style is prestigious and corporate, with deep shadows and golden highlights to match the brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmEPRgkt0RA7F7QEZ2trhidor8CnHpMNJyf25Pys65r2mihQmghJGVtb47pPiZQ-GEMBrNRxJPwU-ApT8QtVsoRTru3xGq_DbX9_8Lb0LYE1y_J9nDGr9_ImnX-zIS--3jFPp8uyAi33QziqobRlKKYa_bVqxvlxMAjL6rLcdw08O9wM_RZVo4c8EtJNlczq0T21oPhdHUkj3HLv-U_gyPXOyabt3D_JNAc48G2IeTicZ83mEFo4V7GA"/>
+</div>
+<span class="font-headline-md text-headline-md font-bold text-primary">GameVerse Chess</span>
+</div>
+<div class="flex items-center gap-6">
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-high p-2 rounded-xl transition-colors">settings</button>
+</div>
+</header>
+<!-- Sidebar Navigation (Desktop) -->
+<nav class="hidden lg:flex flex-col fixed left-0 top-0 h-full p-4 bg-surface-container text-primary border-r border-outline-variant transition-all duration-150 ease-in-out w-sidebar-width z-40 pt-20">
+<div class="mb-8 px-2 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined">person</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">Magnus Lite</p>
+<p class="text-label-caps text-on-surface-variant">ELO 2850 • Online</p>
+</div>
+</div>
+<div class="space-y-2">
+<a class="flex items-center gap-4 px-4 py-3 bg-primary-container text-on-primary-container font-bold rounded-xl" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="font-body-md text-body-md">Play</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-variant rounded-xl" href="#">
+<span class="material-symbols-outlined">extension</span>
+<span class="font-body-md text-body-md">Puzzles</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-variant rounded-xl" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="font-body-md text-body-md">Learn</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-variant rounded-xl" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="font-body-md text-body-md">Analysis</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-variant rounded-xl" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-body-md text-body-md">Social</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="lg:pl-[360px] pt-16 pb-20 lg:pb-0 min-h-screen">
+<div class="max-w-[1440px] mx-auto p-4 lg:p-8 flex flex-col xl:flex-row gap-8">
+<!-- Left Column: The Board Stage -->
+<div class="flex-1 flex flex-col gap-4">
+<!-- Victory Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-2 animate-fade-in">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-primary uppercase tracking-widest">Victory</h1>
+<p class="text-on-surface-variant font-body-sm">Checkmate in 42 moves • Rated Rapid (10+5)</p>
+</div>
+<div class="flex gap-2">
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg font-bold hover:brightness-110 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined">refresh</span> Rematch
+                        </button>
+<button class="border border-outline-variant text-on-surface px-6 py-2 rounded-lg font-bold hover:bg-surface-container-high transition-all">
+                            New Game
+                        </button>
+</div>
+</div>
+<!-- Chessboard Rendering -->
+<div class="relative w-full aspect-square max-w-[800px] mx-auto bg-surface-container-low rounded-xl p-2 shadow-2xl border border-outline-variant">
+<div class="chess-board-grid rounded-lg overflow-hidden border border-outline">
+<!-- Simplified Board Pattern (8x8) -->
+<script>
+                            const board = document.currentScript.parentElement;
+                            for (let r = 0; r < 8; r++) {
+                                for (let c = 0; c < 8; c++) {
+                                    const square = document.createElement('div');
+                                    square.className = (r + c) % 2 === 0 ? 'bg-board-light' : 'bg-board-dark';
+                                    square.classList.add('relative', 'flex', 'items-center', 'justify-center');
+                                    
+                                    // Add coordinates to some squares
+                                    if (c === 0) {
+                                        const label = document.createElement('span');
+                                        label.className = 'absolute top-0.5 left-0.5 text-[10px] font-bold ' + ((r + c) % 2 === 0 ? 'text-board-dark' : 'text-board-light');
+                                        label.innerText = 8 - r;
+                                        square.appendChild(label);
+                                    }
+                                    if (r === 7) {
+                                        const label = document.createElement('span');
+                                        label.className = 'absolute bottom-0.5 right-0.5 text-[10px] font-bold ' + ((r + c) % 2 === 0 ? 'text-board-dark' : 'text-board-light');
+                                        label.innerText = String.fromCharCode(97 + c);
+                                        square.appendChild(label);
+                                    }
+
+                                    // Render a few pieces for the final position (simplified)
+                                    if (r === 0 && c === 4) { // Black King
+                                        square.innerHTML += `<span class="material-symbols-outlined text-4xl text-black" style="font-variation-settings: 'FILL' 1;">king_bed</span>`;
+                                    }
+                                    if (r === 1 && c === 5) { // White Queen delivering checkmate
+                                        square.innerHTML += `<span class="material-symbols-outlined text-4xl text-white" style="font-variation-settings: 'FILL' 1;">playing_cards</span>`;
+                                        square.classList.add('bg-move-highlight');
+                                    }
+                                    
+                                    board.appendChild(square);
+                                }
+                            }
+                        </script>
+</div>
+</div>
+<!-- Move Timeline -->
+<div class="bg-surface-container rounded-xl p-4 border border-outline-variant overflow-hidden">
+<div class="flex items-center justify-between mb-4">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Game Timeline</span>
+<div class="flex gap-2">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">first_page</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">chevron_left</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">chevron_right</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">last_page</button>
+</div>
+</div>
+<div class="flex gap-1 overflow-x-auto pb-2 custom-scrollbar">
+<!-- Visual representation of moves (accuracy markers) -->
+<div class="flex-shrink-0 w-8 h-12 bg-on-secondary-fixed-variant rounded-sm flex flex-col items-center justify-end p-1">
+<div class="w-full bg-secondary h-1/2 rounded-full mb-1"></div>
+</div>
+<!-- Repeat visual markers for moves... -->
+<script>
+                            const timeline = document.currentScript.parentElement;
+                            for (let i = 0; i < 42; i++) {
+                                const bar = document.createElement('div');
+                                bar.className = 'flex-shrink-0 w-3 h-8 bg-surface-container-highest rounded-full transition-all hover:bg-primary cursor-pointer';
+                                const height = Math.random() * 100;
+                                bar.style.height = `32px`;
+                                bar.style.opacity = (0.3 + (Math.random() * 0.7)).toString();
+                                if (i === 41) bar.classList.add('bg-primary', 'w-4', 'opacity-100');
+                                timeline.appendChild(bar);
+                            }
+                        </script>
+</div>
+</div>
+</div>
+<!-- Right Column: Performance & Data -->
+<aside class="w-full xl:w-sidebar-width flex flex-col gap-6">
+<!-- Performance Summary Bento Grid -->
+<div class="grid grid-cols-2 gap-4">
+<div class="col-span-2 bg-surface-container rounded-xl p-6 border border-outline-variant flex flex-col items-center text-center">
+<p class="text-label-caps text-on-surface-variant mb-2">Accuracy</p>
+<h2 class="font-display-clock text-display-clock text-primary">94.2%</h2>
+<div class="w-full h-1 bg-surface-container-highest rounded-full mt-4 overflow-hidden">
+<div class="h-full bg-primary w-[94%] shadow-[0_0_10px_#eecc83]"></div>
+</div>
+</div>
+<div class="bg-surface-container rounded-xl p-4 border border-outline-variant">
+<p class="text-label-caps text-on-surface-variant mb-1">ELO Rating</p>
+<div class="flex items-center gap-2">
+<h3 class="font-headline-md text-headline-md text-on-surface">+14</h3>
+<span class="material-symbols-outlined text-secondary">trending_up</span>
+</div>
+<p class="text-body-sm text-on-surface-variant mt-1">New: 2864</p>
+</div>
+<div class="bg-surface-container rounded-xl p-4 border border-outline-variant">
+<p class="text-label-caps text-on-surface-variant mb-1">Best Moves</p>
+<div class="flex items-center gap-2">
+<h3 class="font-headline-md text-headline-md text-on-surface">18</h3>
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+<p class="text-body-sm text-on-surface-variant mt-1">0 Blunders</p>
+</div>
+</div>
+<!-- Analysis Sidebar Section -->
+<div class="bg-surface-container-high rounded-xl border border-outline-variant flex flex-col flex-1 overflow-hidden min-h-[400px]">
+<div class="p-4 border-b border-outline-variant flex justify-between items-center bg-surface-container-highest">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">monitoring</span>
+<span class="font-bold text-on-surface">Engine Analysis</span>
+</div>
+<button class="bg-primary-container text-on-primary-container px-3 py-1 rounded-full text-label-caps font-bold text-[10px]">Stockfish 16.1</button>
+</div>
+<!-- Move Log Table -->
+<div class="flex-1 overflow-y-auto custom-scrollbar">
+<table class="w-full border-collapse">
+<thead class="sticky top-0 bg-surface-container-high shadow-sm">
+<tr class="text-left text-label-caps text-on-surface-variant">
+<th class="p-3 font-medium">#</th>
+<th class="p-3 font-medium">White</th>
+<th class="p-3 font-medium">Black</th>
+<th class="p-3 font-medium">Eval</th>
+</tr>
+</thead>
+<tbody class="font-notation-log text-notation-log">
+<!-- Example Move Rows -->
+<tr class="border-b border-outline-variant/30 hover:bg-surface-container-highest/50 transition-colors">
+<td class="p-3 text-on-surface-variant">1.</td>
+<td class="p-3 text-on-surface">e4</td>
+<td class="p-3 text-on-surface">e5</td>
+<td class="p-3 text-secondary">+0.3</td>
+</tr>
+<tr class="bg-surface-container-highest/20 border-b border-outline-variant/30 hover:bg-surface-container-highest/50 transition-colors">
+<td class="p-3 text-on-surface-variant">2.</td>
+<td class="p-3 text-on-surface">Nf3</td>
+<td class="p-3 text-on-surface">Nc6</td>
+<td class="p-3 text-secondary">+0.4</td>
+</tr>
+<!-- Last move highlight -->
+<tr class="bg-primary/10 border-l-4 border-primary border-b border-outline-variant/30">
+<td class="p-3 text-on-surface-variant">42.</td>
+<td class="p-3 text-on-surface font-bold">Qf7#</td>
+<td class="p-3 text-on-surface">--</td>
+<td class="p-3 text-primary">#M1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Bottom Action Bar -->
+<div class="p-4 bg-surface-container-highest">
+<button class="w-full bg-primary text-on-primary font-bold py-3 rounded-lg flex items-center justify-center gap-2 hover:shadow-[0_0_15px_rgba(238,204,131,0.3)] transition-all">
+<span class="material-symbols-outlined">psychology</span>
+                            Analyze with Engine
+                        </button>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Mobile Bottom Navigation (Shared Component Logic) -->
+<nav class="lg:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center py-2 px-4 bg-surface-container-lowest text-on-surface-variant border-t border-outline-variant shadow-lg rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-primary font-bold" href="#">
+<span class="material-symbols-outlined">chess</span>
+<span class="text-label-caps font-label-caps">Play</span>
+</a>
+<a class="flex flex-col items-center justify-center" href="#">
+<span class="material-symbols-outlined">visibility</span>
+<span class="text-label-caps font-label-caps">Watch</span>
+</a>
+<a class="flex flex-col items-center justify-center" href="#">
+<span class="material-symbols-outlined">forum</span>
+<span class="text-label-caps font-label-caps">Lobby</span>
+</a>
+<a class="flex flex-col items-center justify-center" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-label-caps font-label-caps">Profile</span>
+</a>
+</nav>
+<!-- Subtle Background Atmosphere -->
+<div class="fixed inset-0 -z-10 pointer-events-none opacity-20">
+<div class="absolute top-0 left-1/4 w-96 h-96 bg-primary blur-[120px] rounded-full"></div>
+<div class="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary-container blur-[120px] rounded-full"></div>
+</div>
+<script>
+        // Simple Micro-interaction: Scale pieces on hover/click emulation
+        document.querySelectorAll('.material-symbols-outlined').forEach(icon => {
+            icon.addEventListener('mousedown', () => {
+                icon.style.transform = 'scale(0.9)';
+            });
+            icon.addEventListener('mouseup', () => {
+                icon.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body></html>

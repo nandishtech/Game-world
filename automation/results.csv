@@ -1,0 +1,33 @@
+Identity ID,Name,Surname,Email,Username,Status,Timestamp,Screenshot Path
+1,Rahul,Sharma,,testuser01,"Failed: Page.goto: net::ERR_CERT_AUTHORITY_INVALID at https://esportsworldcup.com/signup?ref_club=godlike
+Call log:
+  - navigating to ""https://esportsworldcup.com/signup?ref_club=godlike"", waiting until ""load""
+",2026-08-10 21:15:11,screenshots\errors\error_001_20260810_211511.png
+2,Priya,Patel,,testuser02,"Failed: Page.goto: net::ERR_CERT_AUTHORITY_INVALID at https://esportsworldcup.com/signup?ref_club=godlike
+Call log:
+  - navigating to ""https://esportsworldcup.com/signup?ref_club=godlike"", waiting until ""load""
+",2026-08-10 21:15:13,screenshots\errors\error_002_20260810_211513.png
+3,Aman,Verma,,testuser03,"Failed: Page.goto: net::ERR_CERT_AUTHORITY_INVALID at https://esportsworldcup.com/signup?ref_club=godlike
+Call log:
+  - navigating to ""https://esportsworldcup.com/signup?ref_club=godlike"", waiting until ""load""
+",2026-08-10 21:15:14,screenshots\errors\error_003_20260810_211514.png
+4,Sanya,Gupta,,testuser04,"Failed: Page.goto: net::ERR_CERT_AUTHORITY_INVALID at https://esportsworldcup.com/signup?ref_club=godlike
+Call log:
+  - navigating to ""https://esportsworldcup.com/signup?ref_club=godlike"", waiting until ""load""
+",2026-08-10 21:15:16,screenshots\errors\error_004_20260810_211515.png
+1,Rahul,Sharma,,testuser01,"Failed: Page.fill: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator(""input[name='email']"")
+",2026-08-10 21:16:21,screenshots\errors\error_001_20260810_211621.png
+2,Priya,Patel,,testuser02,"Failed: Page.fill: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator(""input[name='email']"")
+",2026-08-10 21:17:25,screenshots\errors\error_002_20260810_211725.png
+1,Rahul,Sharma,,testuser01,"Failed: HTTPSConnectionPool(host='api.internal.temp-mail.io', port=443): Max retries exceeded with url: /api/v3/email/new (Caused by ConnectTimeoutError(<HTTPSConnection(host='api.internal.temp-mail.io', port=443) at 0x23a267cfa10>, 'Connection to api.internal.temp-mail.io timed out. (connect timeout=10)'))",2026-08-10 21:23:28,screenshots\errors\error_001_20260810_212328.png
+1,Rahul,Sharma,,testuser01,"Failed: HTTPSConnectionPool(host='api.internal.temp-mail.io', port=443): Max retries exceeded with url: /api/v3/email/new (Caused by ConnectTimeoutError(<HTTPSConnection(host='api.internal.temp-mail.io', port=443) at 0x2a813afba10>, 'Connection to api.internal.temp-mail.io timed out. (connect timeout=10)'))",2026-08-10 21:25:35,screenshots\errors\error_001_20260810_212535.png
+2,Priya,Patel,,testuser02,"Failed: HTTPSConnectionPool(host='api.internal.temp-mail.io', port=443): Max retries exceeded with url: /api/v3/email/new (Caused by ConnectTimeoutError(<HTTPSConnection(host='api.internal.temp-mail.io', port=443) at 0x2a813d9dbd0>, 'Connection to api.internal.temp-mail.io timed out. (connect timeout=10)'))",2026-08-10 21:26:59,screenshots\errors\error_002_20260810_212636.png
+3,Aman,Verma,,testuser03,"Failed: HTTPSConnectionPool(host='api.internal.temp-mail.io', port=443): Max retries exceeded with url: /api/v3/email/new (Caused by ConnectTimeoutError(<HTTPSConnection(host='api.internal.temp-mail.io', port=443) at 0x2a813d9e850>, 'Connection to api.internal.temp-mail.io timed out. (connect timeout=10)'))",2026-08-10 21:27:31,screenshots\errors\error_003_20260810_212731.png
+4,Sanya,Gupta,,testuser04,"Failed: HTTPSConnectionPool(host='api.internal.temp-mail.io', port=443): Max retries exceeded with url: /api/v3/email/new (Caused by ConnectTimeoutError(<HTTPSConnection(host='api.internal.temp-mail.io', port=443) at 0x2a813d9ec10>, 'Connection to api.internal.temp-mail.io timed out. (connect timeout=10)'))",2026-08-10 21:28:31,screenshots\errors\error_004_20260810_212831.png
+1,Rahul,Sharma,,testuser01,"Failed: HTTPSConnectionPool(host='api.internal.temp-mail.io', port=443): Max retries exceeded with url: /api/v3/email/new (Caused by ConnectTimeoutError(<HTTPSConnection(host='api.internal.temp-mail.io', port=443) at 0x18f5434ba10>, 'Connection to api.internal.temp-mail.io timed out. (connect timeout=10)'))",2026-08-10 21:31:23,screenshots\errors\error_001_20260810_213123.png
+2,Priya,Patel,,testuser02,"Failed: HTTPSConnectionPool(host='api.internal.temp-mail.io', port=443): Max retries exceeded with url: /api/v3/email/new (Caused by ConnectTimeoutError(<HTTPSConnection(host='api.internal.temp-mail.io', port=443) at 0x18f545edbd0>, 'Connection to api.internal.temp-mail.io timed out. (connect timeout=10)'))",2026-08-10 21:32:48,screenshots\errors\error_002_20260810_213224.png
+3,Aman,Verma,,testuser03,"Failed: HTTPSConnectionPool(host='api.internal.temp-mail.io', port=443): Max retries exceeded with url: /api/v3/email/new (Caused by ConnectTimeoutError(<HTTPSConnection(host='api.internal.temp-mail.io', port=443) at 0x18f545ee850>, 'Connection to api.internal.temp-mail.io timed out. (connect timeout=10)'))",2026-08-10 21:33:18,screenshots\errors\error_003_20260810_213318.png

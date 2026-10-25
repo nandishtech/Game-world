@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CYBER-NEXUS | NEON UPRISING BATTLEPASS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#d0bcff",
+                        "on-secondary": "#3c0091",
+                        "tertiary-fixed-dim": "#4cd7f6",
+                        "on-primary-container": "#00285d",
+                        "on-background": "#e5e2e1",
+                        "surface-variant": "#353534",
+                        "on-secondary-container": "#c4abff",
+                        "on-primary-fixed": "#001a42",
+                        "surface-container": "#201f1f",
+                        "secondary": "#d0bcff",
+                        "secondary-container": "#571bc1",
+                        "on-secondary-fixed": "#23005c",
+                        "tertiary-container": "#009eb9",
+                        "primary": "#adc6ff",
+                        "on-surface-variant": "#c2c6d6",
+                        "on-tertiary-fixed-variant": "#004e5c",
+                        "secondary-fixed": "#e9ddff",
+                        "on-primary-fixed-variant": "#004395",
+                        "primary-container": "#4d8eff",
+                        "outline": "#8c909f",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-primary": "#002e6a",
+                        "on-surface": "#e5e2e1",
+                        "surface-container-low": "#1c1b1b",
+                        "error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#5516be",
+                        "primary-fixed-dim": "#adc6ff",
+                        "on-error": "#690005",
+                        "inverse-primary": "#005ac2",
+                        "tertiary": "#4cd7f6",
+                        "surface-tint": "#adc6ff",
+                        "inverse-surface": "#e5e2e1",
+                        "surface-container-high": "#2a2a2a",
+                        "background": "#050505",
+                        "outline-variant": "#424754",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-highest": "#353534",
+                        "on-tertiary-fixed": "#001f26",
+                        "surface-dim": "#131313",
+                        "surface-bright": "#3a3939",
+                        "surface": "#131313",
+                        "on-tertiary-container": "#002f38",
+                        "tertiary-fixed": "#acedff",
+                        "on-tertiary": "#003640",
+                        "inverse-on-surface": "#313030",
+                        "error": "#ffb4ab",
+                        "primary-fixed": "#d8e2ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "container-max": "1440px",
+                        "margin-mobile": "16px",
+                        "gutter": "24px",
+                        "margin-desktop": "48px"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Space Grotesk"],
+                        "display-lg": ["Space Grotesk"],
+                        "label-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-sm": ["Space Grotesk"],
+                        "headline-lg": ["Space Grotesk"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "display-lg-mobile": ["Space Grotesk"]
+                    },
+                    "fontSize": {
+                        "headline-xl": ["40px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "1", "fontWeight": "500"}],
+                        "display-lg-mobile": ["40px", {"lineHeight": "1.2", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .neon-glow-primary {
+            box-shadow: 0 0 15px rgba(173, 198, 255, 0.3);
+        }
+        .neon-glow-secondary {
+            box-shadow: 0 0 20px rgba(208, 188, 255, 0.4);
+        }
+        .glass-card {
+            background: rgba(32, 31, 31, 0.3);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .track-gradient-premium {
+            background: linear-gradient(90deg, rgba(87, 27, 193, 0.2) 0%, rgba(173, 198, 255, 0.1) 100%);
+        }
+        .progress-pulse {
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.8; filter: brightness(1); }
+            50% { opacity: 1; filter: brightness(1.3); }
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .tier-card-active {
+            border: 1px solid rgba(173, 198, 255, 0.5);
+            background: rgba(173, 198, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-primary/30 min-h-screen overflow-x-hidden">
+<!-- Header / Top Bar -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 bg-surface/40 backdrop-blur-3xl border-b border-white/10">
+<div class="flex items-center gap-8">
+<span class="font-display-lg text-display-lg-mobile md:text-display-lg tracking-tighter text-primary brightness-125">CYBER-NEXUS</span>
+<div class="hidden md:flex gap-6">
+<a class="font-headline-sm text-headline-sm text-on-surface-variant/70 hover:text-on-surface transition-all hover:scale-[1.02]" href="#">Arena</a>
+<a class="font-headline-sm text-headline-sm text-on-surface-variant/70 hover:text-on-surface transition-all hover:scale-[1.02]" href="#">Legions</a>
+<a class="font-headline-sm text-headline-sm text-on-surface-variant/70 hover:text-on-surface transition-all hover:scale-[1.02]" href="#">Vault</a>
+<a class="font-headline-sm text-headline-sm text-primary border-b-2 border-primary brightness-110 drop-shadow-[0_0_10px_rgba(173,198,255,0.5)]" href="#">Battlepass</a>
+<a class="font-headline-sm text-headline-sm text-on-surface-variant/70 hover:text-on-surface transition-all hover:scale-[1.02]" href="#">Intelligence</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 mr-4">
+<span class="material-symbols-outlined text-primary">monetization_on</span>
+<span class="font-label-md text-label-md text-primary">2,450</span>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors">settings</button>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-full font-label-md text-label-md hover:brightness-125 hover:scale-[1.02] active:scale-95 transition-all">Connect</button>
+</div>
+</nav>
+<!-- Sidebar (Desktop) -->
+<aside class="fixed left-0 top-0 h-screen hidden lg:flex flex-col z-40 bg-surface-container/30 backdrop-blur-2xl border-r border-white/5 w-64 pt-24 px-6 pb-8">
+<div class="mb-8">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-10 h-10 rounded-full border border-secondary p-0.5 overflow-hidden">
+<img class="w-full h-full object-cover rounded-full" data-alt="A high-tech digital portrait of a futuristic cyborg commander with glowing blue eyes and sleek carbon fiber armor, set against a dark cinematic cockpit background with soft purple ambient lighting in a premium AAA game art style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5okx1KJoHWEzmqFNiztzp3CYZ7uAOn94GIm5DeCRMJ49O4Y9Rr2A-fy8p85c27fTZ_TJ4YGVKChNDsx_9X7x6Fj3Rquf1nGWrm1EPB9zpQGlIM9pA7YWCHoFcvoAV3E6NuWdg-M4MxwPwt8hcA1rgdhroaX8H0BwSd4P6V4oJXXWJyhKo5uuSLU63zho7dEFOuJXgKOfHmZDHTNBhabxRtMGduuGtgwf5whSsg7Wkb9V4iAckU2HW4cHC0I5JRvRLc_UmzPR96Ys"/>
+</div>
+<div>
+<p class="font-headline-sm text-headline-sm text-primary text-sm leading-tight">STRAT-COM</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant opacity-60">Status: Optimal</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-4 p-3 rounded-lg text-on-surface-variant hover:bg-white/5 transition-all hover:translate-x-1" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="font-label-md text-label-md uppercase tracking-widest">Home</span>
+</a>
+<a class="flex items-center gap-4 p-3 rounded-lg text-on-surface-variant hover:bg-white/5 transition-all hover:translate-x-1" href="#">
+<span class="material-symbols-outlined">sports_esports</span>
+<span class="font-label-md text-label-md uppercase tracking-widest">Battles</span>
+</a>
+<a class="flex items-center gap-4 p-3 rounded-lg text-on-surface-variant hover:bg-white/5 transition-all hover:translate-x-1" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md uppercase tracking-widest">Allies</span>
+</a>
+<a class="flex items-center gap-4 p-3 rounded-lg text-on-surface-variant hover:bg-white/5 transition-all hover:translate-x-1" href="#">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="font-label-md text-label-md uppercase tracking-widest">Inventory</span>
+</a>
+<a class="flex items-center gap-4 p-3 rounded-lg text-on-surface-variant hover:bg-white/5 transition-all hover:translate-x-1" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md text-label-md uppercase tracking-widest">Data</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-white/5">
+<button class="w-full bg-secondary-container/20 text-secondary border border-secondary/30 p-3 rounded-lg font-label-md text-label-md uppercase tracking-widest mb-4 hover:bg-secondary-container/40 transition-all">Join Party</button>
+<a class="flex items-center gap-4 p-3 rounded-lg text-on-surface-variant hover:bg-white/5 transition-all" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md text-label-md uppercase tracking-widest">Log Out</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="lg:pl-64 pt-24 min-h-screen relative">
+<div class="absolute inset-0 z-0 pointer-events-none opacity-40">
+
+</div>
+<div class="relative z-10 px-margin-mobile md:px-margin-desktop py-8">
+<!-- Season Header Section -->
+<header class="flex flex-col md:flex-row justify-between items-end gap-6 mb-12">
+<div class="flex-1">
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-white mb-2 leading-none">NEON UPRISING</h1>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 px-3 py-1 bg-surface-container-high rounded-full border border-white/10">
+<span class="material-symbols-outlined text-sm text-tertiary">schedule</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">24 DAYS LEFT</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-primary/80">SEASON 01</span>
+</div>
+</div>
+<div class="flex flex-col items-end gap-4 w-full md:w-auto">
+<div class="flex items-center gap-4 w-full">
+<div class="flex-1 md:w-64">
+<div class="flex justify-between mb-1">
+<span class="font-label-sm text-label-sm text-primary uppercase">LEVEL 12 COMMANDER</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">8,400 / 10,000 XP</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden border border-white/5">
+<div class="h-full bg-primary progress-pulse w-[84%] relative">
+<div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
+</div>
+</div>
+</div>
+</div>
+<button class="w-full md:w-auto bg-gradient-to-r from-secondary-container to-secondary text-on-secondary px-8 py-3 rounded-lg font-headline-sm text-headline-sm-mobile md:text-headline-sm hover:brightness-125 transition-all shadow-lg neon-glow-secondary">
+                        UPGRADE TO PREMIUM
+                    </button>
+</div>
+</header>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Battle Pass Track (Horizontal Scroll) -->
+<section class="lg:col-span-8 flex flex-col gap-4">
+<div class="flex justify-between items-center px-4">
+<h2 class="font-headline-sm text-headline-sm text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">military_tech</span>
+                            TRACK REWARDS
+                        </h2>
+<div class="flex gap-2">
+<button class="p-2 rounded-full border border-white/10 hover:bg-white/10 transition-all">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="p-2 rounded-full border border-white/10 hover:bg-white/10 transition-all">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="glass-card rounded-2xl p-6 overflow-hidden">
+<div class="flex flex-col gap-6 overflow-x-auto pb-4 hide-scrollbar">
+<!-- Premium Track -->
+<div class="flex gap-4">
+<div class="flex-shrink-0 w-24 h-12 flex items-center justify-center font-label-md text-label-md text-secondary uppercase tracking-widest border-r border-white/10 pr-4">Premium</div>
+<!-- Tiers 12-20 Sample -->
+<div class="flex gap-4">
+<!-- Tier 12 (Unlocked) -->
+<div class="w-32 h-40 glass-card rounded-xl border-secondary/40 relative group cursor-pointer tier-card-active">
+<div class="absolute top-2 right-2">
+<span class="material-symbols-outlined text-secondary text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="h-2/3 flex items-center justify-center p-4">
+<img class="w-full h-full object-contain brightness-110 drop-shadow-lg" data-alt="A detailed, vibrant 3D rendering of a premium in-game legendary weapon skin called 'Neon Pulse' for a futuristic rifle, glowing with cyan and purple energy effects, floating in a dark sci-fi display case with a cinematic low-key aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwTAVqFpbrsBagZlLLahY-UkZhYqxNCUnaqYZZXrJN12t0YHCFk_Ez-3icc4N6g05bm3NbkB62v4HIJUo_X_CiuwU6zgMYcLKzU7gb2WyjXHodtfKp_1IgOjok67D18h7NGuo8tuttqNTe1QzUJMlASnscQcLQYOBuaeRWaJ3NTVUB0TjfzRp7Z42H2MzOiHSenPnmQVgY40IYiClhfGBaUhA57PLigngwud8UfJ9d5AakFq-i5K_GrwoB0_2xwPz6yqPhkcL-bps"/>
+</div>
+<div class="h-1/3 bg-secondary-container/20 p-2 text-center flex flex-col justify-center">
+<p class="font-label-sm text-[10px] text-on-surface-variant uppercase">Weapon Skin</p>
+<p class="font-label-md text-xs text-white truncate px-1">CYAN BURST</p>
+</div>
+</div>
+<!-- Tier 13 (Locked) -->
+<div class="w-32 h-40 glass-card rounded-xl border-white/5 opacity-50 relative group cursor-not-allowed hover:opacity-70 transition-all">
+<div class="absolute inset-0 flex items-center justify-center bg-black/40 z-10 rounded-xl">
+<span class="material-symbols-outlined text-secondary">lock</span>
+</div>
+<div class="h-2/3 flex items-center justify-center p-4">
+<span class="material-symbols-outlined text-4xl text-on-surface-variant">monetization_on</span>
+</div>
+<div class="h-1/3 p-2 text-center">
+<p class="font-label-sm text-[10px] text-on-surface-variant">CURRENCY</p>
+<p class="font-label-md text-xs text-white">500 NEXUS</p>
+</div>
+</div>
+<!-- Tier 14 (Locked) -->
+<div class="w-32 h-40 glass-card rounded-xl border-white/5 opacity-50 relative group cursor-not-allowed">
+<div class="absolute inset-0 flex items-center justify-center bg-black/40 z-10 rounded-xl">
+<span class="material-symbols-outlined text-secondary">lock</span>
+</div>
+<div class="h-2/3 flex items-center justify-center p-4">
+<img class="w-full h-full object-cover rounded-lg" data-alt="A stylized digital art portrait of a legendary hero avatar, featuring a female cyborg with holographic hair and a glowing visor, rendered in a sharp comic-book art style with deep blacks and vibrant neon accents for a AAA game interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_8dJGg68gLEL7kDHf7chQnVS43iiH9RclbsiVN-f8Mz7yRcHfdyiyHEUJSdok8YVsWJwGjYFMxYMHstQnoquGhRKQO8FAwQG_EyE5-C1yjTm4gmobdBLzRnTu8z5o3aBu1JdQ5GtIdT7XpCs1bwtxIlCdeBfWp9lnxMfvsw6-uvjgfBd_9eyUDMBTOkPgeYeX6ZXIIVTqirQQgnX4BxrRoWjnzlyGUa8_jua2u75Fy2EYBKdQOAHj73NyIcaFX3mpupT6_6urICc"/>
+</div>
+<div class="h-1/3 p-2 text-center">
+<p class="font-label-sm text-[10px] text-on-surface-variant">AVATAR</p>
+<p class="font-label-md text-xs text-white">REBEL ONE</p>
+</div>
+</div>
+<!-- ... Skipping to Tier 50 Legendary Reward ... -->
+<div class="w-12 flex items-center justify-center opacity-20">
+<span class="material-symbols-outlined">more_horiz</span>
+</div>
+<div class="w-48 h-40 glass-card rounded-xl border-primary/50 relative group cursor-pointer bg-gradient-to-br from-primary/10 to-secondary/10 shadow-[0_0_30px_rgba(173,198,255,0.2)]">
+<div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-on-primary px-3 py-0.5 rounded-full font-label-sm text-[10px] uppercase tracking-widest z-20">LEGENDARY TIER 50</div>
+<div class="h-2/3 flex items-center justify-center p-4 relative">
+<div class="absolute inset-0 opacity-40">
+
+</div>
+<img class="w-full h-full object-contain relative z-10 drop-shadow-[0_0_20px_rgba(173,198,255,0.6)]" data-alt="A breathtaking legendary character skin called 'Omega Protocol' featuring a full suit of advanced kinetic battle armor with internal neon pulse lighting, displayed in an epic low-angle heroic pose, cinematic lighting, dark futuristic environment, AAA game assets." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCY0n9Ug_aWVO5EaJnEH8OYHDada5c6tvW7-Q0tjQ1qRu93IwGWjs1fF6qB7lnEztdJ3h5tBrv4fHOMFy4e7i-OIpaCksx9WIzgw5hYqG0svjB-MErwkTzzD1XQ2NvkqNuZSq3X5hSHRlUG6i536BiOLeJMkF0MjiS5gqTYPsflrI0aqUzb1FkwkwAMDNR9EfquNzlAt9UFiX1HqUZ-7edjDEga7Z3yie6dT0vm47B22XnNeerxT5TGz7UPlSL0auS-1R9-VhjbQ0Q"/>
+</div>
+<div class="h-1/3 bg-primary/20 p-2 text-center flex flex-col justify-center border-t border-white/10">
+<p class="font-label-sm text-[10px] text-primary uppercase">Elite Armor Skin</p>
+<p class="font-label-md text-sm text-white font-bold tracking-tight">OMEGA PROTOCOL</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Progress Track Line -->
+<div class="relative h-6 flex items-center">
+<div class="absolute left-28 right-0 h-1 bg-surface-container rounded-full overflow-hidden border border-white/5">
+<div class="h-full bg-primary w-[24%]"></div>
+</div>
+<div class="absolute left-28 flex gap-4 w-full">
+<div class="w-32 flex justify-center"><div class="w-3 h-3 rounded-full bg-primary border-4 border-background ring-4 ring-primary/20"></div></div>
+<div class="w-32 flex justify-center"><div class="w-3 h-3 rounded-full bg-surface-container border-4 border-background"></div></div>
+<div class="w-32 flex justify-center"><div class="w-3 h-3 rounded-full bg-surface-container border-4 border-background"></div></div>
+</div>
+</div>
+<!-- Free Track -->
+<div class="flex gap-4">
+<div class="flex-shrink-0 w-24 h-12 flex items-center justify-center font-label-md text-label-md text-on-surface-variant uppercase tracking-widest border-r border-white/10 pr-4">Free</div>
+<div class="flex gap-4">
+<div class="w-32 h-40 glass-card rounded-xl border-white/10 relative group cursor-pointer tier-card-active">
+<div class="absolute top-2 right-2">
+<span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="h-2/3 flex items-center justify-center p-4">
+<span class="material-symbols-outlined text-4xl text-primary">style</span>
+</div>
+<div class="h-1/3 p-2 text-center">
+<p class="font-label-sm text-[10px] text-on-surface-variant">TITLE</p>
+<p class="font-label-md text-xs text-white">RECRUIT</p>
+</div>
+</div>
+<div class="w-32 h-40 glass-card rounded-xl border-white/5 opacity-50 relative group">
+<div class="h-2/3 flex items-center justify-center p-4">
+<span class="material-symbols-outlined text-4xl text-on-surface-variant">token</span>
+</div>
+<div class="h-1/3 p-2 text-center">
+<p class="font-label-sm text-[10px] text-on-surface-variant">COSMETIC</p>
+<p class="font-label-md text-xs text-white">SPRAY: UPRISE</p>
+</div>
+</div>
+<div class="w-32 h-40 glass-card rounded-xl border-white/5 opacity-50 relative group">
+<div class="h-2/3 flex items-center justify-center p-4">
+<span class="material-symbols-outlined text-4xl text-on-surface-variant">military_tech</span>
+</div>
+<div class="h-1/3 p-2 text-center">
+<p class="font-label-sm text-[10px] text-on-surface-variant">CURRENCY</p>
+<p class="font-label-md text-xs text-white">100 CREDITS</p>
+</div>
+</div>
+<div class="w-12"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Missions Panel (Right Side) -->
+<aside class="lg:col-span-4 flex flex-col gap-6">
+<section class="flex flex-col gap-4">
+<div class="flex justify-between items-center px-2">
+<h3 class="font-headline-sm text-headline-sm text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">assignment</span>
+                                DAILY MISSIONS
+                            </h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant opacity-60">REFRESH IN 14H</span>
+</div>
+<div class="space-y-3">
+<!-- Mission 1 (Claimable) -->
+<div class="glass-card p-4 rounded-xl border-primary/30 bg-primary/5 group hover:bg-primary/10 transition-all">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h4 class="font-label-md text-label-md text-white">ELIMINATION SPREE</h4>
+<p class="font-body-md text-xs text-on-surface-variant">Get 10 kills in a single Arena match</p>
+</div>
+<span class="font-label-sm text-label-sm text-primary">+500 XP</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex-1 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary w-full"></div>
+</div>
+<button class="bg-primary text-on-primary px-4 py-1 rounded text-xs font-bold uppercase hover:brightness-125 transition-all">CLAIM</button>
+</div>
+</div>
+<!-- Mission 2 (In Progress) -->
+<div class="glass-card p-4 rounded-xl border-white/5 group">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h4 class="font-label-md text-label-md text-white">SUPPORT OPERATIVE</h4>
+<p class="font-body-md text-xs text-on-surface-variant">Provide 2,500 damage in shields</p>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">+350 XP</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex-1 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-secondary-fixed-dim w-[45%]"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">1.2K / 2.5K</span>
+</div>
+</div>
+<!-- Mission 3 (Not Started) -->
+<div class="glass-card p-4 rounded-xl border-white/5 group">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h4 class="font-label-md text-label-md text-white">EXPLORER</h4>
+<p class="font-body-md text-xs text-on-surface-variant">Travel 5,000m in any vehicle</p>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">+250 XP</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex-1 h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-secondary-fixed-dim w-[0%]"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">0 / 5K</span>
+</div>
+</div>
+</div>
+</section>
+<section class="flex flex-col gap-4">
+<div class="flex justify-between items-center px-2">
+<h3 class="font-headline-sm text-headline-sm text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary">workspace_premium</span>
+                                WEEKLY CHALLENGES
+                            </h3>
+</div>
+<div class="flex flex-col gap-2">
+<div class="glass-card p-4 rounded-xl flex justify-between items-center hover:bg-white/5 cursor-pointer transition-all border-l-4 border-primary">
+<span class="font-label-md text-label-md text-white uppercase tracking-widest">WEEK 01</span>
+<span class="material-symbols-outlined text-primary">task_alt</span>
+</div>
+<div class="glass-card p-4 rounded-xl flex justify-between items-center border-l-4 border-on-surface-variant opacity-60">
+<span class="font-label-md text-label-md text-white uppercase tracking-widest">WEEK 02</span>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm">4/10</span>
+<span class="material-symbols-outlined text-sm">lock_open</span>
+</div>
+</div>
+<div class="glass-card p-4 rounded-xl flex justify-between items-center border-l-4 border-on-surface-variant/20 opacity-40 cursor-not-allowed">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">WEEK 03</span>
+<span class="material-symbols-outlined text-sm">lock</span>
+</div>
+</div>
+</section>
+</aside>
+</div>
+</div>
+</main>
+<!-- Footer Action Bar (Mobile only) -->
+<div class="md:hidden fixed bottom-0 left-0 w-full bg-surface/80 backdrop-blur-xl border-t border-white/10 flex justify-around items-center py-3 z-50">
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="text-[10px] uppercase font-bold">Home</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+<span class="text-[10px] uppercase font-bold">Pass</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="text-[10px] uppercase font-bold">Vault</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">group</span>
+<span class="text-[10px] uppercase font-bold">Social</span>
+</button>
+</div>
+<script>
+        // Micro-interaction: XP Progress Bar Animation logic could go here
+        // Atmospheric scanning line effect
+        const style = document.createElement('style');
+        style.textContent = `
+            .scan-line {
+                width: 100%;
+                height: 2px;
+                background: linear-gradient(to right, transparent, rgba(173,198,255,0.2), transparent);
+                position: absolute;
+                top: -10px;
+                animation: scan 4s linear infinite;
+            }
+            @keyframes scan {
+                0% { top: -10px; }
+                100% { top: 100%; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Add scan lines to some glass cards
+        document.querySelectorAll('.glass-card').forEach(card => {
+            const line = document.createElement('div');
+            line.className = 'scan-line';
+            card.classList.add('relative', 'overflow-hidden');
+            card.appendChild(line);
+        });
+    </script>
+</body></html>

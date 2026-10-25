@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyber Chess Board</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="arcade-cabinet">
+    <header class="cabinet-header">
+      <h1 class="glow-text">CHESS // CORE</h1>
+      <div class="subtitle">TACTICAL BOARD QUANTUM COMPUTER</div>
+    </header>
+
+    <div class="screen-container">
+      <!-- Loading Screen -->
+      <div id="loading-screen" class="screen active">
+        <div class="glitch-title" data-text="ALIGNING">ALIGNING</div>
+        <div class="loading-bar"><div class="loading-progress"></div></div>
+        <div class="blink-text">LOADING TACTICAL BOARDS...</div>
+      </div>
+
+      <!-- Main Menu Screen -->
+      <div id="main-menu" class="screen">
+        <div class="menu-title glow-text">TACTICAL VECTOR</div>
+        <div class="menu-options">
+          <button class="menu-btn" onclick="startGame('local')">LOCAL 2P PORT</button>
+          <button class="menu-btn" onclick="startGame('ai')">VS SYSTEM BOT</button>
+        </div>
+      </div>
+
+      <!-- Game Running Screen -->
+      <div id="game-screen" class="screen">
+        <div class="hud">
+          <div class="hud-item">
+            <span class="label">PLAYER 1 (WHITE)</span>
+            <span id="player-white" class="value glow-value">READY</span>
+          </div>
+          <div class="hud-item">
+            <span id="turn-indicator" class="label glow-text">TURN: WHITE</span>
+          </div>
+          <div class="hud-item">
+            <span class="label">PLAYER 2 (BLACK)</span>
+            <span id="player-black" class="value glow-value">READY</span>
+          </div>
+        </div>
+
+        <div id="chess-board" class="board">
+          <!-- 64 Squares generated dynamically -->
+        </div>
+
+        <div class="action-footer">
+          <button class="menu-btn btn-sm" onclick="exitToMenu()">FORFEIT</button>
+          <button class="menu-btn btn-sm" onclick="restartGame()">RESET</button>
+        </div>
+      </div>
+
+      <!-- Overlay Win/GameOver -->
+      <div id="result-overlay" class="overlay">
+        <div class="overlay-content">
+          <h2 id="result-title" class="glow-text">CHECKMATE</h2>
+          <p id="result-desc">WHITE SECURES VICTORY</p>
+          <button class="menu-btn" onclick="exitToMenu()">COMMAND HANGAR</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>

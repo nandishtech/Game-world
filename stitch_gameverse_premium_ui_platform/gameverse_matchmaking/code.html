@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GameVerse | Matchmaking</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .neon-glow-text {
+            text-shadow: 0 0 10px rgba(173, 198, 255, 0.5), 0 0 20px rgba(173, 198, 255, 0.3);
+        }
+        .neon-glow-primary {
+            box-shadow: 0 0 30px 0 rgba(173, 198, 255, 0.2);
+        }
+        .glass-card {
+            backdrop-filter: blur(24px);
+            background: rgba(18, 18, 18, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .rim-light {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 100%);
+        }
+        @keyframes pulse-scan {
+            0% { opacity: 0.3; transform: scale(0.95); }
+            50% { opacity: 0.6; transform: scale(1); }
+            100% { opacity: 0.3; transform: scale(0.95); }
+        }
+        .scanning-line {
+            animation: pulse-scan 3s infinite ease-in-out;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-high": "#2a2a2a",
+                        "on-secondary-fixed-variant": "#5516be",
+                        "background": "#050505",
+                        "on-tertiary-container": "#002f38",
+                        "inverse-surface": "#e5e2e1",
+                        "secondary-container": "#571bc1",
+                        "surface-container-lowest": "#0e0e0e",
+                        "error-container": "#93000a",
+                        "primary-fixed": "#d8e2ff",
+                        "outline-variant": "#424754",
+                        "surface-container-low": "#1c1b1b",
+                        "on-primary-fixed": "#001a42",
+                        "inverse-primary": "#005ac2",
+                        "on-secondary-container": "#c4abff",
+                        "on-secondary-fixed": "#23005c",
+                        "on-error-container": "#ffdad6",
+                        "surface-variant": "#353534",
+                        "on-primary-fixed-variant": "#004395",
+                        "on-surface-variant": "#c2c6d6",
+                        "secondary-fixed-dim": "#d0bcff",
+                        "primary": "#adc6ff",
+                        "on-secondary": "#3c0091",
+                        "primary-fixed-dim": "#adc6ff",
+                        "tertiary-fixed-dim": "#4cd7f6",
+                        "tertiary-container": "#009eb9",
+                        "tertiary-fixed": "#acedff",
+                        "surface": "#131313",
+                        "surface-bright": "#3a3939",
+                        "secondary": "#d0bcff",
+                        "on-primary": "#002e6a",
+                        "primary-container": "#4d8eff",
+                        "surface-container": "#201f1f",
+                        "inverse-on-surface": "#313030",
+                        "outline": "#8c909f",
+                        "on-error": "#690005",
+                        "surface-dim": "#131313",
+                        "on-surface": "#e5e2e1",
+                        "on-primary-container": "#00285d",
+                        "error": "#ffb4ab",
+                        "tertiary": "#4cd7f6",
+                        "on-tertiary-fixed": "#001f26",
+                        "surface-container-highest": "#353534",
+                        "secondary-fixed": "#e9ddff",
+                        "on-tertiary-fixed-variant": "#004e5c",
+                        "surface-tint": "#adc6ff",
+                        "on-tertiary": "#003640",
+                        "on-background": "#e5e2e1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "4px",
+                        "lg": "8px",
+                        "xl": "12px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "48px",
+                        "container-max": "1440px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Space Grotesk"],
+                        "display-lg-mobile": ["Space Grotesk"],
+                        "headline-xl": ["Space Grotesk"],
+                        "display-lg": ["Space Grotesk"],
+                        "label-sm": ["Inter"],
+                        "headline-lg": ["Space Grotesk"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                        "display-lg-mobile": ["40px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "headline-xl": ["40px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "1", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface overflow-hidden">
+<!-- Cinematic Background -->
+<div class="fixed inset-0 z-0">
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent z-10"></div>
+<div class="absolute inset-0 bg-background/60 z-10"></div>
+<div class="w-full h-full bg-cover bg-center opacity-40 scale-105" data-alt="A cinematic, high-fidelity view of a sprawling cyber-city at night, with towering neon-lit skyscrapers reflecting off wet streets. Atmospheric blue and purple fog rolls through the lower levels of the architecture, creating depth and a sense of vastness. The lighting is moody and dramatic, with sharp primary blue highlights cutting through the deep blacks of the environment. The overall aesthetic is futuristic, clean, and premium, perfectly matching a high-performance AAA gaming interface." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCKvBPBwIBOVjZkjqtkNpUrJ1ZyEKZwfmJ5r2dM8j9iutMlUFAo_qLyXfR4qPf7alv13iQ2gdAlqZsB3hxcPo4uJoy4pGdTih8aT4rl9D3jtY_onL75RivwPtv7RNXAUqO9Iz9HN2oPsCEB8MeR-BJBW6mKoXD0svbhS_L4peCu7eXQF4iAxAurNwM4kG2y8OHAjDMJiN8sjDUxf7b_cj1e_WJENY0Vnn6gCwd5-ReD7uceX1kvFTcimhL4B19F6HI7rHuIJVSjvcY')">
+</div>
+<!-- Atmospheric Scanning Lines -->
+<div class="absolute inset-0 pointer-events-none z-15 opacity-5 overflow-hidden">
+<div class="w-full h-1 bg-white absolute top-0 left-0 scanning-line" style="box-shadow: 0 0 15px white;"></div>
+</div>
+</div>
+<!-- Top Navigation Shell -->
+<header class="fixed top-0 w-full z-50 bg-surface/40 backdrop-blur-3xl border-b border-white/10 shadow-xl">
+<div class="flex justify-between items-center px-margin-desktop py-4 max-w-container-max mx-auto">
+<div class="font-headline-sm text-headline-sm font-bold text-primary tracking-tighter">GameVerse</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md" href="#">Home</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-label-md text-label-md" href="#">Games</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md" href="#">Community</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 font-label-md text-label-md" href="#">Leaderboards</a>
+</nav>
+<div class="flex items-center gap-6">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer transition-all" data-icon="search">search</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer transition-all" data-icon="notifications">notifications</span>
+<div class="flex items-center gap-3 border-l border-white/10 pl-6">
+<img class="w-10 h-10 rounded-full border border-primary/30" data-alt="A premium 3D rendered avatar of a sleek, futuristic cyborg gamer character with neon blue glowing eyes and metallic silver accents, set against a dark minimalist background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHwyJmvJt-ssgLEOYykUOTJSMV-Eqwejrgs53wlRTSv1ty7kCwKZnijL6m2eir68ZgXAHaNh8IFjuLXJTghIpq6TfSI_OgIxKl8fnQ5mYG12e_Su0p9Wgt4CB_xXBwRxsXe2pOdaqS-ohwX5VBsc7PiMfMFUiyBQonQUJOQnuE5meHuT0MQ2A_Bji3T5rqE3dYynF4JscShpgrvwFt0IrMBS_ZJFTbGyROZpd-GacQq-ifbAtt_uCreDaUAAkP4Bgku4hdrEWOJhY"/>
+<div class="hidden lg:block">
+<p class="font-label-md text-label-md text-primary">Pro Gamer</p>
+<p class="text-[10px] text-on-surface-variant">LVL 42 ELITE</p>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="relative z-20 w-full h-screen flex flex-col items-center justify-center pt-24 pb-32">
+<!-- Center Stage: Radar -->
+<div class="relative flex flex-col items-center justify-center">
+<div class="relative w-[400px] h-[400px] md:w-[600px] md:h-[600px] flex items-center justify-center">
+<!-- STITCH_SHADER_START:ANIMATION_12 class="absolute inset-0 w-full h-full opacity-80 pointer-events-none" -->
+<div class="absolute inset-0 w-full h-full opacity-80 pointer-events-none" style="display:block;">
+<canvas id="shader-canvas-ANIMATION_12" style="display:block;width:100%;height:100%"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('shader-canvas-ANIMATION_12');
+
+  // Sync the WebGL drawing-buffer size with the CSS-driven layout size.
+  // This fires on initial layout and whenever the element is resized.
+  function syncSize() {
+    const w = canvas.clientWidth  || 1280;
+    const h = canvas.clientHeight || 720;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width  = w;
+      canvas.height = h;
+    }
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(syncSize).observe(canvas);
+  }
+  syncSize();
+
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+  const vs = `attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+  const fs = `precision highp float;
+varying vec2 v_texCoord;
+uniform float u_time;
+uniform vec2 u_resolution;
+
+void main() {
+    vec2 uv = v_texCoord;
+    
+    // Create a pulsing radar-like effect
+    vec2 center = vec2(0.5, 0.5);
+    float dist = distance(uv, center);
+    
+    // Background noise/grid
+    float grid = (sin(uv.x * 40.0) * 0.5 + 0.5) * (sin(uv.y * 40.0) * 0.5 + 0.5);
+    vec3 color = vec3(0.02, 0.02, 0.05); // Deep space blue
+    color += grid * 0.02;
+    
+    // Rotating sweep
+    float angle = atan(uv.y - 0.5, uv.x - 0.5);
+    float sweep = mod(angle - u_time * 2.0, 6.28318) / 6.28318;
+    sweep = pow(sweep, 4.0);
+    
+    // Rings
+    float ring1 = abs(sin(dist * 20.0 - u_time * 2.0)) * 0.1;
+    float ring2 = 1.0 - smoothstep(0.45, 0.46, dist);
+    ring2 *= smoothstep(0.44, 0.45, dist);
+    
+    // Glow
+    vec3 glowColor = vec3(0.23, 0.51, 0.96); // Neon Blue #3B82F6
+    color += sweep * glowColor * 0.3;
+    color += ring1 * glowColor * 0.2 * (1.0 - dist);
+    color += ring2 * glowColor * 0.8;
+    
+    // Center point
+    float centerDot = 1.0 - smoothstep(0.0, 0.01, dist);
+    color += centerDot * vec3(1.0);
+
+    gl_FragColor = vec4(color, 1.0);
+}`;
+  function cs(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const pos = gl.getAttribLocation(prog, 'a_position');
+  gl.enableVertexAttribArray(pos);
+  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+  const uTime = gl.getUniformLocation(prog, 'u_time');
+  const uRes = gl.getUniformLocation(prog, 'u_resolution');
+  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+  // u_mouse is in pixel coordinates matching u_resolution (ShaderToy convention).
+  // Shaders that need normalized coords should use: u_mouse / u_resolution.
+  let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+  window.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width && rect.height) {
+      const nx = (event.clientX - rect.left) / rect.width;
+      const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+      mouse.x = nx * canvas.width;
+      mouse.y = ny * canvas.height;
+    }
+  });
+
+  function render(t) {
+    if (typeof ResizeObserver === 'undefined') syncSize();
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    if (uTime) gl.uniform1f(uTime, t * 0.001);
+    if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+    if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(render);
+  }
+  render(0);
+})();
+</script>
+</div>
+<!-- STITCH_SHADER_END:ANIMATION_12 -->
+<!-- Radar Overlay Details -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<div class="w-[80%] h-[80%] rounded-full border border-primary/20 animate-pulse"></div>
+<div class="w-[60%] h-[60%] rounded-full border border-primary/10"></div>
+</div>
+<!-- Searching Text -->
+<div class="absolute z-30 flex flex-col items-center mt-64 md:mt-80">
+<h1 class="font-headline-xl text-headline-xl text-primary tracking-widest neon-glow-text mb-2">SEARCHING FOR MATCH...</h1>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 px-3 py-1 bg-primary/10 rounded-full border border-primary/20">
+<span class="w-2 h-2 rounded-full bg-primary animate-ping"></span>
+<span class="font-label-md text-label-md text-primary uppercase">Queue Active</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Info Grid (Asymmetric Bento) -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-6 w-full max-w-4xl px-margin-mobile md:px-0 mt-8">
+<div class="glass-card p-6 rounded-xl flex flex-col gap-1 relative overflow-hidden group hover:scale-[1.02] transition-transform">
+<div class="rim-light absolute inset-0 pointer-events-none"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-tighter">Mode</span>
+<span class="font-headline-sm text-headline-sm text-primary">Ranked 5v5</span>
+</div>
+<div class="glass-card p-6 rounded-xl flex flex-col gap-1 relative overflow-hidden group hover:scale-[1.02] transition-transform">
+<div class="rim-light absolute inset-0 pointer-events-none"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-tighter">Region</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">NA East</span>
+</div>
+<div class="glass-card p-6 rounded-xl flex flex-col gap-1 relative overflow-hidden group hover:scale-[1.02] transition-transform">
+<div class="rim-light absolute inset-0 pointer-events-none"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-tighter">Wait Time</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">1:45</span>
+</div>
+<div class="glass-card p-6 rounded-xl flex flex-col gap-1 relative overflow-hidden group hover:scale-[1.02] transition-transform border-primary/30">
+<div class="rim-light absolute inset-0 pointer-events-none"></div>
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-tighter">Current</span>
+<span class="font-headline-sm text-headline-sm text-primary" id="timer">00:42</span>
+</div>
+</div>
+<!-- Party Members -->
+<div class="mt-12 w-full max-w-2xl px-margin-mobile">
+<div class="flex items-center justify-between mb-4 px-2">
+<h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">Party Status</h3>
+<span class="font-label-sm text-label-sm text-tertiary">3 / 5 Ready</span>
+</div>
+<div class="flex gap-4 overflow-x-auto pb-4 no-scrollbar">
+<!-- Current User -->
+<div class="min-w-[140px] flex flex-col items-center gap-3">
+<div class="relative">
+<img class="w-16 h-16 rounded-full border-2 border-primary shadow-lg shadow-primary/20" data-alt="Futuristic cyborg character profile icon with blue neon elements, high fidelity, 3D render, dark background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCULw0iEfsVR6I_1WjtjvnN0fZvw5DOd7XV2eg8Hw5McmaXQ8QkIuacS0nzyvX1ocBTd7RTa0BhxfhNCSlh3jnbky7tdEjn-_TDl43EIMR3Dgh1bzhxGBjhEirbJ5_IEy2c5fnNjZ0XThxTrkdGvyCw5E3aeJUx9kuwrgBmLabbzwGcyU4yw6cmXHqOpkaseVRFXbJIgpughgXsJm_Wznk4zUdD2kHiDCUzGPlIVDqA3dWbr0O5t_eV2u_79ZQSqplWTnh53mLr-4g"/>
+<div class="absolute -bottom-1 -right-1 bg-primary text-on-primary text-[8px] font-bold px-1 rounded border border-background">YOU</div>
+</div>
+<div class="text-center">
+<p class="font-label-md text-label-md text-on-surface">Pro Gamer</p>
+<p class="font-label-sm text-label-sm text-primary">READY</p>
+</div>
+</div>
+<!-- Party Member 1 -->
+<div class="min-w-[140px] flex flex-col items-center gap-3 opacity-80">
+<div class="relative">
+<img class="w-16 h-16 rounded-full border-2 border-primary shadow-lg shadow-primary/20" data-alt="A female sci-fi pilot character avatar with sleek white armor and glowing cyan visors, set against a dark void, minimalist aesthetic, 3D high performance render." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeVMFbFVR7gkERT3zSUIPerWU-z88PTFC4loTLZmVntfsmwJF5kAclE1B8ecCNAHJ0P2qvChbKGn8IqmVkmWyQQlM0kfJiQpCcNJ03ovgsRDqaK7alWONpu0fX8lSzxkqka39mgbImJ8XVPtcn4YmHnDCNPh_ZWo_IYKeYpyX8GdfbwGTU0yAXnk-qkVGYUcudw0XHLFk2aHtqFaVutZGNwKUXq0L_KGVIW05BkKuWezJgY4NJk0kxORkL20jv5tQ37g8uKHr0IV8"/>
+</div>
+<div class="text-center">
+<p class="font-label-md text-label-md text-on-surface">AceStriker</p>
+<p class="font-label-sm text-label-sm text-primary">READY</p>
+</div>
+</div>
+<!-- Party Member 2 -->
+<div class="min-w-[140px] flex flex-col items-center gap-3 opacity-80">
+<div class="relative">
+<img class="w-16 h-16 rounded-full border-2 border-primary shadow-lg shadow-primary/20" data-alt="A robotic sentinel head with orange glowing ocular lenses and matte black carbon fiber casing, high definition 3D gaming portrait style, clean dark lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA93ba6QdlhP5BSNmgYiM7gHjHwd3Yp0DuZHdaondH1djZ5Nhty_CR6t7l3MeUGi-tC4pa3C9ApCYmeb4jxazmBSlOtd5EhNGhMxsVsQswD0APngR56L3NXwqoyzre7RwbcYaN-0-yQ4m0Pa6GE2ve6I1RpoElZtzC3UyVEcG6o8_EaJGNTLJL_DAGQcYlvQWR1h0alKRq232DSxDVLCdQreu5GD2dup4TT6th3u57GpuYjJuBMOqVwBdMSbFvKF3GzpnNj-RClj34"/>
+</div>
+<div class="text-center">
+<p class="font-label-md text-label-md text-on-surface">NeoDyne</p>
+<p class="font-label-sm text-label-sm text-primary">READY</p>
+</div>
+</div>
+<!-- Empty Slot -->
+<div class="min-w-[140px] flex flex-col items-center gap-3 opacity-30">
+<div class="w-16 h-16 rounded-full border-2 border-dashed border-on-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="add">add</span>
+</div>
+<div class="text-center">
+<p class="font-label-md text-label-md text-on-surface-variant">Empty</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Bar Navigation Shell -->
+<footer class="fixed bottom-0 w-full z-50 bg-background/80 backdrop-blur-xl border-t border-white/5">
+<div class="max-w-container-max mx-auto px-margin-desktop py-6 flex flex-col md:flex-row justify-between items-center gap-6">
+<!-- Ping & Connectivity -->
+<div class="flex items-center gap-8 order-2 md:order-1">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary" data-icon="wifi">wifi</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-tighter">Latency</span>
+<span class="font-label-md text-label-md text-tertiary">24 MS</span>
+</div>
+</div>
+<div class="hidden sm:flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-tighter">Server</span>
+<span class="font-label-md text-label-md text-on-surface">IAD-C42</span>
+</div>
+</div>
+<!-- Primary Actions -->
+<div class="flex items-center gap-4 order-1 md:order-2">
+<button class="px-8 py-3 rounded-lg font-label-md text-label-md border border-primary/20 text-on-surface hover:bg-white/5 hover:border-primary/50 hover:scale-105 active:scale-95 transition-all duration-300 glass-card">
+                    CANCEL MATCHMAKING
+                </button>
+<div class="hidden lg:block h-12 w-[1px] bg-white/10 mx-2"></div>
+<div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-container-high border border-white/5">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]" data-icon="settings">settings</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">QUEUE SETTINGS</span>
+</div>
+</div>
+</div>
+</footer>
+<script>
+        // Simple micro-interaction for the timer
+        let seconds = 42;
+        const timerElement = document.getElementById('timer');
+        
+        setInterval(() => {
+            seconds++;
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            timerElement.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+        }, 1000);
+
+        // Add subtle movement to the background scale on mouse move
+        document.addEventListener('mousemove', (e) => {
+            const x = (window.innerWidth / 2 - e.pageX) / 100;
+            const y = (window.innerHeight / 2 - e.pageY) / 100;
+            const bg = document.querySelector('[style*="background-image"]');
+            if(bg) {
+                bg.style.transform = `scale(1.05) translate(${x}px, ${y}px)`;
+            }
+        });
+    </script>
+</body></html>

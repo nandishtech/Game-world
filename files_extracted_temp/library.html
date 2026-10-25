@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GameVerse | Game Library</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Space+Grotesk:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-container": "#002f38",
+                        "on-tertiary": "#003640",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#5516be",
+                        "on-tertiary-fixed-variant": "#004e5c",
+                        "on-secondary-container": "#c4abff",
+                        "on-secondary": "#3c0091",
+                        "surface-dim": "#131313",
+                        "surface-container-lowest": "#0e0e0e",
+                        "surface-container-low": "#1c1b1b",
+                        "outline": "#8c909f",
+                        "primary-fixed": "#d8e2ff",
+                        "surface-container-highest": "#353534",
+                        "primary-container": "#4d8eff",
+                        "on-primary": "#002e6a",
+                        "on-background": "#e5e2e1",
+                        "secondary-container": "#571bc1",
+                        "outline-variant": "#424754",
+                        "error": "#ffb4ab",
+                        "surface-variant": "#353534",
+                        "inverse-on-surface": "#313030",
+                        "surface-tint": "#adc6ff",
+                        "on-primary-fixed-variant": "#004395",
+                        "on-primary-fixed": "#001a42",
+                        "surface": "#131313",
+                        "tertiary-container": "#009eb9",
+                        "inverse-primary": "#005ac2",
+                        "background": "#131313",
+                        "secondary-fixed": "#e9ddff",
+                        "primary-fixed-dim": "#adc6ff",
+                        "inverse-surface": "#e5e2e1",
+                        "secondary-fixed-dim": "#d0bcff",
+                        "on-tertiary-fixed": "#001f26",
+                        "on-error": "#690005",
+                        "tertiary-fixed-dim": "#4cd7f6",
+                        "on-surface-variant": "#c2c6d6",
+                        "tertiary": "#4cd7f6",
+                        "surface-bright": "#3a3939",
+                        "on-primary-container": "#00285d",
+                        "on-surface": "#e5e2e1",
+                        "primary": "#adc6ff",
+                        "surface-container-high": "#2a2a2a",
+                        "secondary": "#d0bcff",
+                        "tertiary-fixed": "#acedff",
+                        "on-secondary-fixed": "#23005c",
+                        "error-container": "#93000a",
+                        "surface-container": "#201f1f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "48px",
+                        "container-max": "1440px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "headline-sm": ["Space Grotesk"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Space Grotesk"],
+                        "headline-xl": ["Space Grotesk"],
+                        "display-lg-mobile": ["Space Grotesk"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "display-lg": ["Space Grotesk"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "headline-xl": ["40px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "display-lg-mobile": ["40px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "1", "fontWeight": "500"}],
+                        "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #050505;
+            color: #e5e2e1;
+            overflow-x: hidden;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .neon-border-hover:hover {
+            border-color: #adc6ff;
+            box-shadow: 0 0 20px rgba(173, 198, 255, 0.2);
+        }
+        .game-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(173, 198, 255, 0.15);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #424754;
+            border-radius: 10px;
+        }
+        .neon-text-glow {
+            text-shadow: 0 0 8px rgba(173, 198, 255, 0.6);
+        }
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        .animate-pulse-glow {
+            animation: pulse-glow 3s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md selection:bg-primary/30">
+<!-- Background Decoration -->
+<div class="fixed inset-0 pointer-events-none z-0">
+
+<div class="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 blur-[120px] rounded-full"></div>
+<div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-secondary/10 blur-[120px] rounded-full"></div>
+</div>
+<!-- Navigation Shell (TopAppBar) -->
+<header class="fixed top-0 w-full z-50 bg-surface/40 dark:bg-surface-container/40 backdrop-blur-3xl border-b border-white/10 shadow-xl">
+<div class="flex justify-between items-center px-margin-desktop py-4 max-w-container-max mx-auto">
+<div class="flex items-center gap-8">
+<span class="font-headline-sm text-headline-sm font-bold text-primary tracking-tighter">GameVerse</span>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 cursor-pointer active:scale-95" href="library.html">Games</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 cursor-pointer active:scale-95" href="friends.html">Community</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 cursor-pointer active:scale-95" href="index.html#leaderboards">Leaderboards</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors duration-300 cursor-pointer active:scale-95" href="tournaments.html">Tournaments</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden sm:flex items-center bg-surface-container-high rounded-full px-4 py-2 border border-outline-variant/30">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-label-md text-on-surface w-40 placeholder:text-outline" placeholder="Search universe..." type="text"/>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-all duration-200 cursor-pointer">notifications</button>
+<div class="w-8 h-8 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A stylized portrait of a futuristic gamer avatar, wearing high-tech glowing headphones and neon-lined cybernetic visor, set against a dark, minimalist background with soft blue and purple lighting. The aesthetic is clean, premium, and fits a high-end AAA gaming environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpeeShHnPuHzp-VRYE6VGjKJ7let8uy_1YRF0mhx-cdrdFuMXZMADisdHz6jOJ_fSCCMyjmh1M-_HRQHelbYGCqjZFQpTne-5cz8WLbWB7AX6uCDBpdhaVSnlhWdTeqga2sztOBX-lUDTqAH24PIqYKxRAdKenoqWJdVRwN6Mw6JjeF_CGSljGFE26kcbDs6fy4eegZncYMU75mFb5dlMZ9je7SY7s9EnmzWUlaFBe6uoPdteDuj8OGcGpMXBz_qO1GK5Z6CRvuNY"/>
+</div>
+</div>
+</div>
+</header>
+<div class="flex pt-20 h-screen overflow-hidden relative z-10">
+<!-- Side Navigation Bar -->
+<aside class="fixed left-0 top-0 h-full w-64 z-40 bg-surface-container-low dark:bg-surface-container-low/60 backdrop-blur-xl border-r border-white/5 shadow-2xl flex flex-col pt-24 pb-8 gap-4 px-4">
+<div class="px-4 mb-6">
+<div class="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10">
+<div class="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-secondary p-[1px]">
+<div class="w-full h-full rounded-lg bg-surface flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A macro shot of a sleek, high-tech metallic badge with glowing blue circuitry, representing a high-level elite player status in a futuristic gaming universe. The lighting is dramatic and focused, highlighting the premium craftsmanship and sharp lines." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAySf3Sx3OJDVac2wDzfzLYqafyYkdWy6Jf_JkH_TIW5PtRybvg8c7jjeLI4uJFrCZ1SU7B9_IBZJphmAD3gVXfFWZbCuAcoqFp3I79mBetFJh2aGu7nOEq-hhUyWtuktHzZvC5_AnUOH8c-b4sqGKimlC3KDyj30LpD4xuKgGrI7OTg2bZbq_c2eNrroFfLAASPnQQ5aiIKFahhjY63kFZ5ZAaFJ9eME-dKpbCWGw1IOKJAXP0qBvlw31h3JNEDArr8J3cJt4mudY"/>
+</div>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Pro Gamer</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Level 42 Elite</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<div class="text-primary font-bold bg-primary/10 border-r-4 border-primary px-4 py-3 flex items-center gap-3 cursor-pointer active:translate-x-1 transition-all duration-200">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Library</span>
+</div>
+<div class="text-on-surface-variant hover:bg-white/5 px-4 py-3 flex items-center gap-3 cursor-pointer active:translate-x-1 transition-all duration-200">
+<span class="material-symbols-outlined">military_tech</span>
+<span class="font-label-md text-label-md">Achievements</span>
+</div>
+<div class="text-on-surface-variant hover:bg-white/5 px-4 py-3 flex items-center gap-3 cursor-pointer active:translate-x-1 transition-all duration-200">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Friends</span>
+</div>
+<div class="text-on-surface-variant hover:bg-white/5 px-4 py-3 flex items-center gap-3 cursor-pointer active:translate-x-1 transition-all duration-200">
+<span class="material-symbols-outlined">history</span>
+<span class="font-label-md text-label-md">History</span>
+</div>
+<div class="text-on-surface-variant hover:bg-white/5 px-4 py-3 flex items-center gap-3 cursor-pointer active:translate-x-1 transition-all duration-200">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</div>
+</nav>
+<div class="mt-auto space-y-1">
+<div class="text-on-surface-variant hover:bg-white/5 px-4 py-3 flex items-center gap-3 cursor-pointer active:translate-x-1 transition-all duration-200">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-md text-label-md">Support</span>
+</div>
+<div class="text-error hover:bg-error/10 px-4 py-3 flex items-center gap-3 cursor-pointer active:translate-x-1 transition-all duration-200">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md text-label-md">Sign Out</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-64 overflow-y-auto custom-scrollbar">
+<!-- Hero Section -->
+<section class="px-margin-desktop pt-12 pb-8">
+<div class="relative overflow-hidden rounded-3xl h-[320px] glass-card flex flex-col justify-center px-12 border-white/5">
+
+<div class="relative z-10 max-w-2xl">
+<h1 class="font-display-lg text-display-lg mb-4 tracking-tighter text-on-surface">Explore <span class="text-primary neon-text-glow">Games</span></h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-8 max-w-lg">Discover the next generation of AAA gaming experiences across the nexus. High-fidelity worlds await your arrival.</p>
+<div class="flex items-center gap-4 bg-black/40 backdrop-blur-md rounded-2xl p-2 border border-white/10 max-w-xl group focus-within:border-primary transition-all duration-300">
+<span class="material-symbols-outlined text-outline ml-4 group-focus-within:text-primary">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md text-on-surface flex-1 py-3" id="library-search" placeholder="Search for titles, developers, or genres..." type="text"/>
+<button class="bg-primary text-on-primary font-label-md text-label-md px-8 py-3 rounded-xl hover:brightness-110 active:scale-95 transition-all" onclick="document.getElementById('library-search').dispatchEvent(new Event('input'))">Search</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Filters Section -->
+<section class="px-margin-desktop py-4 sticky top-0 z-20 bg-background/80 backdrop-blur-md">
+<div class="flex items-center gap-3 overflow-x-auto pb-4 custom-scrollbar" id="genre-filters">
+<button class="filter-chip px-6 py-2 rounded-full font-label-md text-label-md bg-primary text-on-primary shadow-[0_0_15px_rgba(173,198,255,0.4)]" data-genre="All Games">All Games</button>
+<button class="filter-chip px-6 py-2 rounded-full font-label-md text-label-md glass-card text-on-surface-variant hover:text-on-surface hover:border-white/20 transition-all" data-genre="Action">Action</button>
+<button class="filter-chip px-6 py-2 rounded-full font-label-md text-label-md glass-card text-on-surface-variant hover:text-on-surface hover:border-white/20 transition-all" data-genre="Adventure">Adventure</button>
+<button class="filter-chip px-6 py-2 rounded-full font-label-md text-label-md glass-card text-on-surface-variant hover:text-on-surface hover:border-white/20 transition-all" data-genre="Strategy">Strategy</button>
+<button class="filter-chip px-6 py-2 rounded-full font-label-md text-label-md glass-card text-on-surface-variant hover:text-on-surface hover:border-white/20 transition-all" data-genre="Board Games">Board Games</button>
+<button class="filter-chip px-6 py-2 rounded-full font-label-md text-label-md glass-card text-on-surface-variant hover:text-on-surface hover:border-white/20 transition-all" data-genre="Simulation">Simulation</button>
+<button class="filter-chip px-6 py-2 rounded-full font-label-md text-label-md glass-card text-on-surface-variant hover:text-on-surface hover:border-white/20 transition-all" data-genre="RPG">RPG</button>
+<button class="filter-chip px-6 py-2 rounded-full font-label-md text-label-md glass-card text-on-surface-variant hover:text-on-surface hover:border-white/20 transition-all" data-genre="Sports">Sports</button>
+</div>
+</section>
+<!-- Games Grid -->
+<section class="px-margin-desktop py-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-gutter mb-20" id="games-grid">
+<!-- Game Card 1 -->
+<div class="game-card group relative rounded-2xl glass-card overflow-hidden transition-all duration-500 cursor-pointer border border-white/5 hover:border-primary/50" data-title="Neon Strike" data-genre="Action" onclick="location.href='game-details.html?game=neon-strike'">
+<div class="relative h-48 w-full">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A breathtaking cinematic landscape of a futuristic neon city under a purple cosmic sky, with flying vehicles and glowing skyscrapers. The aesthetic is vaporwave-inspired with high contrast and sharp details, perfectly suited for an action-adventure game cover." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAo6efdyY0mqX5JYN4dNeXB6HyW2Z2ZexUeXcUnjxDoYTtI06O2QBkR5XA4It9h9zkH2TMNAWZ_qirGJZwvFuYjduaAQh8bi5vXVXEGyVAuiELyjJ2kTDoSctZ6VEov4fz9s5FhtfHnGDt_IaQwlLpjpq1q9KHZHy2BV5qJ2INBT2bKxaSxIJ42g0h053Dnkdg1zg4Mnpls2EWVzW4SjeC5c7PTDL9pR9oaTFaR289hzbpukdLDIJTWqvvy6oFApKiooPYX8Bi2zAI"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent opacity-60"></div>
+<div class="absolute top-4 left-4">
+<span class="bg-tertiary-container/20 backdrop-blur-md border border-tertiary/30 text-tertiary px-3 py-1 rounded-full text-label-sm font-label-sm flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span> 2.4k Online
+                            </span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Neon Strike</h3>
+<p class="text-label-md text-on-surface-variant">Cyberpunk Action</p>
+</div>
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-md text-label-md">4.9</span>
+</div>
+</div>
+<div class="mt-6 flex items-center justify-between">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-surface overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="User profile picture of a gamer avatar in a colorful artistic style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqXtpkgfu0qSp-DFUqVfOOCqneqhnds7mGWni18RLwwm67Ph20-4FfiNXEqOAVe2uqV4veigrzB_POi9SoX_3KeuAyH12kI2xCRGoJD5jqcn9COfjqHTwKW_yyjE7teE9zzVgtrAndFGKnOmuE_YqnhAch_3EZb1OD41lHV37QH2aksyeesbkL_auiul865-fRW7yygsoflPvVDXjL2b2jT48AHWvlZb3-KgUo7tsGiyKHxq6tyyjBmHqZ_Fqor9rsILa5ufhJHu0"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="User profile picture of a gamer avatar in a colorful artistic style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4bU10OCmUwODESyBOTX5nq5vydl64u838QbOgG-y8gDHeVIuc1gGAdxVdN34QGYJCzf3tRG2B4MgjKDKnRa0gNUqDkg-3k8xUDGVlTUQ13FbV-_g5zba_x_2NTC40lOsr6AxzO0yy3OmWpVXg4yfZRxpBDpP7XcH6owvXcLEAeNdwgwdlyjxQnDxeNYhoTW-TAM4MhEPihJ7_XP3ixdMJbsZv3irCk7g6RgeBho9Q5jDNTtANOeRCQhxlh4TDQIDwh6wtemp3A7M"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface bg-surface-container flex items-center justify-center text-[10px] text-on-surface-variant font-bold">+12</div>
+</div>
+<button class="bg-primary/10 border border-primary/40 text-primary hover:bg-primary hover:text-on-primary font-label-md text-label-md px-6 py-2 rounded-xl transition-all active:scale-90" onclick="event.stopPropagation()">Play Now</button>
+</div>
+</div>
+</div>
+<!-- Game Card 2 -->
+<div class="game-card group relative rounded-2xl glass-card overflow-hidden transition-all duration-500 cursor-pointer border border-white/5 hover:border-secondary/50" data-title="Ethereal Chess" data-genre="Strategy,Board Games" onclick="location.href='game-details.html?game=ethereal-chess'">
+<div class="relative h-48 w-full">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="An intricate strategy board game layout featuring holographic game pieces, glowing crystal markers, and a dark obsidian surface with etched golden lines. The lighting is mystical and atmospheric, focusing on the tactical complexity and premium materials of the game components." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGUG1L_Q1Qpn8cAESR1Fa9xIixQaUU_w5PodV1GF3oU9P48hibbafqfJ_QGwpOB65ti3dgy_u5zFWqVPHHe7uqddwjCgdrPzz4fJqNFQfCeprq2SArfKBbB4gfUSjeu8nL9FyogrIU7rRWoWeWdxQDdiniqIjXSVXB-3RyRt-YZweRion2mMIOWBBCpZL_D8rY4C4wwtmpmqPk1c4tcOs6N5tsp8alW_8NFDiKduEpoGqVAssSTy6Y0HlKUlATdy0vBDuMZ2Qfkjw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent opacity-60"></div>
+<div class="absolute top-4 left-4">
+<span class="bg-tertiary-container/20 backdrop-blur-md border border-tertiary/30 text-tertiary px-3 py-1 rounded-full text-label-sm font-label-sm flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span> 850 Online
+                            </span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Ethereal Chess</h3>
+<p class="text-label-md text-on-surface-variant">Strategic Board</p>
+</div>
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-md text-label-md">4.7</span>
+</div>
+</div>
+<div class="mt-6 flex items-center justify-between">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-surface overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="User profile picture of a gamer avatar in a colorful artistic style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5YjPDHWfWI1Rw0CBqga6wz8poZU80SlOke-PpBkQKvkmui2M3mZJo-xYDrg-IVJSSs3RyB3GvV8jTjhVlHFeT1tGeOWvd5wUVdaSLXBcTChuFq1hM42v5qMessVkwY6Q8fsceSYTPbEjqYBORbe5g_kDY9G4aXbvAWqQKWk9k1ERGc-gGljQflsAs6oXPfzcyg4afugU9ItOUYBv09A1Udhb_fXuHBVU4fWOD6-hDJZodgLv8KE9T_hJam8S7JSzLiqwf-lmCXEY"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="User profile picture of a gamer avatar in a colorful artistic style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtArYf7uBVdlJt5Z_6McuHrwD3OHOXMhYh-aqfREaYdRuA6Bw_Ha__UvCJaLQWKGi4x97L43xZExyqGQmxdcQn2vBvAOzbF6RxH9KCSzfZCEVdFGuD0A5xix3tAlOL0CoSoCCnfCCZYSANXIc56zuFiO286TNYLkkn8uepCRjhnLmZ493_TO9F2S92Dvz4vCW4S0K0DCIYUc8Lw4ylqWEDHGghdG-nTxa5LBFRP7R0JBqXh5Tuv2tMD2pUBADlEv9sPHIUIAOYWxo"/>
+</div>
+</div>
+<button class="bg-secondary/10 border border-secondary/40 text-secondary hover:bg-secondary hover:text-on-secondary font-label-md text-label-md px-6 py-2 rounded-xl transition-all active:scale-90">Play Now</button>
+</div>
+</div>
+</div>
+<!-- Game Card 3 -->
+<div class="game-card group relative rounded-2xl glass-card overflow-hidden transition-all duration-500 cursor-pointer border border-white/5 hover:border-primary/50" data-title="Void Racer" data-genre="Action,Sports" onclick="location.href='game-details.html?game=void-racer'">
+<div class="relative h-48 w-full">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A high-speed racing scene featuring sleek aerodynamic vehicles with glowing blue exhaust flames, tearing through a futuristic desert track during a crimson sunset. The sense of speed is conveyed through motion blur and lens flare, emphasizing a fast-paced arcade racing aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4l9FK_FbsZJnEQU_6DiC7iIdXOUfwctPIdSSGuUq66wNnLyPMeMHNj2sHR6HG0QKk-TzJTmcrFxdhkR713eKar7B0PCgUzpOOmkIJLqrwvPHrb0q4qKG2GY4ENpUrQvjck1a7QrlVUrJj7V9fowVd303pI-VWgqsihQhfOqYX0V4BgoRAWBw_cz2u6HZcERUEtYJAVOs-lZDlcQSR8yvf8t4hCpRh8sCkxI--1lmlU53rInz1XYmuftjIo3BFZKbqsciSV2SGjD8"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent opacity-60"></div>
+<div class="absolute top-4 left-4">
+<span class="bg-tertiary-container/20 backdrop-blur-md border border-tertiary/30 text-tertiary px-3 py-1 rounded-full text-label-sm font-label-sm flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span> 1.1k Online
+                            </span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Void Racer</h3>
+<p class="text-label-md text-on-surface-variant">Arcade Racing</p>
+</div>
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-md text-label-md">4.8</span>
+</div>
+</div>
+<div class="mt-6 flex items-center justify-between">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-surface overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="User profile picture of a gamer avatar in a colorful artistic style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQ5THDD2H2bBDcHjyoDq_Jg9CRhOso0OJ4-q54kWHzjvau5eoJHOAxjGwtZ3WQIva8W34Lx-K5JeRkNbU453EXVENAe18045aGuqPcL_kDYrNqrcEHtz6CTIoWqVZvrHMkRHb99UUVTU_aKdTuf3_2yTZgYIMB9vihK8x5o7f1VrgTAVPwMZJfDSqtrrzL14vMfat6G9KIRB8V3O8lO62vf78S14Sfgn6yrVIBr2CTNmXyZMHcMQaFCaBVnB9M-YnZSOnp7ahQho8"/>
+</div>
+</div>
+<button class="bg-primary/10 border border-primary/40 text-primary hover:bg-primary hover:text-on-primary font-label-md text-label-md px-6 py-2 rounded-xl transition-all active:scale-90" onclick="event.stopPropagation()">Play Now</button>
+</div>
+</div>
+</div>
+<!-- Game Card 4 -->
+<div class="game-card group relative rounded-2xl glass-card overflow-hidden transition-all duration-500 cursor-pointer border border-white/5 hover:border-tertiary/50" data-title="Eco Genesis" data-genre="Simulation,Adventure" onclick="location.href='game-details.html?game=eco-genesis'">
+<div class="relative h-48 w-full">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A tranquil and immersive simulation of a bio-luminescent forest, featuring floating organisms, glowing flora, and ancient stone ruins overgrown with neon-colored moss. The atmosphere is peaceful and mystical, with soft ambient light creating a sense of wonder and discovery." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDngnCpOIDpBHaTdAVsHVT3Rhu0_VCIXZveuC80szwlLIuhn9d9lyXOVA1zFK7_LQukdCLGCIdyZe1t47MNXnhKMiMjsKgDu_lHJO1k9jK_i2wg81_Nl8Npr2iJJKxx-eK_KPKpsuv9tzKngPNDfyxwhkQ8ijmVRv9KGH4zgUQ4tgIZhNfd_AUH4wVj4y96jNe8gV8awoOpgSz-uBcXc2R4i2mQiHusosB13qxkDRQ4-fUqNKIyQxAGttg5htxUw4Y-3AsuNhUuz3o"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent opacity-60"></div>
+<div class="absolute top-4 left-4">
+<span class="bg-tertiary-container/20 backdrop-blur-md border border-tertiary/30 text-tertiary px-3 py-1 rounded-full text-label-sm font-label-sm flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span> 4.3k Online
+                            </span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Eco Genesis</h3>
+<p class="text-label-md text-on-surface-variant">World Simulator</p>
+</div>
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-md text-label-md">5.0</span>
+</div>
+</div>
+<div class="mt-6 flex items-center justify-between">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-surface overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="User profile picture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDO90mxafCrxtzpZCSh6WlhA14aUw5fi-JcleDomz5anXH6JSD6HRpXnDjMD6lHfR-l7TxPZOA9VXZjvRy40nbpCnl5IkmnPBxVrAv0a0A4llq2gG7hW5ICnU48bOIOv0RU9r7v7kgyGbDR5E7mLJqCEGMEekegVPc-UuU9Mo5o2LoKsrxVIJvxq_gj1CWYIa843pN1Xx4P-jULN38gRj7bt1dCSMMtE3LbM3eYNsc90N7IvepsJebPjjFrFBypijAm1pyrBea4ANs"/>
+</div>
+</div>
+<button class="bg-tertiary/10 border border-tertiary/40 text-tertiary hover:bg-tertiary hover:text-on-tertiary font-label-md text-label-md px-6 py-2 rounded-xl transition-all active:scale-90">Play Now</button>
+</div>
+</div>
+</div>
+<!-- Repeat Pattern for more cards -->
+<!-- Card 5 -->
+<div class="game-card group relative rounded-2xl glass-card overflow-hidden transition-all duration-500 cursor-pointer border border-white/5 hover:border-secondary/50" data-title="Shadow Realm" data-genre="RPG,Adventure" onclick="location.href='game-details.html?game=shadow-realm'">
+<div class="relative h-48 w-full">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A dark fantasy RPG landscape featuring a monolithic obsidian castle towering over a misty valley, illuminated by an eclipse. The art style is painterly and epic, with high contrast between deep shadows and glowing ethereal runes carved into the castle walls." src="https://lh3.googleusercontent.com/aida-public/AB6AXuChco9OjMR7zeiejAMBrVPVDIqSKFwYLJVik9WaWjRR7jHr5ESqHqOVnLrdkSvNy0mzKpqDuhqMeBSXeSc4yg7x5xFAHjskN8cAzRDZEenAq35D4n98wEL3StwVBnlXs-NpGGAXxXt_I5ol0dzWGtCFpXo0oFnJfn9J7-Rne7bt25YpdN6vdhG1j5fY5Io160j5hSIWZfAN-SefZflfsB2RpE3F1ePCzTBw-pYQWQHGksGAvjLsIXBuGnFbvqtAHx2M-bL5mKR2d4M"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent opacity-60"></div>
+<div class="absolute top-4 left-4">
+<span class="bg-tertiary-container/20 backdrop-blur-md border border-tertiary/30 text-tertiary px-3 py-1 rounded-full text-label-sm font-label-sm flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span> 1.8k Online
+                            </span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Shadow Realm</h3>
+<p class="text-label-md text-on-surface-variant">Epic RPG</p>
+</div>
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-md text-label-md">4.6</span>
+</div>
+</div>
+<div class="mt-6 flex items-center justify-between">
+<button class="bg-secondary/10 border border-secondary/40 text-secondary hover:bg-secondary hover:text-on-secondary font-label-md text-label-md px-6 py-2 rounded-xl transition-all active:scale-90">Play Now</button>
+</div>
+</div>
+</div>
+<!-- Card 6 -->
+<div class="game-card group relative rounded-2xl glass-card overflow-hidden transition-all duration-500 cursor-pointer border border-white/5 hover:border-primary/50" data-title="Tactical Ops" data-genre="Strategy,Action" onclick="location.href='game-details.html?game=tactical-ops'">
+<div class="relative h-48 w-full">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A futuristic tactical squad combat scene in a rain-slicked industrial arena, with holographic UI overlays and glowing energy barriers. The lighting is gritty and atmospheric, emphasizing the tension of a high-stakes competitive strategy game." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGYIwMk4Po8YlV1-bPVLRYCM4NezIkmW2CUloqC5VgGUQbJ18EMBK-Q2aWdU0gMmLB2y2mL56b-fmduEwz5EUZigOfsOCcTY1rWsAuUmGuY_fzBZCPObk71n7amhiHIUbur4nMaMD9ZNVHQse1athVGV-2Esr-RoEcd03Ews39OWMZYfOapVibskXHNbLZKAwrKMyPd0W68ZuiCdqvDXkP_Xo-rN-xeuaJUb2qExlaf734blpaJ4_H80EPdXxaoDwUSBDNdv_4NQc"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent opacity-60"></div>
+<div class="absolute top-4 left-4">
+<span class="bg-tertiary-container/20 backdrop-blur-md border border-tertiary/30 text-tertiary px-3 py-1 rounded-full text-label-sm font-label-sm flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span> 3.1k Online
+                            </span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Tactical Ops</h3>
+<p class="text-label-md text-on-surface-variant">Team Strategy</p>
+</div>
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-md text-label-md">4.9</span>
+</div>
+</div>
+<div class="mt-6 flex items-center justify-between">
+<button class="bg-primary/10 border border-primary/40 text-primary hover:bg-primary hover:text-on-primary font-label-md text-label-md px-6 py-2 rounded-xl transition-all active:scale-90" onclick="event.stopPropagation()">Play Now</button>
+</div>
+</div>
+</div>
+<!-- Ludo Royale -->
+<div class="game-card group relative rounded-2xl glass-card overflow-hidden transition-all duration-500 cursor-pointer border border-white/5 hover:border-primary/50" data-title="Ludo Royale" data-genre="Board Games,Strategy" onclick="location.href='ludo-home.html'">
+<div class="relative h-48 w-full">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Ludo Royale gameplay preview" src="ludo-thumb.png"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent opacity-60"></div>
+<div class="absolute top-4 left-4">
+<span class="bg-tertiary-container/20 backdrop-blur-md border border-tertiary/30 text-tertiary px-3 py-1 rounded-full text-label-sm font-label-sm flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span> 8.4k Online
+                            </span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Ludo Royale</h3>
+<p class="text-label-md text-on-surface-variant">Board Game Classic</p>
+</div>
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-md text-label-md">4.8</span>
+</div>
+</div>
+<div class="mt-6 flex items-center justify-between">
+<button class="bg-primary/10 border border-primary/40 text-primary hover:bg-primary hover:text-on-primary font-label-md text-label-md px-6 py-2 rounded-xl transition-all active:scale-90" onclick="event.stopPropagation(); location.href='ludo-home.html'">Play Now</button>
+</div>
+</div>
+</div>
+<!-- Tic Tac Toe (coming soon) -->
+<div class="game-card group relative rounded-2xl glass-card overflow-hidden transition-all duration-500 border border-white/5" data-title="Tic Tac Toe" data-genre="Strategy,Board Games">
+<div class="relative h-48 w-full flex items-center justify-center bg-surface-container-high">
+<span class="material-symbols-outlined text-primary/30 text-[80px]">grid_3x3</span>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent opacity-60"></div>
+<div class="absolute top-4 left-4">
+<span class="bg-white/10 backdrop-blur-md border border-white/20 text-on-surface-variant px-3 py-1 rounded-full text-label-sm font-label-sm">Coming Soon</span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Tic Tac Toe</h3>
+<p class="text-label-md text-on-surface-variant">Quick Classic</p>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+</div>
+</div>
+<div class="mt-6 flex items-center justify-between">
+<button class="bg-white/5 border border-white/10 text-on-surface-variant hover:text-primary hover:border-primary/40 font-label-md text-label-md px-6 py-2 rounded-xl transition-all active:scale-90" onclick="event.stopPropagation(); GV.toast('Thanks! We will let you know when Tic Tac Toe launches.')">Notify Me</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="w-full relative bottom-0 border-t border-outline-variant/20 bg-background py-16">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-desktop max-w-container-max mx-auto">
+<div class="col-span-1 md:col-span-1">
+<span class="font-headline-sm text-headline-sm font-bold text-on-surface mb-4 block">GameVerse</span>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xs">Connecting players to the next dimension of interactive entertainment.</p>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-primary mb-4">Platform</h4>
+<ul class="space-y-2">
+<li><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="library.html">Games</a></li>
+<li><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="tournaments.html">Tournaments</a></li>
+<li><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="index.html#leaderboards">Leaderboards</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-primary mb-4">Community</h4>
+<ul class="space-y-2">
+<li><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Discord</a></li>
+<li><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">YouTube</a></li>
+<li><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Contact Support</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-primary mb-4">Legal</h4>
+<ul class="space-y-2">
+<li><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a></li>
+<li><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a></li>
+</ul>
+</div>
+</div>
+<div class="px-margin-desktop max-w-container-max mx-auto mt-12 pt-8 border-t border-outline-variant/10 text-center">
+<p class="font-label-sm text-label-sm text-on-surface-variant opacity-50">© 2024 GameVerse Nexus. All rights reserved.</p>
+</div>
+</footer>
+</main>
+</div>
+<!-- Floating Action Button (Only relevant for core navigation on mobile, hidden for focused desktop) -->
+<div class="md:hidden fixed bottom-6 right-6 z-50">
+<button class="w-16 h-16 rounded-full bg-primary text-on-primary shadow-2xl flex items-center justify-center cursor-pointer active:scale-95 transition-all" onclick="document.getElementById('games-grid').scrollIntoView({behavior:'smooth'})">
+<span class="material-symbols-outlined text-[32px]">sports_esports</span>
+</button>
+</div>
+<p class="hidden text-center text-on-surface-variant py-16 col-span-full" id="no-results">No games match your search. Try a different title or genre.</p>
+<script>
+        // Simple Micro-interactions
+        document.querySelectorAll('.game-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                // Potential for dynamic JS effects
+            });
+        });
+
+        // Search Bar Focus Effect
+        const searchInput = document.getElementById('library-search');
+        const searchContainer = searchInput?.parentElement;
+
+        searchInput?.addEventListener('focus', () => {
+            searchContainer?.classList.add('border-primary', 'shadow-[0_0_20px_rgba(173,198,255,0.2)]');
+        });
+
+        searchInput?.addEventListener('blur', () => {
+            searchContainer?.classList.remove('border-primary', 'shadow-[0_0_20px_rgba(173,198,255,0.2)]');
+        });
+
+        // Filtering: search text + genre chips combine to show/hide game cards.
+        const cards = Array.from(document.querySelectorAll('.game-card'));
+        const chips = Array.from(document.querySelectorAll('.filter-chip'));
+        const noResults = document.getElementById('no-results');
+        let activeGenre = 'All Games';
+
+        function applyFilters() {
+            const q = (searchInput?.value || '').trim().toLowerCase();
+            let visibleCount = 0;
+            cards.forEach(card => {
+                const title = (card.dataset.title || '').toLowerCase();
+                const genres = (card.dataset.genre || '').split(',');
+                const matchesText = !q || title.includes(q);
+                const matchesGenre = activeGenre === 'All Games' || genres.includes(activeGenre);
+                const visible = matchesText && matchesGenre;
+                card.style.display = visible ? '' : 'none';
+                if (visible) visibleCount++;
+            });
+            noResults.classList.toggle('hidden', visibleCount !== 0);
+        }
+
+        searchInput?.addEventListener('input', applyFilters);
+
+        chips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                activeGenre = chip.dataset.genre;
+                chips.forEach(c => {
+                    c.classList.remove('bg-primary', 'text-on-primary', 'shadow-[0_0_15px_rgba(173,198,255,0.4)]');
+                    c.classList.add('glass-card', 'text-on-surface-variant');
+                });
+                chip.classList.add('bg-primary', 'text-on-primary', 'shadow-[0_0_15px_rgba(173,198,255,0.4)]');
+                chip.classList.remove('glass-card', 'text-on-surface-variant');
+                applyFilters();
+            });
+        });
+    </script>
+<script src="app.js"></script>
+</body></html>

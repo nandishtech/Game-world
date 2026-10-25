@@ -1,0 +1,530 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>CYBER-NEXUS | Moderation &amp; Trust Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "secondary-container": "#571bc1",
+                "on-primary-fixed-variant": "#004395",
+                "on-primary": "#002e6a",
+                "on-surface-variant": "#c2c6d6",
+                "tertiary": "#4cd7f6",
+                "on-secondary-fixed": "#23005c",
+                "on-primary-fixed": "#001a42",
+                "inverse-on-surface": "#313030",
+                "tertiary-fixed-dim": "#4cd7f6",
+                "on-secondary-container": "#c4abff",
+                "primary-fixed-dim": "#adc6ff",
+                "surface-container-highest": "#353534",
+                "outline-variant": "#424754",
+                "surface-container": "#201f1f",
+                "primary": "#adc6ff",
+                "on-primary-container": "#00285d",
+                "surface-tint": "#adc6ff",
+                "error": "#ffb4ab",
+                "surface": "#131313",
+                "on-tertiary-fixed-variant": "#004e5c",
+                "background": "#131313",
+                "surface-variant": "#353534",
+                "inverse-primary": "#005ac2",
+                "tertiary-fixed": "#acedff",
+                "surface-container-lowest": "#0e0e0e",
+                "surface-container-low": "#1c1b1b",
+                "secondary": "#d0bcff",
+                "outline": "#8c909f",
+                "on-error-container": "#ffdad6",
+                "secondary-fixed": "#e9ddff",
+                "primary-container": "#4d8eff",
+                "secondary-fixed-dim": "#d0bcff",
+                "on-background": "#e5e2e1",
+                "on-secondary": "#3c0091",
+                "on-tertiary": "#003640",
+                "error-container": "#93000a",
+                "surface-bright": "#3a3939",
+                "tertiary-container": "#009eb9",
+                "on-tertiary-container": "#002f38",
+                "surface-container-high": "#2a2a2a",
+                "on-surface": "#e5e2e1",
+                "on-secondary-fixed-variant": "#5516be",
+                "on-error": "#690005",
+                "on-tertiary-fixed": "#001f26",
+                "surface-dim": "#131313",
+                "primary-fixed": "#d8e2ff",
+                "inverse-surface": "#e5e2e1"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "container-max": "1440px",
+                "margin-mobile": "16px",
+                "unit": "4px",
+                "gutter": "24px",
+                "margin-desktop": "48px"
+            },
+            "fontFamily": {
+                "body-lg": ["Inter"],
+                "headline-sm": ["Space Grotesk"],
+                "display-lg-mobile": ["Space Grotesk"],
+                "label-sm": ["Inter"],
+                "display-lg": ["Space Grotesk"],
+                "body-md": ["Inter"],
+                "headline-xl": ["Space Grotesk"],
+                "label-md": ["Inter"],
+                "headline-lg": ["Space Grotesk"]
+            },
+            "fontSize": {
+                "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                "display-lg-mobile": ["40px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                "label-sm": ["12px", {"lineHeight": "1", "fontWeight": "500"}],
+                "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                "headline-xl": ["40px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                "label-md": ["14px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #050505;
+            color: #e5e2e1;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .glass-panel {
+            background: rgba(32, 31, 31, 0.4);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-left: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px -10px rgba(173, 198, 255, 0.1);
+        }
+
+        .neon-border-primary {
+            border: 1px solid rgba(173, 198, 255, 0.3);
+            box-shadow: 0 0 15px rgba(173, 198, 255, 0.1);
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .badge-critical { background: rgba(255, 180, 171, 0.1); color: #ffb4ab; border: 1px solid rgba(255, 180, 171, 0.3); }
+        .badge-pending { background: rgba(208, 188, 255, 0.1); color: #d0bcff; border: 1px solid rgba(208, 188, 255, 0.3); }
+        .badge-resolved { background: rgba(76, 215, 246, 0.1); color: #4cd7f6; border: 1px solid rgba(76, 215, 246, 0.3); }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
+
+        .scanline {
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(173, 198, 255, 0.2), transparent);
+            position: absolute;
+            animation: scan 4s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+<!-- TopNavBar (Fixed) -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 bg-surface/40 backdrop-blur-3xl border-b border-white/10">
+<div class="flex items-center gap-8">
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg tracking-tighter text-primary brightness-125">CYBER-NEXUS</h1>
+<nav class="hidden md:flex gap-6 items-center">
+<a class="font-label-md text-label-md text-on-surface-variant/70 hover:text-on-surface transition-colors" href="#">Arena</a>
+<a class="font-label-md text-label-md text-on-surface-variant/70 hover:text-on-surface transition-colors" href="#">Legions</a>
+<a class="font-label-md text-label-md text-on-surface-variant/70 hover:text-on-surface transition-colors" href="#">Vault</a>
+<a class="font-label-md text-label-md text-on-surface-variant/70 hover:text-on-surface transition-colors" href="#">Battlepass</a>
+<a class="font-label-md text-label-md text-primary border-b-2 border-primary brightness-110 drop-shadow-[0_0_10px_rgba(173,198,255,0.5)]" href="#">Intelligence</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden lg:flex items-center bg-surface-container-low px-4 py-2 rounded-full border border-white/5 gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-label-md w-48 text-on-surface" placeholder="Scan records..." type="text">
+</div>
+<div class="flex items-center gap-3">
+<button class="p-2 hover:brightness-125 hover:scale-[1.02] transition-all text-on-surface-variant">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="bg-primary text-on-primary-container font-label-md px-6 py-2 rounded-full hover:brightness-125 hover:scale-[1.02] active:scale-95 duration-100 ease-out">Connect</button>
+</div>
+</div>
+</header>
+<!-- SideNavBar (Fixed Left) -->
+<aside class="fixed left-0 top-0 h-screen hidden lg:flex flex-col z-40 bg-surface-container/30 backdrop-blur-2xl border-r border-white/5 w-64 pt-24 pb-8 px-6">
+<div class="mb-10 px-2">
+<div class="flex items-center gap-3 mb-2">
+<div class="w-10 h-10 rounded-lg overflow-hidden border border-primary/30">
+<img class="w-full h-full object-cover" data-alt="A futuristic portrait of a high-ranking cyber commander with glowing blue cybernetic eye enhancements and a sleek dark armor suit, professional cinematic lighting, sci-fi military aesthetic, 8k resolution, deep blacks and electric blue accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDx5F-Q2Y9p06h3MnHRk33XfYsdUS3ho6TD4Cjt8b2as_zD2FedW3c8aNdNOGyoLdhME0xtACFrZEVtIEcHnFVJgbmtWWTeqZMU1H6FJplYSc_5_hJmFyef1HVLjAKVRSu_5oLirEm7PBq9GFrmLGqtj7AJzqNrO8bhK9J__52NPEtPv90cEUoD95CetZEAKg-1KZATVJhURxcs94Rn15RRzEOUXfjNcMGnJAMfUAcQr-tvcxf1utiZMNQwN43gX81-QmeqTnZtRKg">
+</div>
+<div>
+<p class="font-label-md text-label-md text-primary uppercase tracking-widest">STRAT-COM</p>
+<p class="text-[10px] text-tertiary">Operational Status: Optimal</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-white/10 hover:text-white transition-all hover:translate-x-1 duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span class="font-label-md text-label-md uppercase tracking-widest">Home</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg bg-secondary-container/20 text-secondary border-r-4 border-secondary shadow-[inset_-10px_0_20px_rgba(208,188,255,0.1)]" href="#">
+<span class="material-symbols-outlined" data-icon="sports_esports">sports_esports</span>
+<span class="font-label-md text-label-md uppercase tracking-widest">Battles</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-white/10 hover:text-white transition-all hover:translate-x-1 duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-md text-label-md uppercase tracking-widest">Allies</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-white/10 hover:text-white transition-all hover:translate-x-1 duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+<span class="font-label-md text-label-md uppercase tracking-widest">Inventory</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 rounded-lg text-on-surface-variant hover:bg-white/10 hover:text-white transition-all hover:translate-x-1 duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-label-md text-label-md uppercase tracking-widest">Data</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-white/5">
+<button class="w-full mb-4 bg-secondary-container text-white py-3 rounded-lg font-label-md uppercase tracking-widest hover:brightness-110">Join Party</button>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:text-error transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label-md text-label-md uppercase tracking-widest">Log Out</span>
+</a>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="lg:ml-64 pt-24 min-h-screen px-margin-mobile md:px-margin-desktop pb-12 relative overflow-hidden">
+<!-- Atmospheric Background Shaders -->
+
+<header class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6 relative z-10">
+<div>
+<h2 class="font-headline-xl text-headline-xl text-white mb-2">Moderation &amp; Trust Center</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">High-fidelity surveillance and community integrity dashboard. Monitor real-time player behavior, resolve appeals, and manage account safety scores.</p>
+</div>
+<div class="flex gap-4">
+<div class="glass-card px-6 py-4 rounded-xl flex flex-col items-center">
+<span class="text-primary font-headline-sm text-headline-sm">142</span>
+<span class="text-[10px] uppercase tracking-[0.2em] text-on-surface-variant">Active Cases</span>
+</div>
+<div class="glass-card px-6 py-4 rounded-xl flex flex-col items-center">
+<span class="text-tertiary font-headline-sm text-headline-sm">98.2%</span>
+<span class="text-[10px] uppercase tracking-[0.2em] text-on-surface-variant">Trust Score</span>
+</div>
+</div>
+</header>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-gutter relative z-10">
+<!-- Action Queue Section (Reported Players) -->
+<section class="col-span-12 xl:col-span-8 space-y-gutter">
+<div class="glass-panel p-6 rounded-2xl relative overflow-hidden">
+<div class="scanline"></div>
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-sm text-headline-sm text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">priority_high</span>
+                            Action Queue
+                        </h3>
+<div class="flex gap-2">
+<span class="status-badge badge-critical">12 Urgent</span>
+<span class="status-badge badge-pending">45 Active</span>
+</div>
+</div>
+<div class="space-y-4 max-h-[600px] overflow-y-auto pr-2">
+<!-- Queue Item 1 -->
+<div class="glass-card p-5 rounded-xl flex flex-col md:flex-row gap-6 items-start md:items-center">
+<div class="flex items-center gap-4 flex-1">
+<div class="w-12 h-12 rounded-full border border-error/50 p-0.5">
+<img class="w-full h-full rounded-full object-cover" data-alt="A dark and gritty profile avatar of a game user with glowing red visor eyes, wearing tactical techwear armor in a rain-slicked neon street background, cyber-nexus aesthetic, cinematic character concept art." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJWYgNWdE-b9DYtw8xt8rduGSzU2xvt5lkPL5s81PLrGZb_24FixbLmUG9K7v2HYFvplloX4kNeqpBikgjHRZ17GybrJN8xkTcjcs01tu-gO-IECXxqgZstl_A_DcQo-E7uYeq-RlD7u4qxgX4MrM0JcZdeOkaaLWWzKTr2Nc9wfBXRMIlAL3T0WEicckYrDmbXLd5SeyxmuKGcszK9akjacTVQH-kxDGto-YChwU5hoteUISTNsRSigPaT7P_WMi-1cXMbY11VLc">
+</div>
+<div>
+<h4 class="font-headline-sm text-[18px] text-white">X_VoidRunner_X</h4>
+<p class="text-label-sm text-on-surface-variant">Reported for: Griefing &amp; Exploitation</p>
+</div>
+</div>
+<div class="flex flex-col gap-1 items-end md:w-32">
+<span class="status-badge badge-critical">Critical</span>
+<span class="text-[10px] text-on-surface-variant">5 mins ago</span>
+</div>
+<div class="flex gap-2 w-full md:w-auto">
+<button class="flex-1 md:flex-none px-4 py-2 bg-surface-container-highest hover:bg-error/20 hover:text-error rounded-lg text-label-md transition-all">Ban</button>
+<button class="flex-1 md:flex-none px-4 py-2 bg-primary/10 text-primary border border-primary/20 rounded-lg text-label-md hover:bg-primary/20 transition-all">Review</button>
+</div>
+</div>
+<!-- Queue Item 2 -->
+<div class="glass-card p-5 rounded-xl flex flex-col md:flex-row gap-6 items-start md:items-center">
+<div class="flex items-center gap-4 flex-1">
+<div class="w-12 h-12 rounded-full border border-tertiary/50 p-0.5">
+<img class="w-full h-full rounded-full object-cover" data-alt="A sleek minimalist avatar of a player wearing a translucent glass helmet with data streams flowing across the surface, vibrant violet and cyan lighting, futuristic studio photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDtAnH7um5WOwfyzEt_Igpxc81cyqoe30LaYDoDUOH2eIV-5CP9cNMhsI-Y1_2oofWpPSjnlamI1486qFStNC09WQ6lPGI0g-DPSbAngGeHOqA_Xv2MyejDgVEuqvnTNhMC1y9ncS-uFxvxxrlEW53BR7GSM_pWreTvJecvKx5LBVLzaSySaYQSlcdi0BMzU0vZW4JrLH8GipSnGu0yCOeKN4aRFq7mnuFCjV00PSyq3-aAQ86Q0Z_1-tvBp8WNkpJEjJ01H883GVM">
+</div>
+<div>
+<h4 class="font-headline-sm text-[18px] text-white">Nova_Sentinel</h4>
+<p class="text-label-sm text-on-surface-variant">Reported for: Suspicious Market Flux</p>
+</div>
+</div>
+<div class="flex flex-col gap-1 items-end md:w-32">
+<span class="status-badge badge-pending">Pending</span>
+<span class="text-[10px] text-on-surface-variant">14 mins ago</span>
+</div>
+<div class="flex gap-2 w-full md:w-auto">
+<button class="flex-1 md:flex-none px-4 py-2 bg-surface-container-highest hover:bg-error/20 hover:text-error rounded-lg text-label-md transition-all">Ban</button>
+<button class="flex-1 md:flex-none px-4 py-2 bg-primary/10 text-primary border border-primary/20 rounded-lg text-label-md hover:bg-primary/20 transition-all">Review</button>
+</div>
+</div>
+<!-- Queue Item 3 -->
+<div class="glass-card p-5 rounded-xl flex flex-col md:flex-row gap-6 items-start md:items-center">
+<div class="flex items-center gap-4 flex-1">
+<div class="w-12 h-12 rounded-full border border-white/10 p-0.5">
+<img class="w-full h-full rounded-full object-cover" data-alt="Cyberpunk character portrait with neon mohawk and heavy facial tattoos, industrial wasteland background with orange glow, high fidelity textures, cinematic lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpup8RQdjU035zqzmsu2MW6nYU9nk6mgJVU2a85oQCjg3QXRfdwj7iVzoJmKnjG4MTBJdQFS034RKg0RITSNgepPK-9tAON2rjLnBBgKBr-MbfLrmL6Yncju4fGLaAwcfObO050NmT-ptLhaWqgQE-gAVU_vTDTL9AXT2VAXQUy3uemOBTtmTAcN89Ld1RpcVvcV19FkVpYbFRWchYptTqXrNmgvacV8_lDH9qfQsk3Lp_YTpDKZN773RG1Sl9d3wVOWAFzQfmd30">
+</div>
+<div>
+<h4 class="font-headline-sm text-[18px] text-white">CyberPunk_99</h4>
+<p class="text-label-sm text-on-surface-variant">Reported for: Chat Harassment</p>
+</div>
+</div>
+<div class="flex flex-col gap-1 items-end md:w-32">
+<span class="status-badge badge-pending">Pending</span>
+<span class="text-[10px] text-on-surface-variant">32 mins ago</span>
+</div>
+<div class="flex gap-2 w-full md:w-auto">
+<button class="flex-1 md:flex-none px-4 py-2 bg-surface-container-highest hover:bg-error/20 hover:text-error rounded-lg text-label-md transition-all">Ban</button>
+<button class="flex-1 md:flex-none px-4 py-2 bg-primary/10 text-primary border border-primary/20 rounded-lg text-label-md hover:bg-primary/20 transition-all">Review</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Appeal Requests with Evidence Viewer -->
+<div class="glass-panel p-6 rounded-2xl">
+<h3 class="font-headline-sm text-headline-sm text-white mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">gavel</span>
+                        Appeal Requests
+                    </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-4">
+<div class="glass-card p-4 rounded-xl border-l-4 border-secondary/50">
+<div class="flex justify-between mb-2">
+<span class="text-label-md font-bold text-white">Appeal #8821</span>
+<span class="text-[10px] text-secondary uppercase font-bold">New</span>
+</div>
+<p class="text-body-md text-sm text-on-surface-variant mb-4">"I was disconnected during the match, I didn't quit on purpose."</p>
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded bg-surface-container-highest border border-white/10 flex items-center justify-center text-xs">IMG</div>
+<span class="text-label-sm text-on-surface-variant">Latency_Log.txt</span>
+</div>
+</div>
+<div class="glass-card p-4 rounded-xl border-l-4 border-white/10 opacity-60">
+<div class="flex justify-between mb-2">
+<span class="text-label-md font-bold text-white">Appeal #8819</span>
+<span class="status-badge badge-resolved">Resolved</span>
+</div>
+<p class="text-body-md text-sm text-on-surface-variant">"Unfair ban for marketplace trading."</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl border border-white/5 relative overflow-hidden group aspect-video">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-4">
+<div class="w-full">
+<p class="text-label-sm text-white font-bold mb-1">Evidence Viewer: Case #8821</p>
+<div class="w-full bg-white/10 h-1 rounded-full overflow-hidden">
+<div class="bg-secondary h-full w-2/3 shadow-[0_0_10px_#d0bcff]"></div>
+</div>
+</div>
+</div>
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A highly detailed close-up of a holographic user interface showing complex data nodes, network graphs, and suspicious activity alerts in shades of deep indigo and neon violet, futuristic forensic data analysis style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqcsgXLjRYe03HV9RbuPMVTv4OU1SwxY1faSovwFcCGKqMWuf6Xbp62c0G7El_UtPtg6qkRypDairTtfwjSm5jtcrwZz0tKXYjyJjrmpr0K37BfAQGqNDsxNX_2rElv9dBEsR7sgXVTD15lItnApfc2blHLngFN6KFyB2SIdqwOOYFeA4dXob99cBt0dILV2QEqjjCnoejKj8knffvqf7gSztmRxc2McpU9f8JQgDUAegHjTMZkhTEK9uE7_Yf3J5WgSYvF1detnc">
+<div class="absolute inset-0 flex items-center justify-center">
+<button class="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:scale-110 transition-all">
+<span class="material-symbols-outlined text-white">play_arrow</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Sidebar: Account Risk Scores & Management -->
+<aside class="col-span-12 xl:col-span-4 space-y-gutter">
+<!-- Trust & Safety Scores -->
+<div class="glass-panel p-6 rounded-2xl border-t border-primary/20">
+<h3 class="font-headline-sm text-[20px] text-white mb-6">Trust &amp; Safety Engine</h3>
+<div class="space-y-6">
+<div class="space-y-2">
+<div class="flex justify-between text-label-md">
+<span class="text-on-surface-variant">Network Integrity</span>
+<span class="text-primary font-bold">94%</span>
+</div>
+<div class="h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[94%] shadow-[0_0_15px_#adc6ff]"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-label-md">
+<span class="text-on-surface-variant">Social Behavior</span>
+<span class="text-tertiary font-bold">71%</span>
+</div>
+<div class="h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-tertiary w-[71%] shadow-[0_0_15px_#4cd7f6]"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-label-md">
+<span class="text-on-surface-variant">Market Legitimacy</span>
+<span class="text-secondary font-bold">88%</span>
+</div>
+<div class="h-2 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[88%] shadow-[0_0_15px_#d0bcff]"></div>
+</div>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-white/5 space-y-4">
+<h4 class="text-label-sm uppercase tracking-widest text-on-surface-variant">Flagged Regions</h4>
+<div class="flex items-center justify-between p-3 rounded-lg bg-error/5 border border-error/10">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-error">public</span>
+<span class="text-label-md">Zone 07-Delta</span>
+</div>
+<span class="text-error font-bold">CRITICAL</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-lg bg-surface-container-low border border-white/5">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant">public</span>
+<span class="text-label-md">Zone 12-Prime</span>
+</div>
+<span class="text-primary font-bold">STABLE</span>
+</div>
+</div>
+</div>
+<!-- Ban & Warning Management -->
+<div class="glass-panel p-6 rounded-2xl relative overflow-hidden">
+<div class="absolute -right-4 -top-4 w-32 h-32 bg-secondary opacity-5 blur-3xl"></div>
+<h3 class="font-headline-sm text-[20px] text-white mb-6">Enforcement Tools</h3>
+<div class="grid grid-cols-2 gap-3 mb-6">
+<button class="flex flex-col items-center gap-2 p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all">
+<span class="material-symbols-outlined text-tertiary">history</span>
+<span class="text-[10px] uppercase font-bold tracking-wider">History</span>
+</button>
+<button class="flex flex-col items-center gap-2 p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all">
+<span class="material-symbols-outlined text-secondary">block</span>
+<span class="text-[10px] uppercase font-bold tracking-wider">Shadow Ban</span>
+</button>
+<button class="flex flex-col items-center gap-2 p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all">
+<span class="material-symbols-outlined text-primary">edit_square</span>
+<span class="text-[10px] uppercase font-bold tracking-wider">Edit Rules</span>
+</button>
+<button class="flex flex-col items-center gap-2 p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all text-error">
+<span class="material-symbols-outlined">warning</span>
+<span class="text-[10px] uppercase font-bold tracking-wider">Nuke Comm</span>
+</button>
+</div>
+<div class="p-4 rounded-xl bg-surface-container-low border border-white/5">
+<p class="text-label-sm text-on-surface-variant mb-3">Quick Warning Presets</p>
+<select class="w-full bg-surface border border-white/10 rounded-lg text-sm text-on-surface focus:ring-primary focus:border-primary">
+<option>Spamming / Flooding</option>
+<option>Inappropriate Language</option>
+<option>Minor Game Exploit</option>
+<option>Account Sharing Attempt</option>
+</select>
+<button class="w-full mt-4 bg-primary text-on-primary-container py-2 rounded-lg font-label-md hover:brightness-110">Apply Warning</button>
+</div>
+</div>
+<!-- Recent Moderation Activity -->
+<div class="glass-panel p-6 rounded-2xl border border-white/10">
+<h3 class="text-label-md font-bold text-white mb-4">Global Mod Log</h3>
+<div class="space-y-4">
+<div class="flex gap-3 text-xs">
+<span class="text-primary">09:12</span>
+<p><span class="text-white font-medium">Mod_Kaelen</span> banned <span class="text-error">Bot_Farm_33</span> (Permanent)</p>
+</div>
+<div class="flex gap-3 text-xs">
+<span class="text-primary">09:05</span>
+<p><span class="text-white font-medium">AutoMod</span> issued warning to <span class="text-on-surface">SpicyLava</span> (Spam)</p>
+</div>
+<div class="flex gap-3 text-xs">
+<span class="text-primary">08:44</span>
+<p><span class="text-white font-medium">Mod_Sora</span> resolved appeal <span class="text-tertiary">#7761</span> (Restored)</p>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Bottom Navigation for Mobile -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface-container/80 backdrop-blur-xl border-t border-white/10 flex justify-around items-center py-3 z-50">
+<button class="flex flex-col items-center text-primary">
+<span class="material-symbols-outlined">priority_high</span>
+<span class="text-[10px]">Queue</span>
+</button>
+<button class="flex flex-col items-center text-on-surface-variant">
+<span class="material-symbols-outlined">gavel</span>
+<span class="text-[10px]">Appeals</span>
+</button>
+<button class="flex flex-col items-center text-on-surface-variant">
+<span class="material-symbols-outlined">shield</span>
+<span class="text-[10px]">Safety</span>
+</button>
+<button class="flex flex-col items-center text-on-surface-variant">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px]">Configs</span>
+</button>
+</nav>
+<script>
+        // Micro-interactions for glass cards
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('mousedown', () => {
+                card.style.transform = 'scale(0.98)';
+            });
+            card.addEventListener('mouseup', () => {
+                card.style.transform = 'translateY(-2px) scale(1)';
+            });
+        });
+
+        // Simple real-time update simulation
+        setInterval(() => {
+            const timeElements = document.querySelectorAll('.text-\\[10px\\]');
+            timeElements.forEach(el => {
+                if (el.textContent.includes('mins ago')) {
+                    const mins = parseInt(el.textContent);
+                    if (!isNaN(mins)) {
+                        el.textContent = `${mins + 1} mins ago`;
+                    }
+                }
+            });
+        }, 60000);
+    </script>
+</body></html>

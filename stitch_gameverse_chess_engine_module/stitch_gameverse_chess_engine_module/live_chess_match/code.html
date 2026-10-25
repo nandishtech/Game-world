@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GameVerse Chess - Live Match</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed-variant": "#2b5000",
+                        "surface": "#151311",
+                        "surface-container-high": "#2c2a27",
+                        "on-surface-variant": "#d0c5b4",
+                        "surface-tint": "#e4c37a",
+                        "board-dark": "#706659",
+                        "on-primary-fixed": "#251a00",
+                        "outline": "#999080",
+                        "on-surface": "#e7e2dd",
+                        "surface-dim": "#151311",
+                        "move-highlight": "rgba(209, 177, 106, 0.4)",
+                        "tertiary-container": "#aeb5c2",
+                        "on-primary-container": "#594304",
+                        "on-secondary": "#1c3700",
+                        "surface-navy": "#11151C",
+                        "on-primary": "#3f2e00",
+                        "on-primary-fixed-variant": "#5a4304",
+                        "tertiary": "#cad0de",
+                        "primary-container": "#d1b16a",
+                        "error": "#ffb4ab",
+                        "secondary-container": "#3b6a00",
+                        "on-tertiary": "#2a313b",
+                        "on-secondary-container": "#b1e978",
+                        "inverse-surface": "#e7e2dd",
+                        "on-secondary-fixed": "#0e2000",
+                        "on-tertiary-container": "#404752",
+                        "surface-container-highest": "#373431",
+                        "on-error": "#690005",
+                        "surface-container-lowest": "#0f0e0c",
+                        "text-muted": "#98A2B3",
+                        "board-light": "#EDEED1",
+                        "primary": "#eecc83",
+                        "outline-variant": "#4d4639",
+                        "surface-container-low": "#1d1b19",
+                        "on-tertiary-fixed": "#151c26",
+                        "on-background": "#e7e2dd",
+                        "on-error-container": "#ffdad6",
+                        "surface-container": "#211f1d",
+                        "secondary-fixed-dim": "#9fd668",
+                        "tertiary-fixed": "#dce3f1",
+                        "secondary-fixed": "#baf381",
+                        "on-tertiary-fixed-variant": "#404752",
+                        "tertiary-fixed-dim": "#c0c7d4",
+                        "secondary": "#9fd668",
+                        "inverse-on-surface": "#32302d",
+                        "primary-fixed": "#ffdf9b",
+                        "surface-bright": "#3b3936",
+                        "background": "#151311",
+                        "error-container": "#93000a",
+                        "primary-fixed-dim": "#e4c37a",
+                        "surface-variant": "#373431",
+                        "inverse-primary": "#745b1d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "panel-padding": "1.5rem",
+                        "gutter": "1rem",
+                        "container-max": "1440px",
+                        "sidebar-width": "360px",
+                        "board-size-desktop": "min(80vh, 800px)"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["Hanken Grotesk"],
+                        "body-sm": ["Inter"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "notation-log": ["JetBrains Mono"],
+                        "headline-md": ["Hanken Grotesk"],
+                        "body-md": ["Inter"],
+                        "display-clock": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "800"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "notation-log": ["13px", {"lineHeight": "18px", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "display-clock": ["48px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .chess-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            grid-template-rows: repeat(8, 1fr);
+            aspect-ratio: 1 / 1;
+        }
+        .square-light { background-color: #EDEED1; }
+        .square-dark { background-color: #706659; }
+        .piece { width: 90%; height: 90%; margin: auto; transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        .active-move { box-shadow: inset 0 0 0 4px rgba(238, 204, 131, 0.6); }
+        .last-move { background-color: rgba(238, 204, 131, 0.4); }
+        
+        /* Custom scrollbar for notation */
+        .notation-scroll::-webkit-scrollbar { width: 4px; }
+        .notation-scroll::-webkit-scrollbar-track { background: transparent; }
+        .notation-scroll::-webkit-scrollbar-thumb { background: #4d4639; border-radius: 2px; }
+
+        @keyframes pulse-clock {
+            0% { background-color: #211f1d; }
+            50% { background-color: #93000a; }
+            100% { background-color: #211f1d; }
+        }
+        .clock-warning { animation: pulse-clock 2s infinite; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface flex flex-col min-h-screen overflow-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full bg-surface text-primary border-b border-outline-variant transition-colors duration-200 flex justify-between items-center px-panel-padding h-16 z-50">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-high border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a high-ranking chess player with intense focus, set against a dark, minimalist background with subtle gold lighting. The portrait is sharp, corporate, and prestigious, following a dark-mode luxury aesthetic with deep shadows and clean highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-nQhDL8X7k4sZC6dS6DN0GVbFIZGWyjTw8_w1Knsw_sFuTkicCKUuHYE0U0Ki5IApSNtl6u4UJsrKwl40ik8JLRRFHL-RM6KJ5FRMcItb7WPrmRXFOhR4-7aoIK8c7-IEKw3U8CFOmQbPf8uWUrXgbA1d-AfyI8w5oKU9BJaxIq5uraN02i-BSFWdY6FOLTo8zhs16r1fVIpruEfJ0lUSOSM6__9JgeHSv1xVvPFSbzaaSaojBpThsw"/>
+</div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">GameVerse Chess</h1>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</header>
+<!-- Main Game Canvas -->
+<main class="flex-1 mt-16 pb-20 overflow-y-auto px-4 flex flex-col gap-4 max-w-md mx-auto w-full">
+<!-- Opponent Info -->
+<div class="flex justify-between items-center bg-surface-container rounded-xl p-3 mt-4 border border-outline-variant">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-lg bg-surface-container-highest border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">person</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-body-md text-body-md font-bold">Magnus Lite</span>
+<span class="bg-error text-on-error text-[10px] px-1 rounded font-bold">GM</span>
+</div>
+<div class="text-on-surface-variant font-label-caps text-label-caps uppercase">ELO 2850</div>
+</div>
+</div>
+<div class="bg-surface-container-high px-4 py-2 rounded-lg border border-outline-variant">
+<span class="font-display-clock text-[32px] text-on-surface leading-none">08:42</span>
+</div>
+</div>
+<!-- Chess Board Container -->
+<div class="relative w-full aspect-square bg-surface-container-highest rounded shadow-2xl overflow-hidden border-2 border-outline-variant">
+<div class="chess-grid">
+<!-- Row 8 (Top) -->
+<div class="square-light relative"><span class="absolute top-0.5 left-0.5 text-[8px] text-board-dark font-bold">8</span></div>
+<div class="square-dark"></div>
+<div class="square-light"></div>
+<div class="square-dark"></div>
+<div class="square-light"></div>
+<div class="square-dark"></div>
+<div class="square-light"></div>
+<div class="square-dark"></div>
+<!-- Row 7 -->
+<div class="square-dark"></div>
+<div class="square-light"></div>
+<div class="square-dark"></div>
+<div class="square-light"></div>
+<div class="square-dark"></div>
+<div class="square-light"></div>
+<div class="square-dark"></div>
+<div class="square-light"></div>
+<!-- Row 6 -->
+<div class="square-light"></div>
+<div class="square-dark last-move">
+<img class="piece" data-alt="A minimalist vector-style 2D chess knight piece in deep black, positioned centrally on a chess square. The style is sharp, clean, and modern, designed for high-performance competitive play with no unnecessary details or textures." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMl2bC0kVMyymSf6wqMNZVQ_G5QJRqQ07vO-6_Ceb2y2hcuktiviHYVgV5sU-YOf4XIo-dJSDd5QtXdIXPM6slk8oZ2sfK2RFIC48IiEM3d7xxny6CXF0JsxHc3Iwx37ZlAQzCAjPB4XajHPs5-oII1WwBrd87vYH1o3z3iJtfxo6egcmbrRgXv2mZA8e1QsOPDuL98N7jaeXn_XiqkHabrnmDp1LmMasPRqha2CCNFySYo10X4BapMw"/>
+</div>
+<div class="square-light"></div>
+<div class="square-dark"></div>
+<div class="square-light"></div>
+<div class="square-dark"></div>
+<div class="square-light"></div>
+<div class="square-dark"></div>
+<!-- Row 5 -->
+<div class="square-dark"></div>
+<div class="square-light"></div>
+<div class="square-dark"></div>
+<div class="square-light"></div>
+<div class="square-dark"></div>
+<div class="square-light"></div>
+<div class="square-dark"></div>
+<div class="square-light"></div>
+<!-- Row 4 -->
+<div class="square-light"></div>
+<div class="square-dark"></div>
+<div class="square-light"></div>
+<div class="square-dark active-move">
+<img class="piece" data-alt="A minimalist vector-style 2D chess pawn piece in premium matte gold, positioned centrally on a chess square. The style is sharp, clean, and professional, optimized for digital chess interfaces with a flat, modern aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCk_-VdVBsGDczzO7_w_I7qxLn0Vebi3LC5SWPlMpzMPnnlmgXP7BiRtM4bmJ5pxicYgU3XU_CCg_xyLKO_gMFbWB0ZX0StEWNZrFH-A5Dl5y601Ro13MN49U7gIUdhaSHH5K_Lpc3SkP0I-KTgDFDRDwa6A07uFkPQh9K1BblV10CZTufWdZWZ7KFMwQi8aH1E0W6cZ5Imhqg7WE2A46r6BXGSibv0XOKwG50hSsxSmJPFuk5nMxj5g"/>
+</div>
+<div class="square-light"></div>
+<div class="square-dark last-move"></div>
+<div class="square-light"></div>
+<div class="square-dark"></div>
+<!-- Row 3 -->
+<div class="square-dark"></div>
+<div class="square-light"></div>
+<div class="square-dark"></div>
+<div class="square-light"></div>
+<div class="square-dark"></div>
+<div class="square-light"></div>
+<div class="square-dark"></div>
+<div class="square-light"></div>
+<!-- Row 2 -->
+<div class="square-light"></div>
+<div class="square-dark"></div>
+<div class="square-light"></div>
+<div class="square-dark"></div>
+<div class="square-light"></div>
+<div class="square-dark"></div>
+<div class="square-light"></div>
+<div class="square-dark"></div>
+<!-- Row 1 (Bottom) -->
+<div class="square-dark"></div>
+<div class="square-light"></div>
+<div class="square-dark"></div>
+<div class="square-light"></div>
+<div class="square-dark"></div>
+<div class="square-light"></div>
+<div class="square-dark"></div>
+<div class="square-light relative">
+<span class="absolute bottom-0.5 right-0.5 text-[8px] text-board-dark font-bold">h</span>
+</div>
+</div>
+<!-- Coordinates Overlay -->
+<div class="absolute inset-0 pointer-events-none grid grid-cols-8 grid-rows-8 opacity-20">
+<!-- Logic for auto-filling pieces can go here, but focusing on static layout for now -->
+</div>
+</div>
+<!-- Player Info & Clock -->
+<div class="flex justify-between items-center bg-surface-container rounded-xl p-3 border border-outline-variant">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-lg bg-primary-container border border-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">person</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-body-md text-body-md font-bold">Magnus Pro</span>
+</div>
+<div class="text-on-surface-variant font-label-caps text-label-caps uppercase">ELO 1450</div>
+</div>
+</div>
+<div class="bg-surface-container-high px-4 py-2 rounded-lg border-2 border-primary relative">
+<span class="font-display-clock text-[32px] text-primary leading-none">05:12</span>
+<div class="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full"></div>
+</div>
+</div>
+<!-- Move History & Action Row -->
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant">MOVE HISTORY</h3>
+<div class="flex gap-2">
+<button class="w-8 h-8 flex items-center justify-center rounded bg-surface-container-high text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">first_page</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-surface-container-high text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">navigate_before</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-surface-container-high text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">navigate_next</span>
+</button>
+</div>
+</div>
+<div class="h-20 bg-surface-container rounded-xl border border-outline-variant overflow-hidden flex items-center px-4 gap-4 notation-scroll overflow-x-auto whitespace-nowrap">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<span class="text-on-surface-variant font-notation-log text-notation-log">18.</span>
+<span class="font-notation-log text-notation-log text-on-surface">Nf3</span>
+<span class="font-notation-log text-notation-log text-on-surface">d5</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-on-surface-variant font-notation-log text-notation-log">19.</span>
+<span class="font-notation-log text-notation-log text-on-surface">e4</span>
+<span class="font-notation-log text-notation-log text-on-surface">c5</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-on-surface-variant font-notation-log text-notation-log">20.</span>
+<span class="font-notation-log text-notation-log text-on-surface">O-O</span>
+<span class="font-notation-log text-notation-log text-on-surface">Nc6</span>
+</div>
+<div class="flex items-center gap-2 bg-primary-container/20 px-2 py-1 rounded border border-primary/30">
+<span class="text-primary font-notation-log text-notation-log">21.</span>
+<span class="font-notation-log text-notation-log text-primary font-bold">d4</span>
+<span class="text-on-surface-variant opacity-50">...</span>
+</div>
+</div>
+</div>
+</div>
+<!-- In-game Actions -->
+<div class="grid grid-cols-3 gap-3 mb-6">
+<button class="flex flex-col items-center justify-center gap-1 py-3 px-2 rounded-xl bg-surface-container border border-outline-variant text-on-surface-variant hover:bg-surface-container-high transition-all active:scale-95">
+<span class="material-symbols-outlined text-[20px]">flag</span>
+<span class="font-label-caps text-[10px] uppercase">Resign</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-1 py-3 px-2 rounded-xl bg-surface-container border border-outline-variant text-on-surface-variant hover:bg-surface-container-high transition-all active:scale-95">
+<span class="material-symbols-outlined text-[20px]">handshake</span>
+<span class="font-label-caps text-[10px] uppercase">Offer Draw</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-1 py-3 px-2 rounded-xl bg-surface-container border border-outline-variant text-on-surface-variant hover:bg-surface-container-high transition-all active:scale-95">
+<span class="material-symbols-outlined text-[20px]">chat_bubble</span>
+<span class="font-label-caps text-[10px] uppercase">Chat</span>
+</button>
+</div>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="lg:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center py-2 px-4 bg-surface-container-lowest rounded-t-xl shadow-lg border-t border-outline-variant">
+<a class="flex flex-col items-center justify-center text-primary font-bold active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">chess</span>
+<span class="font-label-caps text-label-caps">Play</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-bright transition-transform" href="#">
+<span class="material-symbols-outlined">visibility</span>
+<span class="font-label-caps text-label-caps">Watch</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-bright transition-transform" href="#">
+<span class="material-symbols-outlined">forum</span>
+<span class="font-label-caps text-label-caps">Lobby</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-bright transition-transform" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-caps text-label-caps">Profile</span>
+</a>
+</nav>
+<!-- Background Decoration (Subtle Gradient) -->
+<div class="fixed inset-0 pointer-events-none opacity-20 -z-10">
+<div class="absolute top-0 right-0 w-96 h-96 bg-primary filter blur-[120px] rounded-full opacity-10"></div>
+<div class="absolute bottom-0 left-0 w-64 h-64 bg-error filter blur-[100px] rounded-full opacity-5"></div>
+</div>
+<script>
+        // Simple Micro-interaction for clocks
+        let opponentTime = 522; // 8:42
+        let playerTime = 312;   // 5:12
+        const playerClockEl = document.querySelector('.bg-surface-container-high.border-primary span');
+        const opponentClockEl = document.querySelector('.bg-surface-container-high:not(.border-primary) span');
+
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60);
+            const s = seconds % 60;
+            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+
+        setInterval(() => {
+            playerTime--;
+            if(playerTime < 0) playerTime = 0;
+            playerClockEl.textContent = formatTime(playerTime);
+            
+            // Pulse effect for low time
+            if(playerTime < 30) {
+                playerClockEl.parentElement.classList.add('clock-warning');
+            }
+        }, 1000);
+
+        // Piece dragging simulation (visual only)
+        document.querySelectorAll('.piece').forEach(piece => {
+            piece.addEventListener('mousedown', () => {
+                piece.style.transform = 'scale(1.1)';
+            });
+            piece.addEventListener('mouseup', () => {
+                piece.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body></html>
