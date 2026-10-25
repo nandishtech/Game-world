@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
 import { Card } from '../components/Card';
 import { Button } from '../components/Button';
@@ -18,7 +19,8 @@ import {
   Edit3, 
   Save, 
   Key,
-  CheckCircle2
+  CheckCircle2,
+  Sparkles
 } from 'lucide-react';
 import { privacyService } from '../services/privacyService';
 import { generate2FADetails } from '../services/securityService';
@@ -30,9 +32,12 @@ const ACHIEVEMENTS = [
 ];
 
 export const Profile: React.FC = () => {
-  const { user, updateBio, enable2FA, disable2FA, logoutAllDevices, deleteAccount } = useAuthStore();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const { user, updateBio, completeProfile, enable2FA, disable2FA, logoutAllDevices, deleteAccount } = useAuthStore();
+  const isFirstLogin = searchParams.get('firstLogin') === 'true' || Boolean(user?.isFirstLogin);
   const [activeTab, setActiveTab] = useState<'OVERVIEW' | 'SECURITY' | 'PRIVACY'>('OVERVIEW');
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(isFirstLogin);
   const [bioText, setBioText] = useState(user?.bio || '');
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -72,6 +77,35 @@ export const Profile: React.FC = () => {
 
       <main className="relative z-10 max-w-container-max mx-auto px-margin-desktop space-y-8">
         
+        {/* Onboarding Complete Profile Banner (Workflow: First Login? -> Complete Profile -> User Dashboard) */}
+        {isFirstLogin && (
+          <Card level={1} className="p-6 border-2 border-primary/50 bg-primary/10 rounded-2xl shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center text-primary flex-shrink-0">
+                <Sparkles className="w-5 h-5 text-amber-400" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                  Complete Your Profile Setup <span className="text-[10px] bg-primary text-black font-black px-2 py-0.5 rounded-full">Step 1</span>
+                </h3>
+                <p className="text-xs text-on-surface-variant mt-0.5">
+                  Welcome to Game World! Set your biography below to personalize your callsign, then head to your command deck.
+                </p>
+              </div>
+            </div>
+            <Button
+              variant="neon"
+              className="text-xs py-2.5 px-6 whitespace-nowrap cursor-pointer shrink-0"
+              onClick={() => {
+                completeProfile(bioText);
+                navigate('/dashboard');
+              }}
+            >
+              CONFIRM & ENTER DASHBOARD →
+            </Button>
+          </Card>
+        )}
+
         {/* Profile Card Header */}
         <Card level={2} className="p-6 md:p-8 border border-white/5">
           <div className="flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
@@ -89,7 +123,7 @@ export const Profile: React.FC = () => {
                     Rank ELO {user.stats.rank}
                   </span>
                   <span className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded flex items-center gap-1">
-                    <ShieldCheck className="w-3 h-3" /> {user.role}
+                    <ShieldCheck className="w-3 h-3" /> VERIFIED PLAYER
                   </span>
                 </div>
                 
@@ -249,7 +283,7 @@ export const Profile: React.FC = () => {
                 </div>
                 <div className="flex justify-between">
                   <span>Squad Role Privilege</span>
-                  <span className="text-secondary font-bold uppercase">{user.role}</span>
+                  <span className="text-secondary font-bold uppercase">PLAYER</span>
                 </div>
               </div>
             </Card>

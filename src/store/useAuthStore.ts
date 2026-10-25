@@ -3,6 +3,8 @@ import { persist } from 'zustand/middleware';
 import { UserRole, securityAuditLogger } from '../services/securityService';
 import { rewardSecurityLedger } from '../services/rewardSecurity';
 import { privacyService } from '../services/privacyService';
+import { updateLeaderboardRegistry } from '../data/leaderboardRegistry';
+import { useSocialStore } from './useSocialStore';
 
 export interface UserStats {
   wins: number;
@@ -36,6 +38,7 @@ export interface UserProfile {
   twoFactorSecret?: string;
   recoveryCodes?: string[];
   activeSessions: UserSession[];
+  isFirstLogin?: boolean;
 }
 
 interface AuthState {
@@ -48,6 +51,7 @@ interface AuthState {
   spendCoins: (amount: number) => boolean;
   recordGameReward: (coins: number, xp: number, rankGain?: number, won?: boolean) => void;
   updateBio: (newBio: string) => void;
+  completeProfile: (bio: string, avatarUrl?: string) => void;
   enable2FA: (secret: string, codes: string[]) => void;
   disable2FA: () => void;
   logoutAllDevices: () => void;
@@ -85,6 +89,7 @@ const createZeroProfile = (username: string, email: string): UserProfile => ({
     hoursPlayed: 0
   },
   is2FAEnabled: false,
+  isFirstLogin: true,
   activeSessions: DEFAULT_SESSIONS
 });
 
@@ -244,11 +249,14 @@ export const useAuthStore = create<AuthState>()(
 
         let newXP = user.xp + xp;
         let newLevel = user.level;
+        const initialLevel = user.level;
 
         while (newXP >= 100) {
           newXP -= 100;
           newLevel += 1;
         }
+
+        const leveledUp = newLevel > initialLevel;
 
         const updatedUser: UserProfile = {
           ...user,
@@ -265,6 +273,17 @@ export const useAuthStore = create<AuthState>()(
 
         saveProfileToDirectory(updatedUser);
         set({ user: updatedUser });
+
+        // Step 15 in process: Update global leaderboard
+        updateLeaderboardRegistry(updatedUser);
+
+        // Step 13 in process: Level Up notification
+        if (leveledUp) {
+          useSocialStore.getState().addNotification(
+            'ACHIEVEMENT',
+            `🎉 LEVEL UP! Commander reached Level ${newLevel}! Global statistics updated.`
+          );
+        }
       },
 
       secureClaimReward: (coins: number, xp: number, key: string, won = true) => {
@@ -281,7 +300,21 @@ export const useAuthStore = create<AuthState>()(
         if (!user) return;
         const updatedUser: UserProfile = {
           ...user,
-          bio: newBio
+          bio: newBio,
+          isFirstLogin: false
+        };
+        saveProfileToDirectory(updatedUser);
+        set({ user: updatedUser });
+      },
+
+      completeProfile: (bio: string, avatarUrl?: string) => {
+        const user = get().user;
+        if (!user) return;
+        const updatedUser: UserProfile = {
+          ...user,
+          bio: bio || user.bio,
+          avatarUrl: avatarUrl || user.avatarUrl,
+          isFirstLogin: false
         };
         saveProfileToDirectory(updatedUser);
         set({ user: updatedUser });

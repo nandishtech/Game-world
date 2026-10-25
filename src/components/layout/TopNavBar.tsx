@@ -223,33 +223,6 @@ export const TopNavBar: React.FC = () => {
                           <Sparkles className="w-4 h-4" /> Creator Studio
                         </Link>
                       </li>
-                      <li>
-                        <Link 
-                          to="/moderation" 
-                          onClick={() => setShowProfileMenu(false)}
-                          className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-on-surface-variant hover:text-white hover:bg-white/5 transition-all"
-                        >
-                          <Shield className="w-4 h-4" /> Moderation Deck
-                        </Link>
-                      </li>
-                      <li>
-                        <Link 
-                          to="/admin" 
-                          onClick={() => setShowProfileMenu(false)}
-                          className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-on-surface-variant hover:text-white hover:bg-white/5 transition-all"
-                        >
-                          <Settings className="w-4 h-4" /> Admin Console
-                        </Link>
-                      </li>
-                      <li>
-                        <Link 
-                          to="/liveops" 
-                          onClick={() => setShowProfileMenu(false)}
-                          className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-on-surface-variant hover:text-white hover:bg-white/5 transition-all"
-                        >
-                          <Activity className="w-4 h-4" /> Live Ops Portal
-                        </Link>
-                      </li>
                       <li className="pt-2 border-t border-white/10 mt-2">
                         <button 
                           onClick={() => {

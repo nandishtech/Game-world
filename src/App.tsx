@@ -34,9 +34,6 @@ import { CloudPlay } from './pages/CloudPlay';
 import { LiveBroadcast } from './pages/LiveBroadcast';
 import { CreatorStudio } from './pages/CreatorStudio';
 import { DeveloperPortal } from './pages/DeveloperPortal';
-import { ModerationCenter } from './pages/ModerationCenter';
-import { AdminCommand } from './pages/AdminCommand';
-import { LiveOps } from './pages/LiveOps';
 import { ClanHub } from './pages/ClanHub';
 import { EmbedGame } from './pages/EmbedGame';
 import { FlappyBirdGame } from './pages/FlappyBirdGame';
@@ -124,9 +121,9 @@ const AppContent: React.FC = () => {
           <Route path="/live" element={<ProtectedRoute><LiveBroadcast /></ProtectedRoute>} />
           <Route path="/creator" element={<ProtectedRoute><CreatorStudio /></ProtectedRoute>} />
           <Route path="/developer" element={<ProtectedRoute><DeveloperPortal /></ProtectedRoute>} />
-          <Route path="/moderation" element={<ProtectedRoute><ModerationCenter /></ProtectedRoute>} />
-          <Route path="/admin" element={<ProtectedRoute><AdminCommand /></ProtectedRoute>} />
-          <Route path="/liveops" element={<ProtectedRoute><LiveOps /></ProtectedRoute>} />
+          <Route path="/admin" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/moderation" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/liveops" element={<Navigate to="/dashboard" replace />} />
           <Route path="/clan" element={<ProtectedRoute><ClanHub /></ProtectedRoute>} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />

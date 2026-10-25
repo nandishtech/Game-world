@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useMatchmakeStore } from '../store/useMatchmakeStore';
 import { ShaderBackground } from '../components/ShaderBackground';
 import { useSocialStore } from '../store/useSocialStore';
+import { useAuthStore } from '../store/useAuthStore';
+import { getLeaderboardRankings } from '../data/leaderboardRegistry';
 
 const GAMES = [
   { name: 'Battle Arena', genre: 'Action MOBA', players: '12k', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAo6efdyY0mqX5JYN4dNeXB6HyW2Z2ZexUeXcUnjxDoYTtI06O2QBkR5XA4It9h9zkH2TMNAWZ_qirGJZwvFuYjduaAQh8bi5vXVXEGyVAuiELyjJ2kTDoSctZ6VEov4fz9s5FhtfHnGDt_IaQwlLpjpq1q9KHZHy2BV5qJ2INBT2bKxaSxIJ42g0h053Dnkdg1zg4Mnpls2EWVzW4SjeC5c7PTDL9pR9oaTFaR289hzbpukdLDIJTWqvvy6oFApKiooPYX8Bi2zAI' },
@@ -23,6 +25,8 @@ const LEADERBOARD = [
 
 export const Home: React.FC = () => {
   const navigate = useNavigate();
+  const user = useAuthStore((state) => state.user);
+  const dynamicLeaderboard = getLeaderboardRankings(user);
   const startQueue = useMatchmakeStore((state) => state.startQueue);
   const { addNotification } = useSocialStore();
   const [chatInput, setChatInput] = useState('');
@@ -251,23 +255,37 @@ export const Home: React.FC = () => {
                 <div className="col-span-2">Player</div>
                 <div className="col-span-1 text-center">Level</div>
                 <div className="col-span-1 text-center">Win Rate</div>
-                <div className="col-span-1 text-right">XP</div>
+                <div className="col-span-1 text-right">Score</div>
               </div>
 
               <div className="space-y-2">
-                {LEADERBOARD.map((player) => (
-                  <div key={player.name} className="grid grid-cols-6 px-4 py-4 rounded-xl hover:bg-white/5 items-center transition-all">
-                    <div className={`col-span-1 font-bold ${player.color}`}>{player.rank}</div>
+                {dynamicLeaderboard.map((player) => (
+                  <div 
+                    key={player.name} 
+                    className={`grid grid-cols-6 px-4 py-4 rounded-xl items-center transition-all ${
+                      player.isCurrentUser 
+                        ? 'bg-primary/10 border border-primary/40 shadow-lg shadow-primary/10' 
+                        : 'hover:bg-white/5'
+                    }`}
+                  >
+                    <div className={`col-span-1 font-bold ${player.color}`}>
+                      #{player.rank < 10 ? `0${player.rank}` : player.rank}
+                    </div>
                     <div className="col-span-2 flex items-center gap-3">
                       <div 
-                        className="w-10 h-10 rounded-full bg-surface-container bg-cover bg-center" 
+                        className="w-10 h-10 rounded-full bg-surface-container bg-cover bg-center border border-white/10" 
                         style={{ backgroundImage: `url('${player.img}')` }}
                       />
-                      <span className="font-bold text-white">{player.name}</span>
+                      <div>
+                        <span className="font-bold text-white text-xs sm:text-sm block">{player.name}</span>
+                        {player.isCurrentUser && (
+                          <span className="text-[9px] bg-primary text-black font-black px-1.5 py-0.2 rounded uppercase">Active Profile</span>
+                        )}
+                      </div>
                     </div>
-                    <div className="col-span-1 text-center text-on-surface-variant">Lv. {player.level}</div>
-                    <div className="col-span-1 text-center text-on-surface-variant">{player.winRate}</div>
-                    <div className={`col-span-1 text-right font-mono ${player.color}`}>{player.xp}</div>
+                    <div className="col-span-1 text-center text-on-surface-variant font-medium text-xs">Lv. {player.level}</div>
+                    <div className="col-span-1 text-center text-on-surface-variant font-medium text-xs">{player.winRate}</div>
+                    <div className={`col-span-1 text-right font-mono font-bold text-xs ${player.color}`}>{player.rankScore} PTS</div>
                   </div>
                 ))}
               </div>

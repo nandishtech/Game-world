@@ -125,8 +125,16 @@ export const Auth: React.FC = () => {
     // Direct Login with Right Password (No OTP)
     bruteForceProtector.recordSuccess(email);
     login(displayUser, email);
-    addNotification('ACHIEVEMENT', `Welcome back, ${displayUser}! Successfully logged in.`);
-    navigate('/dashboard');
+
+    // Flowchart: First Login? Yes -> Complete Profile, No -> User Dashboard
+    const profile = useAuthStore.getState().user;
+    if (isSignUp || profile?.isFirstLogin) {
+      addNotification('ACHIEVEMENT', `Welcome to Game World, ${displayUser}! Please complete your profile.`);
+      navigate('/profile?firstLogin=true');
+    } else {
+      addNotification('ACHIEVEMENT', `Welcome back, ${displayUser}! Successfully logged in.`);
+      navigate('/dashboard');
+    }
   };
 
   return (
@@ -290,34 +298,20 @@ export const Auth: React.FC = () => {
                     </button>
                   </form>
 
-                  <div className="relative">
-                    <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/5"></div></div>
-                    <div className="relative flex justify-center text-[10px] uppercase"><span className="bg-surface-container-lowest px-3 text-white/40">Or quick enter as</span></div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="pt-2 text-center space-y-3">
                     <button 
                       type="button"
-                      disabled
-                      title="Server-side admin authentication is not configured."
-                      className="py-2.5 px-3 bg-red-500/10 border border-red-500/30 rounded-xl text-xs font-semibold text-red-400/60 flex items-center justify-center gap-2 cursor-not-allowed"
-                    >
-                      <Lock className="w-4 h-4 text-red-400" />
-                      <span>Admin Portal Unavailable</span>
-                    </button>
-                    <button 
-                      type="button"
-                      onClick={() => { login('Casual_Gamer', 'player@gameworld.gg'); navigate('/dashboard'); }}
-                      className="py-2.5 px-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all text-xs font-semibold text-white flex items-center justify-center gap-2 cursor-pointer"
+                      onClick={() => { login('Guest_Player', 'guest@gameworld.gg'); navigate('/dashboard'); }}
+                      className="w-full py-2.5 px-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all text-xs font-semibold text-white/80 hover:text-white flex items-center justify-center gap-2 cursor-pointer"
                     >
                       <Smartphone className="w-4 h-4 text-secondary" />
-                      <span>Regular Player</span>
+                      <span>Explore as Guest Player</span>
                     </button>
-                  </div>
 
-                  <p className="text-center text-on-surface-variant text-xs">
-                    New explorer? <button className="text-primary font-bold hover:underline cursor-pointer" onClick={() => { setError(''); setIsSignUp(true); }}>Create Account</button>
-                  </p>
+                    <p className="text-on-surface-variant text-xs">
+                      New explorer? <button className="text-primary font-bold hover:underline cursor-pointer" onClick={() => { setError(''); setIsSignUp(true); }}>Create Account</button>
+                    </p>
+                  </div>
                 </motion.section>
               ) : (
                 /* REGISTER FORM WITH REAL-TIME PASSWORD POLICY CHECKER */
