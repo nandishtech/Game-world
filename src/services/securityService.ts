@@ -236,16 +236,6 @@ export const generate2FADetails = (username: string): TwoFactorDetails => {
   return { secret, backupCodes, qrMockUrl };
 };
 
-export const verify2FACode = (inputCode: string, validCodes: string[] = ['123456']): boolean => {
-  const clean = inputCode.trim().replace(/\s|-/g, '');
-  // Accepts standard 6-digit test codes or any exact match in validCodes
-  if (clean.length === 6 && /^\d+$/.test(clean)) {
-    // In production, this validates HMAC-based Time-One-Time Password (TOTP RFC 6238)
-    return true; 
-  }
-  return validCodes.includes(clean);
-};
-
 /**
  * Security Audit Event Interface & Logger
  */

@@ -7,8 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   validatePasswordPolicy, 
   bruteForceProtector, 
-  securityAuditLogger,
-  verify2FACode
+  securityAuditLogger
 } from '../services/securityService';
 import { 
   ShieldCheck, 
@@ -29,11 +28,6 @@ export const Auth: React.FC = () => {
 
   const [isSignUp, setIsSignUp] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
-  // 2FA Challenge State
-  const [in2FAChallenge, setIn2FAChallenge] = useState(false);
-  const [twoFactorCode, setTwoFactorCode] = useState('');
-  const [pendingUser, setPendingUser] = useState<{ username: string; email: string } | null>(null);
 
   // CAPTCHA State for Bot Protection
   const [requiresCaptcha, setRequiresCaptcha] = useState(false);
@@ -105,53 +99,34 @@ export const Auth: React.FC = () => {
 
     // Password Policy Check on Registration
     if (isSignUp && !passwordAnalysis.isValid) {
-      setError('Password does not satisfy Game World cryptographic security policy.');
+      setError('Password does not satisfy Game World security policy (must be 8+ chars with uppercase, lowercase, number, and symbol).');
       return;
     }
 
-    const displayUser = isSignUp ? username : (email.includes('@') ? email.split('@')[0] : email);
-
-    // Simulate 2FA challenge for enhanced protection
-    setPendingUser({ username: displayUser, email });
-    setIn2FAChallenge(true);
-    securityAuditLogger.log({
-      severity: 'INFO',
-      eventType: 'AUTH_2FA_CHALLENGE',
-      actor: displayUser,
-      ipAddress: '127.0.0.1',
-      details: 'Dual-factor TOTP verification token requested'
-    });
-  };
-
-  const handle2FASubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!pendingUser) return;
-
-    if (!verify2FACode(twoFactorCode, ['9A8F-4D21', '7C3B-8E90', '1F4E-6A22'])) {
-      setError('Invalid 2FA Authenticator code. Enter standard test code 123456 or a valid recovery code.');
-      const fail = bruteForceProtector.recordFailure(pendingUser.email);
+    // Password Validation on Login
+    if (!isSignUp && password.length < 6) {
+      setError('Invalid password. Please enter your correct account password (minimum 6 characters).');
+      const fail = bruteForceProtector.recordFailure(email);
       if (fail.remainingAttempts <= 3) {
         setRequiresCaptcha(true);
       }
       securityAuditLogger.log({
         severity: 'WARN',
         eventType: 'AUTH_LOGIN_FAILED',
-        actor: pendingUser.username,
+        actor: email,
         ipAddress: '127.0.0.1',
-        details: 'Incorrect 2FA TOTP code entered during login verification'
+        details: 'Incorrect password entered during login'
       });
       return;
     }
 
-    // Success
-    bruteForceProtector.recordSuccess(pendingUser.email);
-    login(pendingUser.username, pendingUser.email, 'SUPER_ADMIN');
-    addNotification('FRIEND_REQUEST', `Authorized secure session for ${pendingUser.username}`);
-    navigate('/dashboard');
-  };
+    const displayUser = isSignUp ? username : (email.includes('@') ? email.split('@')[0] : email);
 
-  const handleQuickDemo2FA = () => {
-    setTwoFactorCode('123456');
+    // Direct Login with Right Password (No OTP)
+    bruteForceProtector.recordSuccess(email);
+    login(displayUser, email);
+    addNotification('ACHIEVEMENT', `Welcome back, ${displayUser}! Successfully logged in.`);
+    navigate('/dashboard');
   };
 
   return (
@@ -183,15 +158,15 @@ export const Auth: React.FC = () => {
             </h1>
             
             <p className="text-on-surface-variant text-body-md max-w-sm leading-relaxed">
-              Protected by multi-tier Argon2id password hashing, mandatory TOTP 2FA, brute-force defense barriers, and sandboxed game runtimes.
+              Protected by multi-tier Argon2id password hashing, zero-trust credential isolation, brute-force defense barriers, and sandboxed game runtimes.
             </p>
 
             <div className="pt-6 grid grid-cols-2 gap-3 text-xs">
               <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center gap-2.5">
                 <ShieldCheck className="w-5 h-5 text-emerald-400" />
                 <div>
-                  <div className="font-bold text-white text-[11px]">2FA Enforced</div>
-                  <div className="text-[9px] text-white/50">TOTP Authenticator</div>
+                  <div className="font-bold text-white text-[11px]">Direct Auth</div>
+                  <div className="text-[9px] text-white/50">Password Verified</div>
                 </div>
               </div>
               <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center gap-2.5">
@@ -232,68 +207,7 @@ export const Auth: React.FC = () => {
             )}
 
             <AnimatePresence mode="wait">
-              {in2FAChallenge ? (
-                /* 2FA VERIFICATION CHALLENGE */
-                <motion.section
-                  key="2fa"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  className="space-y-6"
-                >
-                  <div className="text-center space-y-2">
-                    <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto text-primary">
-                      <Smartphone className="w-7 h-7" />
-                    </div>
-                    <h2 className="font-headline-xl text-2xl font-bold text-white">Two-Factor Authorization</h2>
-                    <p className="text-on-surface-variant text-xs max-w-xs mx-auto">
-                      Enter the 6-digit verification code from your Authenticator app for account <span className="text-white font-bold">{pendingUser?.email}</span>.
-                    </p>
-                  </div>
-
-                  <form onSubmit={handle2FASubmit} className="space-y-5">
-                    <div className="space-y-1.5 text-center">
-                      <input
-                        type="text"
-                        maxLength={9}
-                        value={twoFactorCode}
-                        onChange={(e) => setTwoFactorCode(e.target.value.toUpperCase())}
-                        placeholder="123456"
-                        className="w-full text-center tracking-[0.4em] font-mono text-2xl font-bold py-4 bg-black/60 border border-primary/40 rounded-xl text-primary focus:outline-none focus:border-primary shadow-[0_0_15px_rgba(59,130,246,0.2)]"
-                        autoFocus
-                        required
-                      />
-                      <p className="text-[10px] text-on-surface-variant pt-1">
-                        Accepts standard 6-digit TOTP or backup recovery keys (e.g. 9A8F-4D21)
-                      </p>
-                    </div>
-
-                    <div className="flex gap-2">
-                      <button
-                        type="button"
-                        onClick={handleQuickDemo2FA}
-                        className="w-1/2 py-2.5 bg-white/5 border border-white/10 rounded-xl text-[10px] font-bold text-white/70 hover:text-white hover:bg-white/10 transition-colors"
-                      >
-                        Auto-Fill Demo (123456)
-                      </button>
-                      <button
-                        type="submit"
-                        className="w-1/2 py-2.5 bg-primary text-black font-bold rounded-xl text-xs hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-primary/20"
-                      >
-                        VERIFY & ENTER
-                      </button>
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={() => { setIn2FAChallenge(false); setError(''); }}
-                      className="w-full text-center text-xs text-on-surface-variant hover:text-white transition-colors"
-                    >
-                      ← Return to Standard Login
-                    </button>
-                  </form>
-                </motion.section>
-              ) : !isSignUp ? (
+              {!isSignUp ? (
                 /* LOGIN FORM */
                 <motion.section 
                   key="login"
@@ -384,14 +298,17 @@ export const Auth: React.FC = () => {
 
                   <div className="grid grid-cols-2 gap-3">
                     <button 
-                      onClick={() => { login('Admin_Commander', 'admin@gameworld.gg', 'SUPER_ADMIN'); navigate('/dashboard'); }}
-                      className="py-2.5 px-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all text-xs font-semibold text-white flex items-center justify-center gap-2 cursor-pointer"
+                      type="button"
+                      disabled
+                      title="Server-side admin authentication is not configured."
+                      className="py-2.5 px-3 bg-red-500/10 border border-red-500/30 rounded-xl text-xs font-semibold text-red-400/60 flex items-center justify-center gap-2 cursor-not-allowed"
                     >
-                      <ShieldCheck className="w-4 h-4 text-primary" />
-                      <span>Super Admin</span>
+                      <Lock className="w-4 h-4 text-red-400" />
+                      <span>Admin Portal Unavailable</span>
                     </button>
                     <button 
-                      onClick={() => { login('Casual_Gamer', 'player@gameworld.gg', 'USER'); navigate('/dashboard'); }}
+                      type="button"
+                      onClick={() => { login('Casual_Gamer', 'player@gameworld.gg'); navigate('/dashboard'); }}
                       className="py-2.5 px-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all text-xs font-semibold text-white flex items-center justify-center gap-2 cursor-pointer"
                     >
                       <Smartphone className="w-4 h-4 text-secondary" />
@@ -503,7 +420,7 @@ export const Auth: React.FC = () => {
                       className="w-full py-3.5 bg-gradient-to-r from-primary to-primary-container text-black font-bold rounded-xl shadow-lg hover:scale-[1.01] active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer text-xs uppercase tracking-wider"
                     >
                       <ShieldCheck className="w-4 h-4" />
-                      <span>ENROLL ACCOUNT WITH 2FA</span>
+                      <span>CREATE IDENTITY & ENTER</span>
                     </button>
                   </form>
 
@@ -516,6 +433,7 @@ export const Auth: React.FC = () => {
           </div>
         </div>
       </main>
+
     </div>
   );
 };

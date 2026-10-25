@@ -291,7 +291,7 @@ export const Profile: React.FC = () => {
                   <div className="space-y-1">
                     <span className="text-[10px] text-white/60 font-semibold">Authenticator Secret Key:</span>
                     <div className="p-2.5 bg-black/60 border border-white/10 rounded-lg font-mono text-xs text-primary tracking-widest">
-                      {user.twoFactorSecret || 'JBSWY3DPEHPK3PXP'}
+                      {user.twoFactorSecret}
                     </div>
                   </div>
 

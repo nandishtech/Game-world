@@ -3,20 +3,15 @@ import { Card } from '../components/Card';
 import { Button } from '../components/Button';
 import { ShaderBackground } from '../components/ShaderBackground';
 import { 
-  Settings, 
   Users, 
   Server, 
-  Shield, 
   Search, 
   ShieldAlert, 
   ShieldCheck, 
   Activity, 
   Key, 
-  Trash2, 
   AlertTriangle,
-  Lock,
-  FileText,
-  UserCheck
+  Lock
 } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
 import { 
@@ -25,7 +20,6 @@ import {
   securityAuditLogger, 
   bruteForceProtector 
 } from '../services/securityService';
-import { antiCheatEngine } from '../services/antiCheatService';
 
 const INITIAL_ACCOUNTS = [
   { id: 'usr_01', username: 'Commander_Nexus', email: 'nexus@gameworld.gg', role: 'SUPER_ADMIN' as UserRole, status: 'ACTIVE', ip: '192.168.1.104' },
@@ -36,15 +30,13 @@ const INITIAL_ACCOUNTS = [
 ];
 
 export const AdminCommand: React.FC = () => {
-  const { user, setRole } = useAuthStore();
+  const { user } = useAuthStore();
   const [activeTab, setActiveTab] = useState<'USERS' | 'SECURITY_AUDIT' | 'RBAC_MATRIX' | 'SYSTEMS'>('SECURITY_AUDIT');
   const [search, setSearch] = useState('');
   const [accounts, setAccounts] = useState(INITIAL_ACCOUNTS);
   
   // Destructive Action Modal State
   const [confirmTarget, setConfirmTarget] = useState<{ id: string; username: string; action: 'BAN' | 'DELETE' } | null>(null);
-  const [admin2FACode, setAdmin2FACode] = useState('');
-  const [adminError, setAdminError] = useState('');
 
   const auditLogs = securityAuditLogger.getLogs(30);
   const lockouts = bruteForceProtector.getAllRecords();
@@ -65,38 +57,29 @@ export const AdminCommand: React.FC = () => {
     });
   };
 
-  const handleExecuteDestructiveAction = () => {
-    if (!confirmTarget) return;
-
-    if (admin2FACode.trim() !== '123456' && admin2FACode.trim() !== '9A8F-4D21') {
-      setAdminError('Invalid Admin 2FA confirmation code. Enter 123456 or a valid backup code to confirm.');
-      return;
-    }
-
-    if (confirmTarget.action === 'BAN') {
-      setAccounts(prev => prev.map(a => a.id === confirmTarget.id ? { ...a, status: 'BANNED' } : a));
-      securityAuditLogger.log({
-        severity: 'CRITICAL',
-        eventType: 'ADMIN_ACTION',
-        actor: user?.username || 'SuperAdmin',
-        ipAddress: '192.168.1.104',
-        details: `ADMIN BANNED account ${confirmTarget.username} (${confirmTarget.id}) with 2FA authorization`
-      });
-    } else {
-      setAccounts(prev => prev.filter(a => a.id !== confirmTarget.id));
-      securityAuditLogger.log({
-        severity: 'CRITICAL',
-        eventType: 'ADMIN_ACTION',
-        actor: user?.username || 'SuperAdmin',
-        ipAddress: '192.168.1.104',
-        details: `ADMIN PERMANENTLY DELETED account ${confirmTarget.username} (${confirmTarget.id})`
-      });
-    }
-
-    setConfirmTarget(null);
-    setAdmin2FACode('');
-    setAdminError('');
-  };
+  if (user?.role !== 'SUPER_ADMIN') {
+    return (
+      <div className="relative min-h-screen pt-28 pb-12 bg-background flex items-center justify-center">
+        <ShaderBackground type="core" />
+        <div className="relative z-10 max-w-md w-full mx-auto px-4">
+          <div className="bg-surface-container-lowest/90 backdrop-blur-2xl border border-red-500/30 rounded-2xl p-7 shadow-2xl shadow-red-500/10 space-y-6">
+            <div className="text-center space-y-2">
+              <div className="inline-flex p-3 rounded-2xl bg-red-500/10 border border-red-500/30 text-red-400 mb-1">
+                <Lock className="w-8 h-8 animate-pulse text-red-400" />
+              </div>
+              <div className="inline-block px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-red-500/20 text-red-400 border border-red-500/40">
+                Admin Access Unavailable
+              </div>
+              <h1 className="text-2xl font-bold text-white tracking-tight">Admin Console Disabled</h1>
+              <p className="text-xs text-on-surface-variant leading-relaxed">
+                Administrative access requires server-side authentication, which is not configured for this application.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative min-h-screen pt-24 pb-12 bg-background">
@@ -112,7 +95,7 @@ export const AdminCommand: React.FC = () => {
                 <Lock className="w-3 h-3" /> Zero-Trust Command Console
               </span>
               <span className="text-[10px] text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                2FA Verified
+                Level 5 Clearance Active
               </span>
             </div>
             <h1 className="text-headline-xl font-headline-xl text-white font-bold mt-1">Admin Command Center</h1>
@@ -121,40 +104,42 @@ export const AdminCommand: React.FC = () => {
             </p>
           </div>
 
-          {/* Quick Tab Selector */}
-          <div className="flex items-center gap-1 bg-black/60 border border-white/10 p-1 rounded-xl">
-            <button
-              onClick={() => setActiveTab('SECURITY_AUDIT')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                activeTab === 'SECURITY_AUDIT' ? 'bg-primary text-black shadow-lg shadow-primary/20' : 'text-white/60 hover:text-white'
-              }`}
-            >
-              <Activity className="w-3.5 h-3.5" /> Security Audit
-            </button>
-            <button
-              onClick={() => setActiveTab('USERS')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                activeTab === 'USERS' ? 'bg-primary text-black shadow-lg shadow-primary/20' : 'text-white/60 hover:text-white'
-              }`}
-            >
-              <Users className="w-3.5 h-3.5" /> Users & Accounts
-            </button>
-            <button
-              onClick={() => setActiveTab('RBAC_MATRIX')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                activeTab === 'RBAC_MATRIX' ? 'bg-primary text-black shadow-lg shadow-primary/20' : 'text-white/60 hover:text-white'
-              }`}
-            >
-              <Key className="w-3.5 h-3.5" /> RBAC Matrix
-            </button>
-            <button
-              onClick={() => setActiveTab('SYSTEMS')}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                activeTab === 'SYSTEMS' ? 'bg-primary text-black shadow-lg shadow-primary/20' : 'text-white/60 hover:text-white'
-              }`}
-            >
-              <ShieldCheck className="w-3.5 h-3.5" /> Checklist Audit
-            </button>
+          {/* Quick Tab Selector & Lock Station */}
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="flex items-center gap-1 bg-black/60 border border-white/10 p-1 rounded-xl">
+              <button
+                onClick={() => setActiveTab('SECURITY_AUDIT')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                  activeTab === 'SECURITY_AUDIT' ? 'bg-primary text-black shadow-lg shadow-primary/20' : 'text-white/60 hover:text-white'
+                }`}
+              >
+                <Activity className="w-3.5 h-3.5" /> Security Audit
+              </button>
+              <button
+                onClick={() => setActiveTab('USERS')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                  activeTab === 'USERS' ? 'bg-primary text-black shadow-lg shadow-primary/20' : 'text-white/60 hover:text-white'
+                }`}
+              >
+                <Users className="w-3.5 h-3.5" /> Users & Accounts
+              </button>
+              <button
+                onClick={() => setActiveTab('RBAC_MATRIX')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                  activeTab === 'RBAC_MATRIX' ? 'bg-primary text-black shadow-lg shadow-primary/20' : 'text-white/60 hover:text-white'
+                }`}
+              >
+                <Key className="w-3.5 h-3.5" /> RBAC Matrix
+              </button>
+              <button
+                onClick={() => setActiveTab('SYSTEMS')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                  activeTab === 'SYSTEMS' ? 'bg-primary text-black shadow-lg shadow-primary/20' : 'text-white/60 hover:text-white'
+                }`}
+              >
+                <ShieldCheck className="w-3.5 h-3.5" /> Checklist Audit
+              </button>
+            </div>
           </div>
         </div>
 
@@ -472,36 +457,18 @@ export const AdminCommand: React.FC = () => {
               Are you sure you want to <span className="text-white font-bold uppercase">{confirmTarget.action}</span> account <span className="text-primary font-bold">{confirmTarget.username}</span>?
             </p>
 
-            <div className="space-y-1.5">
-              <label className="text-[11px] text-white/70">Enter Admin 2FA Code to Authorize:</label>
-              <input
-                type="text"
-                value={admin2FACode}
-                onChange={(e) => setAdmin2FACode(e.target.value)}
-                placeholder="Enter 123456"
-                className="w-full bg-black/60 border border-white/10 rounded-xl py-2 px-3 text-xs text-white focus:outline-none focus:border-red-400"
-                autoFocus
-              />
-            </div>
+            <p className="text-xs text-red-400">
+              Administrative actions require server-side authorization, which is not configured.
+            </p>
 
-            {adminError && (
-              <p className="text-[10px] text-red-400 font-semibold">{adminError}</p>
-            )}
-
-            <div className="flex justify-end gap-2 pt-2">
+            <div className="flex justify-end pt-2">
               <Button 
                 variant="ghost" 
-                onClick={() => { setConfirmTarget(null); setAdmin2FACode(''); setAdminError(''); }}
+                onClick={() => setConfirmTarget(null)}
                 className="px-4 py-2 text-xs"
               >
-                Cancel
+                Close
               </Button>
-              <button
-                onClick={handleExecuteDestructiveAction}
-                className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white font-bold rounded-xl text-xs cursor-pointer shadow-lg shadow-red-600/30 transition-all"
-              >
-                Authorize & Execute
-              </button>
             </div>
           </div>
         </div>
