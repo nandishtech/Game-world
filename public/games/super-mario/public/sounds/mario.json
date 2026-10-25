@@ -1,0 +1,13 @@
+{
+    "fx": {
+        "coin": {
+            "url": "/games/super-mario/public/audio/fx/coin.ogg"
+        },
+        "jump": {
+            "url": "/games/super-mario/public/audio/fx/jump.ogg"
+        },
+        "stomp": {
+            "url": "/games/super-mario/public/audio/fx/stomp.ogg"
+        }
+    }
+}

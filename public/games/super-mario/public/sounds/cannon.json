@@ -1,0 +1,7 @@
+{
+    "fx": {
+        "shoot": {
+            "url": "/games/super-mario/public/audio/fx/thwomp.ogg"
+        }
+    }
+}
