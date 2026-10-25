@@ -232,8 +232,12 @@ export const Profile: React.FC = () => {
                   <span className="text-white font-bold">{user.stats.rank}</span>
                 </div>
                 <div className="flex justify-between border-b border-white/5 pb-2">
-                  <span>Wins / Loss Ratio</span>
-                  <span className="text-green-400 font-bold">2.08 (Win Rate)</span>
+                  <span>Win Rate (W / L)</span>
+                  <span className="text-green-400 font-bold">
+                    {user.stats.wins + user.stats.losses > 0 
+                      ? `${Math.round((user.stats.wins / (user.stats.wins + user.stats.losses)) * 100)}% (${user.stats.wins}W / ${user.stats.losses}L)`
+                      : '0% (0W / 0L)'}
+                  </span>
                 </div>
                 <div className="flex justify-between border-b border-white/5 pb-2">
                   <span>Total Matches Completed</span>

@@ -136,7 +136,6 @@ export const Auth: React.FC = () => {
 
       {/* Main Auth Container */}
       <main className="relative z-10 w-full max-w-[1200px] h-auto min-h-[750px] flex flex-col md:flex-row glass-card rounded-none md:rounded-3xl shadow-2xl overflow-hidden">
-        <div className="scanline"></div>
 
         {/* Left Side: Illustration & Security Highlights */}
         <div className="hidden md:block w-1/2 relative bg-[#0a0a0a] overflow-hidden border-r border-white/5">

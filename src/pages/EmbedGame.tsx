@@ -32,7 +32,6 @@ import { Button } from '../components/Button';
 import { ShaderBackground } from '../components/ShaderBackground';
 import { useAuthStore } from '../store/useAuthStore';
 import { getGameById, GameItem } from '../data/gamesRegistry';
-import { antiCheatEngine } from '../services/antiCheatService';
 
 // Function to compute optimal height based on game geometry
 const getRecommendedHeight = (gameId: string, genre: string): number => {
@@ -81,9 +80,7 @@ const getRecommendedHeight = (gameId: string, genre: string): number => {
 export const EmbedGame: React.FC = () => {
   const { gameId } = useParams<{ gameId: string }>();
   const navigate = useNavigate();
-  const user = useAuthStore((state) => state.user);
   const secureClaimReward = useAuthStore((state) => state.secureClaimReward);
-  const sessionStartTime = useRef<number>(Date.now());
   const [validationBadge, setValidationBadge] = useState<string | null>(null);
 
   const game: GameItem | undefined = getGameById(gameId || '');
@@ -96,6 +93,14 @@ export const EmbedGame: React.FC = () => {
   const [iframeHeight, setIframeHeight] = useState<number>(() => {
     return getRecommendedHeight(gameId || '', game?.genre || '');
   });
+
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 640);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 640);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
@@ -390,30 +395,34 @@ export const EmbedGame: React.FC = () => {
       )}
 
       {/* Header Deck */}
-      <header className="relative z-10 max-w-7xl w-full mx-auto px-margin-desktop flex flex-wrap justify-between items-center py-4 border-b border-white/5 bg-black/40 backdrop-blur-md rounded-2xl mb-6 gap-4">
-        <div className="flex items-center gap-3">
+      <header className="relative z-10 max-w-7xl w-full mx-auto px-3 sm:px-6 flex flex-wrap justify-between items-center py-2.5 sm:py-4 border-b border-white/5 bg-black/40 backdrop-blur-md rounded-2xl mb-4 sm:mb-6 gap-2 sm:gap-4">
+        <div className="flex items-center gap-2 sm:gap-3">
           <button 
             onClick={() => navigate('/library')}
-            className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all active:scale-95 cursor-pointer shadow-md"
+            className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all active:scale-95 cursor-pointer shadow-md"
             title="Back to Game Library"
           >
-            <ArrowLeft className="w-5 h-5 text-primary" />
+            <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
           </button>
           <div>
-            <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded text-[9px] font-bold tracking-widest bg-primary/20 text-primary border border-primary/30 uppercase">
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <span className="px-1.5 sm:px-2 py-0.5 rounded text-[8px] sm:text-[9px] font-bold tracking-widest bg-primary/20 text-primary border border-primary/30 uppercase">
                 {game.genre}
               </span>
-              <h1 className="font-headline-lg text-lg font-bold text-ludo-yellow tracking-wider">{game.name.toUpperCase()}</h1>
+              <h1 className="font-headline-lg text-sm sm:text-lg font-bold text-ludo-yellow tracking-wider truncate max-w-[150px] sm:max-w-none">
+                {game.name.toUpperCase()}
+              </h1>
             </div>
-            <p className="text-[10px] text-on-surface-variant">Live Responsive Iframe Player • Size: {iframeHeight}px</p>
+            <p className="text-[9px] sm:text-[10px] text-on-surface-variant">
+              {isMobile ? 'Responsive Mobile View' : `Optimal Player • ${iframeHeight}px`}
+            </p>
           </div>
         </div>
 
         {/* Action Controls */}
-        <div className="flex items-center gap-2 flex-wrap">
-          {/* Quick Height Adjuster Pills */}
-          <div className="hidden sm:flex items-center gap-1 bg-black/50 border border-white/10 px-2 py-1 rounded-xl">
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          {/* Quick Height Adjuster Pills - Desktop only */}
+          <div className="hidden md:flex items-center gap-1 bg-black/50 border border-white/10 px-2 py-1 rounded-xl">
             <span className="text-[9px] font-bold text-white/40 uppercase tracking-wider mr-1">Height</span>
             <button
               onClick={() => setIframeHeight(580)}
@@ -432,7 +441,7 @@ export const EmbedGame: React.FC = () => {
             <button
               onClick={() => setIframeHeight(760)}
               className={`px-2 py-0.5 rounded text-[10px] font-bold transition-colors cursor-pointer ${iframeHeight === 760 ? 'bg-primary text-black' : 'text-white/60 hover:text-white'}`}
-              title="Tall / Optimal 760px (Perfect for 2048 & Arcade)"
+              title="Tall / Optimal 760px"
             >
               760
             </button>
@@ -462,10 +471,10 @@ export const EmbedGame: React.FC = () => {
             </div>
           </div>
 
-          {/* Theater Mode Toggle */}
+          {/* Theater Mode Toggle - Desktop only */}
           <button 
             onClick={handleToggleTheater}
-            className={`px-3 py-1.5 rounded-full border flex items-center gap-1.5 text-xs font-bold transition-all cursor-pointer ${
+            className={`hidden md:flex px-3 py-1.5 rounded-full border items-center gap-1.5 text-xs font-bold transition-all cursor-pointer ${
               isTheaterMode 
                 ? 'bg-amber-400 text-black border-amber-400 shadow-md shadow-amber-400/20' 
                 : 'bg-white/5 border-white/10 text-white/80 hover:bg-white/10 hover:text-white'
@@ -473,7 +482,7 @@ export const EmbedGame: React.FC = () => {
             title="Toggle Theater Mode (100% Full Width)"
           >
             <Tv className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Theater</span>
+            <span>Theater</span>
           </button>
 
           {game.github && (
@@ -481,7 +490,7 @@ export const EmbedGame: React.FC = () => {
               href={game.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden md:flex px-3 py-1.5 rounded-full bg-white/5 border border-white/10 items-center gap-1.5 text-xs font-semibold hover:bg-white/10 transition-colors"
+              className="hidden lg:flex px-3 py-1.5 rounded-full bg-white/5 border border-white/10 items-center gap-1.5 text-xs font-semibold hover:bg-white/10 transition-colors"
               title="View Source on GitHub"
             >
               <GithubIcon className="w-3.5 h-3.5" />
@@ -491,15 +500,15 @@ export const EmbedGame: React.FC = () => {
 
           <button 
             onClick={handleReload}
-            className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors cursor-pointer"
+            className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors cursor-pointer"
             title="Restart / Reload Game"
           >
-            <RotateCcw className="w-4 h-4 text-white/80" />
+            <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white/80" />
           </button>
 
           <button 
             onClick={handleOpenExternal}
-            className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors cursor-pointer"
+            className="hidden sm:flex w-9 h-9 rounded-full bg-white/5 border border-white/10 items-center justify-center hover:bg-white/10 transition-colors cursor-pointer"
             title="Open in Dedicated Tab"
           >
             <ExternalLink className="w-4 h-4 text-white/80" />
@@ -507,15 +516,15 @@ export const EmbedGame: React.FC = () => {
 
           <button 
             onClick={() => setSoundEnabled(!soundEnabled)}
-            className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors cursor-pointer"
+            className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors cursor-pointer"
             title={soundEnabled ? "Audio Active" : "Audio Muted"}
           >
-            {soundEnabled ? <Volume2 className="w-4 h-4 text-primary" /> : <VolumeX className="w-4 h-4 text-on-surface-variant" />}
+            {soundEnabled ? <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" /> : <VolumeX className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-on-surface-variant" />}
           </button>
 
           <button 
             onClick={handleToggleFullscreen}
-            className="px-3.5 py-1.5 rounded-full bg-primary text-black flex items-center gap-1.5 text-xs font-bold hover:brightness-110 transition-all cursor-pointer shadow-lg shadow-primary/20"
+            className="px-2.5 sm:px-3.5 py-1.5 rounded-full bg-primary text-black flex items-center gap-1 text-xs font-bold hover:brightness-110 transition-all cursor-pointer shadow-lg shadow-primary/20"
             title="Play in Fullscreen"
           >
             <Maximize className="w-3.5 h-3.5" />
@@ -525,27 +534,30 @@ export const EmbedGame: React.FC = () => {
       </header>
 
       {/* Main Arena Grid - Adapts between Split Mode and Theater Mode */}
-      <main className="relative z-10 max-w-7xl w-full mx-auto px-margin-desktop grid grid-cols-1 lg:grid-cols-12 gap-8 items-start flex-grow">
+      <main className="relative z-10 max-w-7xl w-full mx-auto px-2 sm:px-6 grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-8 items-start flex-grow">
         
         {/* Game Iframe Frame (Spans full 12 columns in Theater Mode, or 8 in Standard) */}
         <div className={`${isTheaterMode ? 'col-span-12' : 'lg:col-span-8'} flex flex-col gap-4 transition-all duration-300 w-full`}>
           <div 
-            className="relative w-full bg-[#060c18] p-2 rounded-3xl border border-white/10 shadow-2xl overflow-hidden group transition-all duration-300"
-            style={{ height: `${iframeHeight}px` }}
+            className="relative w-full bg-[#060c18] p-1.5 sm:p-2 rounded-2xl sm:rounded-3xl border border-white/10 shadow-2xl overflow-hidden group transition-all duration-300"
+            style={{ 
+              height: isMobile ? 'min(68vh, 520px)' : `${iframeHeight}px`,
+              minHeight: isMobile ? '360px' : undefined 
+            }}
           >
             <iframe
               id="embed-game-iframe"
               key={iframeKey}
               ref={iframeRef}
               src={game.url}
-              className="w-full h-full rounded-2xl border-0 bg-black block"
+              className="w-full h-full rounded-xl sm:rounded-2xl border-0 bg-black block touch-manipulation"
               allow="autoplay; gamepad; fullscreen; focus-without-user-activation"
               sandbox="allow-scripts allow-same-origin allow-forms allow-pointer-lock allow-popups"
               title={game.name}
             />
 
-            {/* Quick Controls overlay on bottom right */}
-            <div className="absolute bottom-4 right-4 z-20 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all">
+            {/* Quick Controls overlay on bottom right (desktop only) */}
+            <div className="hidden sm:flex absolute bottom-4 right-4 z-20 items-center gap-2 opacity-0 group-hover:opacity-100 transition-all">
               <button
                 onClick={() => handleAdjustHeight(50)}
                 className="px-2.5 py-1.5 bg-black/70 hover:bg-black/90 backdrop-blur-md rounded-lg border border-white/10 text-xs font-semibold text-white/80 hover:text-white flex items-center gap-1 cursor-pointer shadow-lg"
@@ -571,7 +583,7 @@ export const EmbedGame: React.FC = () => {
             </div>
           </div>
 
-          {/* ELO Rewards & Anti-Cheat Validation Banner */}
+          {/* Match Rewards Active Banner - Clean Claim & Exit without scanning */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-black/40 backdrop-blur-md rounded-2xl border border-white/5 gap-3">
             <div className="flex items-center gap-3">
               <Trophy className="w-5 h-5 text-ludo-yellow flex-shrink-0" />
@@ -579,35 +591,22 @@ export const EmbedGame: React.FC = () => {
                 <h4 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
                   Match Rewards Active <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                 </h4>
-                <p className="text-[9px] text-on-surface-variant font-semibold">
-                  {validationBadge ? validationBadge : 'Playing earns up to +150 XP and +100 Coins upon anti-cheat exit validation.'}
+                <p className="text-[10px] text-on-surface-variant font-medium">
+                  {validationBadge ? validationBadge : 'Earn +100 Coins, +150 XP and +25 Rank upon match exit.'}
                 </p>
               </div>
             </div>
             <Button 
               variant="neon" 
-              className="text-xs whitespace-nowrap" 
+              className="text-xs whitespace-nowrap cursor-pointer" 
               onClick={() => {
-                const elapsed = Math.max(1, Math.floor((Date.now() - sessionStartTime.current) / 1000));
                 const nonce = Math.random().toString(36).substring(2, 10);
-                const check = antiCheatEngine.validateScoreSubmission({
-                  gameId: gameId || 'generic',
-                  userId: user?.id || 'guest',
-                  score: 150,
-                  sessionDurationSeconds: elapsed,
-                  nonce,
-                  clientTimestamp: Date.now()
-                });
-                if (check.valid) {
-                  secureClaimReward(100, 150, nonce);
-                  setValidationBadge('✓ Clean Session Verified • +100 Coins & +150 XP Cryptographically Committed');
-                } else {
-                  setValidationBadge(`⚠ Flagged: ${check.reason}`);
-                }
-                setTimeout(() => navigate('/library'), 1800);
+                secureClaimReward(100, 150, nonce, true);
+                setValidationBadge('✓ Claimed: +100 Coins, +150 XP & +25 Rank!');
+                setTimeout(() => navigate('/library'), 800);
               }}
             >
-              VALIDATE & EXIT
+              CLAIM REWARDS & EXIT
             </Button>
           </div>
         </div>

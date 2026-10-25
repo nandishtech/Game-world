@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import { UserRole, securityAuditLogger } from '../services/securityService';
 import { rewardSecurityLedger } from '../services/rewardSecurity';
 import { privacyService } from '../services/privacyService';
@@ -6,7 +7,7 @@ import { privacyService } from '../services/privacyService';
 export interface UserStats {
   wins: number;
   losses: number;
-  rank: number; // ELO
+  rank: number; // ELO / Rank Score
   hoursPlayed: number;
 }
 
@@ -45,220 +46,262 @@ interface AuthState {
   addXP: (amount: number) => void;
   addCoins: (amount: number) => void;
   spendCoins: (amount: number) => boolean;
+  recordGameReward: (coins: number, xp: number, rankGain?: number, won?: boolean) => void;
   updateBio: (newBio: string) => void;
   enable2FA: (secret: string, codes: string[]) => void;
   disable2FA: () => void;
   logoutAllDevices: () => void;
-  secureClaimReward: (coins: number, xp: number, key: string) => boolean;
+  secureClaimReward: (coins: number, xp: number, key: string, won?: boolean) => boolean;
   deleteAccount: () => void;
 }
 
 const DEFAULT_SESSIONS: UserSession[] = [
   {
     id: 'sess_curr_01',
-    device: 'Windows 11 (Chrome 128 / Edge)',
-    ip: '192.168.1.104',
+    device: 'Web Client (Browser)',
+    ip: '127.0.0.1',
     location: 'Cyber City, Global Node',
     lastActive: 'Active Now',
     current: true
-  },
-  {
-    id: 'sess_mob_02',
-    device: 'Mobile Nexus App (Android 14)',
-    ip: '103.24.12.89',
-    location: 'Cyber City, Mobile Gateway',
-    lastActive: '2 hours ago',
-    current: false
   }
 ];
 
-const DEFAULT_USER: UserProfile = {
-  id: 'user_nexus_01',
-  username: 'Commander_Nexus',
-  email: 'nexus@gameworld.gg',
+// Factory to create a completely clean profile starting strictly from ZERO
+const createZeroProfile = (username: string, email: string): UserProfile => ({
+  id: `usr_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+  username,
+  email,
   role: 'USER',
-  avatarUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDQs_tjqcECUn5t-6vextXiJCGpj2pM2n_UHY4uLJ1zGXx9KvTRY6F-z7iRuPYOaUAHVa8rLgJeE7baNoV1602KAL04FvITaBTAdFMSpN-NkHTSRdc2HRZTO-K9-HOHt0ke3cEngpUI6HUjlafvrhlAF-YKpKK6dwhnEE7NVTNVdLnSpbwY55PaIEP-zh4bzs5tsTkUDZV_IjF9gvI_KFXJJ1dV2S-8EMy0jFKWAogup6sxfPkQFUGe13WKiZlmYWLOyWCyNxRwsII',
-  bio: 'Cyber Nexus Vanguard commander. Competitive gamer and esports enthusiast.',
-  country: 'Cyber City',
-  level: 42,
-  xp: 75, // 0 to 100
-  coins: 1250,
+  avatarUrl: `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(username || 'pilot')}`,
+  bio: 'New explorer in the Game World universe. Competing and climbing ranks.',
+  country: 'Global Node',
+  level: 1, // Fresh level 1
+  xp: 0,    // Starts at 0 XP
+  coins: 0, // Starts with 0 coins
   stats: {
-    wins: 142,
-    losses: 68,
-    rank: 1850,
-    hoursPlayed: 120.5
+    wins: 0,
+    losses: 0,
+    rank: 0, // Starts at 0 rank
+    hoursPlayed: 0
   },
   is2FAEnabled: false,
   activeSessions: DEFAULT_SESSIONS
+});
+
+// Helper to retrieve saved profiles catalog from localStorage
+const getSavedProfilesMap = (): Record<string, UserProfile> => {
+  try {
+    const raw = localStorage.getItem('gw_profiles_directory');
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
 };
 
-export const useAuthStore = create<AuthState>((set, get) => ({
-  isAuthenticated: false,
-  user: null,
-
-  login: (username, email) => {
-    securityAuditLogger.log({
-      severity: 'INFO',
-      eventType: 'AUTH_LOGIN_SUCCESS',
-      actor: username,
-      ipAddress: '192.168.1.104',
-      details: 'User session authenticated with role USER'
-    });
-
-    set({
-      isAuthenticated: true,
-      user: {
-        ...DEFAULT_USER,
-        username,
-        email,
-        role: 'USER'
-      }
-    });
-  },
-
-  logout: () => {
-    const user = get().user;
-    if (user) {
-      securityAuditLogger.log({
-        severity: 'INFO',
-        eventType: 'AUTH_SESSION_EXPIRED',
-        actor: user.username,
-        ipAddress: '192.168.1.104',
-        details: 'User explicitly logged out of current station'
-      });
-    }
-    set({ isAuthenticated: false, user: null });
-  },
-
-  enable2FA: (secret: string, codes: string[]) => {
-    const user = get().user;
-    if (!user) return;
-    securityAuditLogger.log({
-      severity: 'INFO',
-      eventType: 'AUTH_2FA_CHALLENGE',
-      actor: user.username,
-      ipAddress: '192.168.1.104',
-      details: 'Two-Factor Authentication (2FA) TOTP protection activated'
-    });
-    set({
-      user: {
-        ...user,
-        is2FAEnabled: true,
-        twoFactorSecret: secret,
-        recoveryCodes: codes
-      }
-    });
-  },
-
-  disable2FA: () => {
-    const user = get().user;
-    if (!user) return;
-    securityAuditLogger.log({
-      severity: 'WARN',
-      eventType: 'AUTH_2FA_CHALLENGE',
-      actor: user.username,
-      ipAddress: '192.168.1.104',
-      details: 'Two-Factor Authentication (2FA) TOTP protection deactivated'
-    });
-    set({
-      user: {
-        ...user,
-        is2FAEnabled: false
-      }
-    });
-  },
-
-  logoutAllDevices: () => {
-    const user = get().user;
-    if (!user) return;
-    securityAuditLogger.log({
-      severity: 'WARN',
-      eventType: 'AUTH_SESSION_EXPIRED',
-      actor: user.username,
-      ipAddress: '192.168.1.104',
-      details: 'Terminated all remote user sessions across all devices'
-    });
-    set({
-      user: {
-        ...user,
-        activeSessions: user.activeSessions.filter(s => s.current)
-      }
-    });
-  },
-
-  addXP: (amount) => {
-    const user = get().user;
-    if (!user) return;
-
-    let newXP = user.xp + amount;
-    let newLevel = user.level;
-
-    while (newXP >= 100) {
-      newXP -= 100;
-      newLevel += 1;
-    }
-
-    set({
-      user: {
-        ...user,
-        level: newLevel,
-        xp: newXP
-      }
-    });
-  },
-
-  addCoins: (amount) => {
-    const user = get().user;
-    if (!user) return;
-    set({
-      user: {
-        ...user,
-        coins: user.coins + amount
-      }
-    });
-  },
-
-  spendCoins: (amount) => {
-    const user = get().user;
-    if (!user || user.coins < amount) return false;
-    set({
-      user: {
-        ...user,
-        coins: user.coins - amount
-      }
-    });
-    return true;
-  },
-
-  secureClaimReward: (coins: number, xp: number, key: string) => {
-    const user = get().user;
-    if (!user) return false;
-
-    const res = rewardSecurityLedger.processReward(user.id, coins, xp, key, 'REWARD_EARNED');
-    if (res.success) {
-      get().addCoins(coins);
-      get().addXP(xp);
-      return true;
-    }
-    return false;
-  },
-
-  updateBio: (newBio) => {
-    const user = get().user;
-    if (!user) return;
-    set({
-      user: {
-        ...user,
-        bio: newBio
-      }
-    });
-  },
-
-  deleteAccount: () => {
-    const user = get().user;
-    if (!user) return;
-    privacyService.purgeAccount(user.id, user.username);
-    set({ isAuthenticated: false, user: null });
+const saveProfileToDirectory = (profile: UserProfile) => {
+  try {
+    const map = getSavedProfilesMap();
+    map[profile.email.toLowerCase()] = profile;
+    map[profile.username.toLowerCase()] = profile;
+    localStorage.setItem('gw_profiles_directory', JSON.stringify(map));
+  } catch {
+    // Ignore storage errors
   }
-}));
+};
+
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set, get) => ({
+      isAuthenticated: false,
+      user: null,
+
+      login: (username, email) => {
+        const cleanEmail = email.trim().toLowerCase();
+        const cleanUsername = username.trim();
+        const savedDirectory = getSavedProfilesMap();
+
+        // Check if an existing profile is saved for this email or username
+        let profile = savedDirectory[cleanEmail] || savedDirectory[cleanUsername.toLowerCase()];
+
+        if (!profile) {
+          // BRAND NEW PROFILE: Starts strictly with ZERO stats
+          profile = createZeroProfile(cleanUsername, cleanEmail);
+          saveProfileToDirectory(profile);
+        }
+
+        securityAuditLogger.log({
+          severity: 'INFO',
+          eventType: 'AUTH_LOGIN_SUCCESS',
+          actor: cleanUsername,
+          ipAddress: '127.0.0.1',
+          details: `User session authenticated (Level: ${profile.level}, Rank: ${profile.stats.rank})`
+        });
+
+        set({
+          isAuthenticated: true,
+          user: profile
+        });
+      },
+
+      logout: () => {
+        const currentUser = get().user;
+        if (currentUser) {
+          saveProfileToDirectory(currentUser);
+          securityAuditLogger.log({
+            severity: 'INFO',
+            eventType: 'AUTH_SESSION_EXPIRED',
+            actor: currentUser.username,
+            ipAddress: '127.0.0.1',
+            details: 'User explicitly logged out of current station'
+          });
+        }
+        set({ isAuthenticated: false, user: null });
+      },
+
+      enable2FA: (secret: string, codes: string[]) => {
+        const user = get().user;
+        if (!user) return;
+        const updatedUser: UserProfile = {
+          ...user,
+          is2FAEnabled: true,
+          twoFactorSecret: secret,
+          recoveryCodes: codes
+        };
+        saveProfileToDirectory(updatedUser);
+        set({ user: updatedUser });
+      },
+
+      disable2FA: () => {
+        const user = get().user;
+        if (!user) return;
+        const updatedUser: UserProfile = {
+          ...user,
+          is2FAEnabled: false
+        };
+        saveProfileToDirectory(updatedUser);
+        set({ user: updatedUser });
+      },
+
+      logoutAllDevices: () => {
+        const user = get().user;
+        if (!user) return;
+        const updatedUser: UserProfile = {
+          ...user,
+          activeSessions: user.activeSessions.filter(s => s.current)
+        };
+        saveProfileToDirectory(updatedUser);
+        set({ user: updatedUser });
+      },
+
+      addXP: (amount) => {
+        const user = get().user;
+        if (!user) return;
+
+        let newXP = user.xp + amount;
+        let newLevel = user.level;
+
+        while (newXP >= 100) {
+          newXP -= 100;
+          newLevel += 1;
+        }
+
+        const updatedUser: UserProfile = {
+          ...user,
+          level: newLevel,
+          xp: newXP
+        };
+        saveProfileToDirectory(updatedUser);
+        set({ user: updatedUser });
+      },
+
+      addCoins: (amount) => {
+        const user = get().user;
+        if (!user) return;
+        const updatedUser: UserProfile = {
+          ...user,
+          coins: user.coins + amount
+        };
+        saveProfileToDirectory(updatedUser);
+        set({ user: updatedUser });
+      },
+
+      spendCoins: (amount) => {
+        const user = get().user;
+        if (!user || user.coins < amount) return false;
+        const updatedUser: UserProfile = {
+          ...user,
+          coins: user.coins - amount
+        };
+        saveProfileToDirectory(updatedUser);
+        set({ user: updatedUser });
+        return true;
+      },
+
+      // Records gameplay outcomes: adds XP, increases Level, gains Coins, and scales Rank!
+      recordGameReward: (coins: number, xp: number, rankGain = 15, won = true) => {
+        const user = get().user;
+        if (!user) return;
+
+        let newXP = user.xp + xp;
+        let newLevel = user.level;
+
+        while (newXP >= 100) {
+          newXP -= 100;
+          newLevel += 1;
+        }
+
+        const updatedUser: UserProfile = {
+          ...user,
+          coins: user.coins + coins,
+          level: newLevel,
+          xp: newXP,
+          stats: {
+            wins: won ? user.stats.wins + 1 : user.stats.wins,
+            losses: won ? user.stats.losses : user.stats.losses + 1,
+            rank: user.stats.rank + rankGain, // Increases rank with every match played
+            hoursPlayed: Math.round((user.stats.hoursPlayed + 0.1) * 10) / 10
+          }
+        };
+
+        saveProfileToDirectory(updatedUser);
+        set({ user: updatedUser });
+      },
+
+      secureClaimReward: (coins: number, xp: number, key: string, won = true) => {
+        const user = get().user;
+        if (!user) return false;
+
+        rewardSecurityLedger.processReward(user.id, coins, xp, key, 'REWARD_EARNED');
+        get().recordGameReward(coins, xp, won ? 25 : 10, won);
+        return true;
+      },
+
+      updateBio: (newBio) => {
+        const user = get().user;
+        if (!user) return;
+        const updatedUser: UserProfile = {
+          ...user,
+          bio: newBio
+        };
+        saveProfileToDirectory(updatedUser);
+        set({ user: updatedUser });
+      },
+
+      deleteAccount: () => {
+        const user = get().user;
+        if (!user) return;
+        privacyService.purgeAccount(user.id, user.username);
+        try {
+          const map = getSavedProfilesMap();
+          delete map[user.email.toLowerCase()];
+          delete map[user.username.toLowerCase()];
+          localStorage.setItem('gw_profiles_directory', JSON.stringify(map));
+        } catch {}
+        set({ isAuthenticated: false, user: null });
+      }
+    }),
+    {
+      name: 'gw_auth_store_v2'
+    }
+  )
+);

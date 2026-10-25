@@ -73,7 +73,7 @@ export const Home: React.FC = () => {
             
             <div className="flex flex-wrap gap-4 pt-4">
               <button 
-                onClick={() => navigate('/dashboard')}
+                onClick={() => navigate('/library')}
                 className="neon-button px-8 py-4 rounded-xl font-headline-sm text-headline-sm text-on-primary shadow-[0_0_20px_rgba(77,142,255,0.4)] hover:scale-105 transition-transform cursor-pointer"
               >
                 Play Now

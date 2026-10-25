@@ -11,8 +11,7 @@ export const Dashboard: React.FC = () => {
   const { addNotification } = useSocialStore();
 
   const handleQuickPlay = () => {
-    addNotification('FRIEND_REQUEST', 'Quick play matchmaking queue initiated');
-    navigate('/matchmaking');
+    navigate('/library');
   };
 
   const handleSignOut = () => {
@@ -126,9 +125,12 @@ export const Dashboard: React.FC = () => {
                 <span className="text-primary font-bold">LVL {user.level}</span>
               </div>
               <div className="w-full h-2 bg-surface-container-highest rounded-full overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-primary to-tertiary w-[78%] progress-pulse shadow-[0_0_10px_rgba(173,198,255,0.5)]"></div>
+                <div 
+                  className="h-full bg-gradient-to-r from-primary to-tertiary progress-pulse shadow-[0_0_10px_rgba(173,198,255,0.5)] transition-all duration-500"
+                  style={{ width: `${Math.min(100, Math.max(0, user.xp % 100))}%` }}
+                ></div>
               </div>
-              <p className="text-right text-[10px] text-on-surface-variant mt-2">12,450 / 15,000 XP to next level</p>
+              <p className="text-right text-[10px] text-on-surface-variant mt-2">{user.xp % 100} / 100 XP to next level</p>
             </div>
 
             <div className="glass-card p-6 rounded-xl flex items-center gap-4">
@@ -143,11 +145,11 @@ export const Dashboard: React.FC = () => {
 
             <div className="glass-card p-6 rounded-xl flex items-center gap-4">
               <div className="w-12 h-12 bg-tertiary/10 rounded-lg flex items-center justify-center border border-tertiary/30">
-                <span className="material-symbols-outlined text-tertiary" style={{ fontVariationSettings: "'FILL' 1" }}>timer</span>
+                <span className="material-symbols-outlined text-tertiary" style={{ fontVariationSettings: "'FILL' 1" }}>military_tech</span>
               </div>
               <div>
-                <p className="text-on-surface-variant font-label-sm text-label-sm uppercase">Time Played</p>
-                <h4 className="font-headline-sm text-headline-sm text-tertiary">1,248 <span className="text-sm font-sans opacity-60">HRS</span></h4>
+                <p className="text-on-surface-variant font-label-sm text-label-sm uppercase">Global Rank</p>
+                <h4 className="font-headline-sm text-headline-sm text-tertiary">{user.stats.rank} <span className="text-sm font-sans opacity-60">PTS</span></h4>
               </div>
             </div>
           </section>
