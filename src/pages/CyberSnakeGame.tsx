@@ -74,7 +74,7 @@ export const CyberSnakeGame: React.FC = () => {
       {!started ? (
         <div className="text-center space-y-6 z-10">
           <h1 className="text-display-lg text-4xl text-white font-extrabold tracking-widest uppercase">CYBER SNAKE GAME</h1>
-          <p className="text-sm text-cyan-400 font-semibold">Original GitHub Repository Deployment</p>
+          <p className="text-sm text-cyan-400 font-semibold">Classic Retro Arcade Edition</p>
           <div className="flex justify-center gap-4">
             <Button variant="neon" onClick={startFullscreenGame} className="px-8 py-4 text-sm font-bold tracking-widest cursor-pointer">
               PLAY IN FULLSCREEN

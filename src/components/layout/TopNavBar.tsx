@@ -64,7 +64,6 @@ export const TopNavBar: React.FC = () => {
           <Link className={activeClass('/friends')} to="/friends">Community</Link>
           <Link className={activeClass('/tournaments')} to="/tournaments">Tournaments</Link>
           <Link className={activeClass('/marketplace')} to="/marketplace">Store</Link>
-          <Link className={activeClass('/developer')} to="/developer">Developer</Link>
         </nav>
 
         {/* Actions & Profiles Deck */}

@@ -7,499 +7,434 @@ import { ShaderBackground } from '../components/ShaderBackground';
 import { 
   Award, 
   User, 
-  Settings, 
   Globe, 
-  Shield, 
   ShieldCheck, 
-  ShieldAlert, 
-  Smartphone, 
-  Download, 
-  Trash2, 
-  LogOut, 
-  Edit3, 
   Save, 
-  Key,
+  Sparkles,
+  Gamepad2,
+  Trophy,
+  Coins,
+  Flame,
   CheckCircle2,
-  Sparkles
+  Calendar,
+  Layers
 } from 'lucide-react';
-import { privacyService } from '../services/privacyService';
-import { generate2FADetails } from '../services/securityService';
 
-const ACHIEVEMENTS = [
-  { id: 'a1', title: 'Hexa-Kill Specialist', desc: 'Secure 6 kills in a single match session.', unlocked: true },
-  { id: 'a2', title: 'Vanguard Initiate', desc: 'Reach Level 10 on the seasonal battlepass.', unlocked: true },
-  { id: 'a3', title: 'Coin Collector', desc: 'Deduct and complete 3 purchases in store.', unlocked: false }
+const PRESET_AVATARS = [
+  { id: 'pilot', name: 'Pilot Alpha', url: 'https://api.dicebear.com/7.x/bottts/svg?seed=PilotAlpha' },
+  { id: 'phoenix', name: 'Cyber Phoenix', url: 'https://api.dicebear.com/7.x/bottts/svg?seed=CyberPhoenix' },
+  { id: 'shadow', name: 'Shadow Striker', url: 'https://api.dicebear.com/7.x/bottts/svg?seed=ShadowStriker' },
+  { id: 'valkyrie', name: 'Neon Valkyrie', url: 'https://api.dicebear.com/7.x/bottts/svg?seed=NeonValkyrie' },
+  { id: 'titan', name: 'Mech Titan', url: 'https://api.dicebear.com/7.x/bottts/svg?seed=MechTitan' },
+  { id: 'ghost', name: 'Cyber Ghost', url: 'https://api.dicebear.com/7.x/bottts/svg?seed=CyberGhost' },
+  { id: 'quantum', name: 'Quantum Pulse', url: 'https://api.dicebear.com/7.x/bottts/svg?seed=QuantumPulse' },
+  { id: 'apex', name: 'Apex Legend', url: 'https://api.dicebear.com/7.x/bottts/svg?seed=ApexLegend' }
 ];
+
+const getRankTier = (rank: number): { tier: string; color: string } => {
+  if (rank >= 1000) return { tier: 'Apex Legend', color: 'text-amber-400' };
+  if (rank >= 500) return { tier: 'Diamond Master', color: 'text-cyan-400' };
+  if (rank >= 250) return { tier: 'Platinum Pilot', color: 'text-emerald-400' };
+  if (rank >= 100) return { tier: 'Gold Vanguard', color: 'text-yellow-400' };
+  if (rank >= 30) return { tier: 'Silver Scout', color: 'text-slate-300' };
+  return { tier: 'Bronze Initiate', color: 'text-amber-600' };
+};
 
 export const Profile: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { user, updateBio, completeProfile, enable2FA, disable2FA, logoutAllDevices, deleteAccount } = useAuthStore();
+  const { user, updateProfile } = useAuthStore();
   const isFirstLogin = searchParams.get('firstLogin') === 'true' || Boolean(user?.isFirstLogin);
-  const [activeTab, setActiveTab] = useState<'OVERVIEW' | 'SECURITY' | 'PRIVACY'>('OVERVIEW');
-  const [isEditing, setIsEditing] = useState(isFirstLogin);
-  const [bioText, setBioText] = useState(user?.bio || '');
+
+  // Editable Form State
+  const [displayName, setDisplayName] = useState(user?.displayName || user?.username || '');
+  const [age, setAge] = useState<number>(user?.age ?? 18);
+  const [country, setCountry] = useState(user?.country || 'Global Node');
+  const [bio, setBio] = useState(user?.bio || 'Climbing ranks in Game World. Ready for live matches!');
+  const [selectedAvatar, setSelectedAvatar] = useState(user?.avatarUrl || PRESET_AVATARS[0].url);
   const [saveSuccess, setSaveSuccess] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [confirmDeleteText, setConfirmDeleteText] = useState('');
 
   if (!user) return null;
 
-  const handleSaveBio = (e: React.FormEvent) => {
+  const totalMatches = user.stats.wins + user.stats.losses;
+  const winRate = totalMatches > 0 ? Math.round((user.stats.wins / totalMatches) * 100) : 0;
+  const rankTier = getRankTier(user.stats.rank);
+
+  const handleSaveProfile = (e: React.FormEvent) => {
     e.preventDefault();
-    updateBio(bioText);
-    setIsEditing(false);
+    updateProfile({
+      displayName: displayName.trim() || user.username,
+      age: Number(age) || 18,
+      country: country.trim() || 'Global Node',
+      bio: bio.trim(),
+      avatarUrl: selectedAvatar
+    });
     setSaveSuccess(true);
     setTimeout(() => setSaveSuccess(false), 3000);
   };
 
-  const handleToggle2FA = () => {
-    if (user.is2FAEnabled) {
-      disable2FA();
-    } else {
-      const details = generate2FADetails(user.username);
-      enable2FA(details.secret, details.backupCodes);
-    }
-  };
-
-  const handleExportData = () => {
-    privacyService.exportUserData(user);
-  };
-
-  const handleExecuteDeleteAccount = () => {
-    if (confirmDeleteText !== user.username) return;
-    deleteAccount();
-  };
-
   return (
-    <div className="relative min-h-screen pt-24 pb-12 bg-background">
+    <div className="relative min-h-screen pt-24 pb-16 bg-background">
       <ShaderBackground type="core" />
 
       <main className="relative z-10 max-w-container-max mx-auto px-margin-desktop space-y-8">
         
-        {/* Onboarding Complete Profile Banner (Workflow: First Login? -> Complete Profile -> User Dashboard) */}
+        {/* Onboarding Welcome Banner for First-Time Users */}
         {isFirstLogin && (
           <Card level={1} className="p-6 border-2 border-primary/50 bg-primary/10 rounded-2xl shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-primary/20 border border-primary/40 flex items-center justify-center text-primary flex-shrink-0">
-                <Sparkles className="w-5 h-5 text-amber-400" />
+              <div className="w-12 h-12 rounded-2xl bg-primary/20 border border-primary/40 flex items-center justify-center text-primary flex-shrink-0">
+                <Sparkles className="w-6 h-6 text-amber-400 animate-pulse" />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                  Complete Your Profile Setup <span className="text-[10px] bg-primary text-black font-black px-2 py-0.5 rounded-full">Step 1</span>
+                <h3 className="text-base font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                  Welcome, Commander! <span className="text-[10px] bg-primary text-black font-black px-2 py-0.5 rounded-full">New Pilot</span>
                 </h3>
                 <p className="text-xs text-on-surface-variant mt-0.5">
-                  Welcome to Game World! Set your biography below to personalize your callsign, then head to your command deck.
+                  Set your Gamer Name, Age, and Avatar below. When you're ready, jump directly into the action!
                 </p>
               </div>
             </div>
             <Button
               variant="neon"
-              className="text-xs py-2.5 px-6 whitespace-nowrap cursor-pointer shrink-0"
+              className="text-xs py-3 px-6 whitespace-nowrap cursor-pointer shrink-0 font-bold tracking-wider"
               onClick={() => {
-                completeProfile(bioText);
-                navigate('/dashboard');
+                updateProfile({
+                  displayName: displayName.trim() || user.username,
+                  age: Number(age) || 18,
+                  country: country.trim() || 'Global Node',
+                  bio: bio.trim(),
+                  avatarUrl: selectedAvatar
+                });
+                navigate('/library');
               }}
             >
-              CONFIRM & ENTER DASHBOARD →
+              START PLAYING GAMES →
             </Button>
           </Card>
         )}
 
-        {/* Profile Card Header */}
-        <Card level={2} className="p-6 md:p-8 border border-white/5">
+        {/* Hero Gamer Profile Banner */}
+        <Card level={2} className="p-6 md:p-8 border border-white/10 shadow-2xl bg-black/40 backdrop-blur-xl">
           <div className="flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
             
-            {/* Avatar & Info */}
+            {/* Avatar & Player Quick Info */}
             <div className="flex flex-col md:flex-row items-center gap-6 text-center md:text-left w-full">
-              <div className="relative w-24 h-24 rounded-full border-2 border-primary overflow-hidden">
-                <img src={user.avatarUrl} alt={user.username} className="w-full h-full object-cover" />
+              <div className="relative w-28 h-28 rounded-2xl border-2 border-primary overflow-hidden shadow-lg shadow-primary/20 bg-black/80 flex-shrink-0">
+                <img src={selectedAvatar} alt={displayName} className="w-full h-full object-cover" />
+                <span className="absolute bottom-1 right-1 px-1.5 py-0.5 rounded bg-primary text-black text-[9px] font-black uppercase">
+                  LVL {user.level}
+                </span>
               </div>
 
               <div className="space-y-2 flex-grow">
                 <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
-                  <h1 className="text-2xl md:text-3xl font-bold text-white leading-none">{user.username}</h1>
-                  <span className="bg-primary/10 border border-primary/20 text-primary text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded">
-                    Rank ELO {user.stats.rank}
+                  <h1 className="text-2xl md:text-3xl font-extrabold text-white leading-none">
+                    {displayName || user.username}
+                  </h1>
+                  <span className={`border border-current px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${rankTier.color}`}>
+                    {rankTier.tier}
                   </span>
-                  <span className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded flex items-center gap-1">
-                    <ShieldCheck className="w-3 h-3" /> VERIFIED PLAYER
+                  <span className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                    <ShieldCheck className="w-3.5 h-3.5" /> VERIFIED PLAYER
                   </span>
                 </div>
                 
-                <p className="text-xs text-on-surface-variant flex items-center justify-center md:justify-start gap-1">
-                  <Globe className="w-4 h-4 text-on-surface-variant" /> {user.country} • Verified Player ID: {user.id}
+                <p className="text-xs text-on-surface-variant flex items-center justify-center md:justify-start gap-2 flex-wrap">
+                  <span className="flex items-center gap-1 text-white/80">
+                    <Globe className="w-3.5 h-3.5 text-primary" /> {country}
+                  </span>
+                  <span>•</span>
+                  <span className="text-white/80 font-medium">Age: {age}</span>
+                  <span>•</span>
+                  <span className="text-white/60">ID: {user.id.substring(0, 12)}</span>
                 </p>
 
-                {/* Level Node bar */}
-                <div className="w-full max-w-sm pt-2">
-                  <div className="flex justify-between text-[10px] text-on-surface-variant font-bold mb-1">
-                    <span>Level {user.level}</span>
-                    <span>{user.xp}/100 XP</span>
+                {/* Level & XP Progress */}
+                <div className="w-full max-w-md pt-2">
+                  <div className="flex justify-between text-[11px] text-on-surface-variant font-bold mb-1.5">
+                    <span className="text-white">Level {user.level} Combatant</span>
+                    <span className="text-primary font-bold">{user.xp} / 100 XP</span>
                   </div>
-                  <div className="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
-                    <div className="bg-primary h-full transition-all duration-500" style={{ width: `${user.xp}%` }} />
+                  <div className="w-full bg-surface-container-high h-2 rounded-full overflow-hidden border border-white/5">
+                    <div 
+                      className="bg-gradient-to-r from-primary to-cyan-400 h-full transition-all duration-500" 
+                      style={{ width: `${Math.min(100, Math.max(0, user.xp % 100))}%` }} 
+                    />
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Tab Navigation Pill Group */}
-            <div className="flex items-center gap-1 bg-black/60 border border-white/10 p-1 rounded-xl flex-shrink-0">
-              <button
-                onClick={() => setActiveTab('OVERVIEW')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                  activeTab === 'OVERVIEW' ? 'bg-primary text-black' : 'text-white/60 hover:text-white'
-                }`}
+            {/* Quick Action Button */}
+            <div className="flex flex-col sm:flex-row gap-2.5 w-full md:w-auto flex-shrink-0">
+              <Button
+                variant="neon"
+                onClick={() => navigate('/library')}
+                className="py-3 px-6 text-xs font-bold tracking-wider cursor-pointer whitespace-nowrap flex items-center justify-center gap-2"
               >
-                Overview
-              </button>
-              <button
-                onClick={() => setActiveTab('SECURITY')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1 ${
-                  activeTab === 'SECURITY' ? 'bg-primary text-black' : 'text-white/60 hover:text-white'
-                }`}
-              >
-                <Shield className="w-3.5 h-3.5" /> 2FA & Security
-              </button>
-              <button
-                onClick={() => setActiveTab('PRIVACY')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1 ${
-                  activeTab === 'PRIVACY' ? 'bg-primary text-black' : 'text-white/60 hover:text-white'
-                }`}
-              >
-                <Download className="w-3.5 h-3.5" /> Privacy & GDPR
-              </button>
+                <Gamepad2 className="w-4 h-4" /> PLAY GAMES NOW
+              </Button>
             </div>
 
           </div>
         </Card>
 
-        {/* TAB 1: OVERVIEW */}
-        {activeTab === 'OVERVIEW' && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+        {/* Main Content Grid: Profile Settings & Player Stats */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          {/* Left Column (8 cols): Profile Editor & Avatar Picker */}
+          <div className="lg:col-span-8 space-y-6">
             
-            {/* Left Columns: Bio and Achievements */}
-            <div className="lg:col-span-2 space-y-6">
-              
-              {/* Bio Editor */}
-              <Card level={2} className="p-6 border border-white/5 space-y-4">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-headline-sm font-headline-sm text-white font-bold">Commander Biography</h3>
-                  {!isEditing && (
-                    <button 
-                      onClick={() => setIsEditing(true)}
-                      className="text-xs text-primary font-bold flex items-center gap-1.5 hover:underline"
-                    >
-                      <Edit3 className="w-4 h-4" /> Edit Biography
-                    </button>
-                  )}
-                </div>
+            {/* Avatar Selector */}
+            <Card level={2} className="p-6 border border-white/10 bg-black/40 backdrop-blur-md space-y-4">
+              <div className="flex justify-between items-center border-b border-white/5 pb-3">
+                <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                  <User className="w-4 h-4 text-primary" /> Choose Your Gamer Avatar
+                </h3>
+                <span className="text-[10px] text-on-surface-variant">Click any avatar to select</span>
+              </div>
 
-                {isEditing ? (
-                  <form onSubmit={handleSaveBio} className="space-y-4">
-                    <textarea
-                      value={bioText}
-                      onChange={(e) => setBioText(e.target.value)}
-                      rows={4}
-                      maxLength={200}
-                      className="w-full bg-[#050505] border border-white/10 rounded-xl p-4 text-xs text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/45 transition-all resize-none placeholder-white/20"
+              <div className="grid grid-cols-4 sm:grid-cols-8 gap-3 pt-2">
+                {PRESET_AVATARS.map((av) => {
+                  const isSelected = selectedAvatar === av.url;
+                  return (
+                    <button
+                      key={av.id}
+                      type="button"
+                      onClick={() => setSelectedAvatar(av.url)}
+                      className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all p-1 bg-black/50 hover:scale-105 cursor-pointer ${
+                        isSelected 
+                          ? 'border-primary shadow-[0_0_15px_rgba(77,142,255,0.6)] scale-105' 
+                          : 'border-white/10 hover:border-white/30 opacity-70 hover:opacity-100'
+                      }`}
+                      title={av.name}
+                    >
+                      <img src={av.url} alt={av.name} className="w-full h-full object-cover rounded-lg" />
+                      {isSelected && (
+                        <div className="absolute top-1 right-1 bg-primary text-black rounded-full p-0.5 shadow-md">
+                          <CheckCircle2 className="w-3 h-3 stroke-[3]" />
+                        </div>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </Card>
+
+            {/* Profile Form Details */}
+            <Card level={2} className="p-6 md:p-8 border border-white/10 bg-black/40 backdrop-blur-md space-y-6">
+              <div className="flex justify-between items-center border-b border-white/5 pb-4">
+                <div>
+                  <h3 className="text-base font-bold text-white uppercase tracking-wider">
+                    Gamer Profile Information
+                  </h3>
+                  <p className="text-xs text-on-surface-variant mt-0.5">
+                    Personalize your gamer callsign, age, and profile motto.
+                  </p>
+                </div>
+              </div>
+
+              <form onSubmit={handleSaveProfile} className="space-y-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  {/* Gamer Name / Callsign */}
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] font-bold uppercase tracking-wider text-white/80 block">
+                      Gamer Callsign / Name <span className="text-primary">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={displayName}
+                      onChange={(e) => setDisplayName(e.target.value)}
+                      maxLength={24}
+                      placeholder="e.g. ShadowHunter"
+                      className="w-full bg-[#050505] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-primary transition-all placeholder-white/20"
                       required
                     />
-                    <div className="flex gap-2 justify-end">
-                      <Button type="submit" variant="neon" className="px-5 py-2 text-xs">
-                        Save Dispatch <Save className="w-4 h-4" />
-                      </Button>
-                      <Button variant="glass" onClick={() => { setIsEditing(false); setBioText(user.bio); }} className="px-5 py-2 text-xs">
-                        Cancel
-                      </Button>
-                    </div>
-                  </form>
-                ) : (
-                  <div className="space-y-2">
-                    <p className="text-xs text-on-surface-variant leading-relaxed bg-[#050505]/40 border border-white/5 p-4 rounded-xl">
-                      {user.bio || 'No details recorded in player database.'}
-                    </p>
-                    {saveSuccess && (
-                      <span className="text-[10px] text-green-400 font-bold block pt-1">
-                        ✓ Profile bio logs updated successfully.
-                      </span>
-                    )}
                   </div>
-                )}
-              </Card>
 
-              {/* Achievements List */}
-              <Card level={2} className="p-6 border border-white/5">
-                <h3 className="text-headline-sm font-headline-sm text-white font-bold mb-6">Combat Ribbons & Achievements</h3>
-                
-                <div className="space-y-4">
-                  {ACHIEVEMENTS.map((a) => (
-                    <div 
-                      key={a.id} 
-                      className={`flex items-center justify-between p-4 rounded-xl border ${a.unlocked ? 'bg-primary/5 border-primary/20' : 'bg-[#050505]/40 border-white/5 opacity-60'}`}
+                  {/* Player Age */}
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] font-bold uppercase tracking-wider text-white/80 block">
+                      Player Age <span className="text-primary">*</span>
+                    </label>
+                    <input
+                      type="number"
+                      min={6}
+                      max={120}
+                      value={age}
+                      onChange={(e) => setAge(Number(e.target.value))}
+                      placeholder="e.g. 18"
+                      className="w-full bg-[#050505] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-primary transition-all placeholder-white/20"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  {/* Country / Region */}
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] font-bold uppercase tracking-wider text-white/80 block">
+                      Country / Region
+                    </label>
+                    <input
+                      type="text"
+                      value={country}
+                      onChange={(e) => setCountry(e.target.value)}
+                      placeholder="e.g. United States, India, Germany..."
+                      className="w-full bg-[#050505] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-primary transition-all placeholder-white/20"
+                    />
+                  </div>
+
+                  {/* Account Email (Read-Only) */}
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] font-bold uppercase tracking-wider text-white/40 block">
+                      Registered Email (Protected)
+                    </label>
+                    <input
+                      type="text"
+                      value={user.email}
+                      disabled
+                      className="w-full bg-[#050505]/50 border border-white/5 rounded-xl px-4 py-2.5 text-xs text-white/50 cursor-not-allowed"
+                    />
+                  </div>
+                </div>
+
+                {/* Gamer Bio / Motto */}
+                <div className="space-y-1.5">
+                  <div className="flex justify-between items-center">
+                    <label className="text-[11px] font-bold uppercase tracking-wider text-white/80 block">
+                      Gamer Bio & Motto
+                    </label>
+                    <span className="text-[10px] text-on-surface-variant">{bio.length}/160</span>
+                  </div>
+                  <textarea
+                    value={bio}
+                    onChange={(e) => setBio(e.target.value)}
+                    rows={3}
+                    maxLength={160}
+                    placeholder="Enter your favorite gaming quote, playstyle, or battle motto..."
+                    className="w-full bg-[#050505] border border-white/10 rounded-xl p-3.5 text-xs text-white focus:outline-none focus:border-primary transition-all resize-none placeholder-white/20"
+                  />
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex flex-wrap items-center justify-between gap-4 pt-3 border-t border-white/5">
+                  {saveSuccess ? (
+                    <span className="text-xs text-emerald-400 font-bold flex items-center gap-1.5">
+                      <CheckCircle2 className="w-4 h-4" /> Profile saved successfully!
+                    </span>
+                  ) : (
+                    <span className="text-[11px] text-on-surface-variant">
+                      Changes are immediately saved to your gaming account.
+                    </span>
+                  )}
+
+                  <div className="flex items-center gap-3">
+                    <Button 
+                      type="submit" 
+                      variant="neon" 
+                      className="py-2.5 px-6 text-xs font-bold tracking-wider cursor-pointer shadow-lg shadow-primary/20"
                     >
-                      <div className="flex items-center gap-3">
-                        <Award className={`w-8 h-8 ${a.unlocked ? 'text-primary' : 'text-on-surface-variant/40'}`} />
-                        <div>
-                          <h4 className="text-xs font-bold text-white">{a.title}</h4>
-                          <p className="text-[10px] text-on-surface-variant leading-normal mt-0.5">{a.desc}</p>
-                        </div>
-                      </div>
-                      <span className={`text-[9px] font-bold px-2 py-0.5 rounded border ${a.unlocked ? 'bg-primary/5 text-primary border-primary/20' : 'bg-white/5 text-on-surface-variant/40 border-white/5'}`}>
-                        {a.unlocked ? 'UNLOCKED' : 'LOCKED'}
-                      </span>
-                    </div>
-                  ))}
+                      SAVE PROFILE <Save className="w-4 h-4 ml-1.5" />
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="glass"
+                      onClick={() => navigate('/library')}
+                      className="py-2.5 px-6 text-xs font-bold tracking-wider cursor-pointer border border-white/10"
+                    >
+                      BROWSE GAMES →
+                    </Button>
+                  </div>
                 </div>
-              </Card>
+              </form>
+            </Card>
 
-            </div>
+          </div>
 
-            {/* Right Column: Platform stats card */}
-            <Card level={2} className="p-6 border border-white/5 space-y-6">
-              <h3 className="text-headline-sm font-headline-sm text-white font-bold">Platform Stats Details</h3>
-              
-              <div className="space-y-4 text-xs font-semibold text-on-surface-variant">
-                <div className="flex justify-between border-b border-white/5 pb-2">
-                  <span>Rank ELO Score</span>
-                  <span className="text-white font-bold">{user.stats.rank}</span>
+          {/* Right Column (4 cols): Gamer Stats & Performance Breakdown */}
+          <div className="lg:col-span-4 space-y-6">
+            
+            {/* Live Stats Overview Card */}
+            <Card level={2} className="p-6 border border-white/10 bg-black/40 backdrop-blur-md space-y-5">
+              <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2 border-b border-white/5 pb-3">
+                <Trophy className="w-4 h-4 text-amber-400" /> Platform Statistics
+              </h3>
+
+              <div className="space-y-4 text-xs">
+                {/* Rank Points */}
+                <div className="flex justify-between items-center p-3 rounded-xl bg-white/5 border border-white/5">
+                  <div className="flex items-center gap-2.5">
+                    <Flame className="w-4 h-4 text-amber-400" />
+                    <span className="text-white/80 font-medium">Rank Score</span>
+                  </div>
+                  <span className="font-extrabold text-white text-sm">{user.stats.rank} ELO</span>
                 </div>
-                <div className="flex justify-between border-b border-white/5 pb-2">
-                  <span>Win Rate (W / L)</span>
-                  <span className="text-green-400 font-bold">
-                    {user.stats.wins + user.stats.losses > 0 
-                      ? `${Math.round((user.stats.wins / (user.stats.wins + user.stats.losses)) * 100)}% (${user.stats.wins}W / ${user.stats.losses}L)`
-                      : '0% (0W / 0L)'}
+
+                {/* Coins Balance */}
+                <div className="flex justify-between items-center p-3 rounded-xl bg-white/5 border border-white/5">
+                  <div className="flex items-center gap-2.5">
+                    <Coins className="w-4 h-4 text-yellow-400" />
+                    <span className="text-white/80 font-medium">Coins Balance</span>
+                  </div>
+                  <span className="font-extrabold text-yellow-400 text-sm">{user.coins} Coins</span>
+                </div>
+
+                {/* Matches Played */}
+                <div className="flex justify-between items-center p-3 rounded-xl bg-white/5 border border-white/5">
+                  <div className="flex items-center gap-2.5">
+                    <Gamepad2 className="w-4 h-4 text-primary" />
+                    <span className="text-white/80 font-medium">Matches Played</span>
+                  </div>
+                  <span className="font-extrabold text-white text-sm">{totalMatches} matches</span>
+                </div>
+
+                {/* Win Rate */}
+                <div className="flex justify-between items-center p-3 rounded-xl bg-white/5 border border-white/5">
+                  <div className="flex items-center gap-2.5">
+                    <Award className="w-4 h-4 text-emerald-400" />
+                    <span className="text-white/80 font-medium">Win Rate</span>
+                  </div>
+                  <span className="font-extrabold text-emerald-400 text-sm">
+                    {winRate}% ({user.stats.wins}W / {user.stats.losses}L)
                   </span>
                 </div>
-                <div className="flex justify-between border-b border-white/5 pb-2">
-                  <span>Total Matches Completed</span>
-                  <span className="text-white font-bold">{user.stats.wins + user.stats.losses} sessions</span>
-                </div>
-                <div className="flex justify-between border-b border-white/5 pb-2">
-                  <span>XP Progress Threshold</span>
-                  <span className="text-primary font-bold">{user.xp}% to next Level</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Squad Role Privilege</span>
-                  <span className="text-secondary font-bold uppercase">PLAYER</span>
+
+                {/* Play Time */}
+                <div className="flex justify-between items-center p-3 rounded-xl bg-white/5 border border-white/5">
+                  <div className="flex items-center gap-2.5">
+                    <Calendar className="w-4 h-4 text-indigo-400" />
+                    <span className="text-white/80 font-medium">Time In Matches</span>
+                  </div>
+                  <span className="font-extrabold text-white text-sm">{user.stats.hoursPlayed} hrs</span>
                 </div>
               </div>
             </Card>
 
-          </div>
-        )}
-
-        {/* TAB 2: 2FA & ACCOUNT SECURITY */}
-        {activeTab === 'SECURITY' && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            
-            {/* 2FA Authenticator Section */}
-            <Card level={2} className="p-6 border border-white/5 space-y-5">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
-                    <Smartphone className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-white uppercase tracking-wider">Two-Factor Authentication (2FA)</h3>
-                    <p className="text-[10px] text-on-surface-variant">Protects account with TOTP authenticator app verification.</p>
-                  </div>
-                </div>
-
-                <button
-                  onClick={handleToggle2FA}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer transition-all ${
-                    user.is2FAEnabled 
-                      ? 'bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500/30' 
-                      : 'bg-emerald-500 text-black hover:bg-emerald-400 shadow-lg shadow-emerald-500/20'
-                  }`}
-                >
-                  {user.is2FAEnabled ? 'Deactivate 2FA' : 'Enable 2FA'}
-                </button>
+            {/* Quick Play Card */}
+            <Card level={2} className="p-6 border border-primary/30 bg-gradient-to-b from-primary/10 to-transparent space-y-4">
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-amber-400" />
+                <h4 className="text-sm font-bold text-white uppercase tracking-wider">Ready to Climb?</h4>
               </div>
-
-              {user.is2FAEnabled ? (
-                <div className="p-4 bg-emerald-950/20 border border-emerald-500/20 rounded-xl space-y-4">
-                  <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold">
-                    <CheckCircle2 className="w-4 h-4" /> Two-Factor Protection is Active
-                  </div>
-                  
-                  <div className="space-y-1">
-                    <span className="text-[10px] text-white/60 font-semibold">Authenticator Secret Key:</span>
-                    <div className="p-2.5 bg-black/60 border border-white/10 rounded-lg font-mono text-xs text-primary tracking-widest">
-                      {user.twoFactorSecret}
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <span className="text-[10px] text-white/60 font-semibold">Emergency Recovery Codes:</span>
-                    <div className="grid grid-cols-2 gap-2">
-                      {user.recoveryCodes?.map((code, idx) => (
-                        <span key={idx} className="p-2 bg-black/40 border border-white/5 rounded font-mono text-[11px] text-white/90 text-center">
-                          {code}
-                        </span>
-                      ))}
-                    </div>
-                    <p className="text-[9px] text-on-surface-variant">Store these one-time recovery codes in a secure offline vault.</p>
-                  </div>
-                </div>
-              ) : (
-                <div className="p-4 bg-black/40 border border-white/5 rounded-xl text-xs text-on-surface-variant space-y-2">
-                  <p>Enabling 2FA adds an extra layer of defense against password theft and unauthorized station logins.</p>
-                  <p className="text-white/80 font-semibold">Supported apps: Google Authenticator, 1Password, Authy, Microsoft Authenticator.</p>
-                </div>
-              )}
-            </Card>
-
-            {/* Active Device Sessions */}
-            <Card level={2} className="p-6 border border-white/5 space-y-5">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-sm font-bold text-white uppercase tracking-wider">Active Device Stations</h3>
-                  <p className="text-[10px] text-on-surface-variant">Sessions currently authorized with your credentials.</p>
-                </div>
-                <button
-                  onClick={logoutAllDevices}
-                  className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-white text-[11px] font-bold border border-white/10 flex items-center gap-1.5 cursor-pointer"
-                >
-                  <LogOut className="w-3.5 h-3.5" /> Terminate Others
-                </button>
-              </div>
-
-              <div className="space-y-3">
-                {user.activeSessions.map((sess) => (
-                  <div key={sess.id} className="p-3 bg-black/40 border border-white/5 rounded-xl flex items-center justify-between text-xs">
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-bold text-white">{sess.device}</span>
-                        {sess.current && (
-                          <span className="text-[8px] font-bold bg-primary/20 text-primary px-1.5 py-0.5 rounded border border-primary/30 uppercase">
-                            This Device
-                          </span>
-                        )}
-                      </div>
-                      <div className="text-[10px] text-on-surface-variant mt-0.5">
-                        {sess.location} • IP {sess.ip}
-                      </div>
-                    </div>
-                    <span className="text-[10px] font-mono text-white/50">{sess.lastActive}</span>
-                  </div>
-                ))}
-              </div>
-            </Card>
-
-          </div>
-        )}
-
-        {/* TAB 3: PRIVACY & GDPR DATA RIGHTS */}
-        {activeTab === 'PRIVACY' && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            
-            {/* GDPR Export My Data */}
-            <Card level={2} className="p-6 border border-white/5 space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary">
-                  <Download className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-bold text-white uppercase tracking-wider">GDPR Article 15 Data Export</h3>
-                  <p className="text-[10px] text-on-surface-variant">Download a complete, machine-readable JSON archive of your platform data.</p>
-                </div>
-              </div>
-
               <p className="text-xs text-on-surface-variant leading-relaxed">
-                Pursuant to GDPR Article 15 and CCPA guidelines, you have the right to obtain confirmation and a full export of all personal data, gameplay statistics, transaction histories, and security logs linked to your profile.
+                Compete in over 67 master titles. Win matches to level up your combatant status and claim coins on the global leaderboard.
               </p>
-
-              <div className="p-3 bg-black/40 border border-white/5 rounded-xl text-[11px] text-white/70 space-y-1">
-                <div>• User Profile & Verification Metadata</div>
-                <div>• Matchmaking ELO & Historical Statistics</div>
-                <div>• Cryptographic Wallet & Transaction Ledger</div>
-                <div>• Authorized Device Access Logs</div>
-              </div>
-
-              <button
-                onClick={handleExportData}
-                className="w-full py-3 bg-primary text-black font-bold rounded-xl text-xs hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/20 cursor-pointer"
+              <Button
+                variant="neon"
+                onClick={() => navigate('/library')}
+                className="w-full py-3 text-xs font-bold tracking-wider cursor-pointer"
               >
-                <Download className="w-4 h-4" /> GENERATE & DOWNLOAD JSON ARCHIVE
-              </button>
-            </Card>
-
-            {/* GDPR Right to be Forgotten */}
-            <Card level={2} className="p-6 border border-red-500/20 bg-red-950/10 space-y-4">
-              <div className="flex items-center gap-3 text-red-400">
-                <div className="w-10 h-10 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
-                  <Trash2 className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-bold text-white uppercase tracking-wider">GDPR Article 17 Account Purge</h3>
-                  <p className="text-[10px] text-white/60">Permanently erase your identity and platform records.</p>
-                </div>
-              </div>
-
-              <p className="text-xs text-on-surface-variant leading-relaxed">
-                Exercising your "Right to be Forgotten" permanently purges your account, leaderboard scores, coin wallet, inventory, and session credentials. This action is irrevocable.
-              </p>
-
-              <button
-                onClick={() => setShowDeleteModal(true)}
-                className="w-full py-3 bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-500/30 font-bold rounded-xl text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <Trash2 className="w-4 h-4" /> REQUEST ACCOUNT DELETION
-              </button>
+                ENTER GAMES LIBRARY →
+              </Button>
             </Card>
 
           </div>
-        )}
+
+        </div>
 
       </main>
-
-      {/* Account Deletion Confirmation Modal */}
-      {showDeleteModal && (
-        <div className="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
-          <div className="w-full max-w-md bg-[#0a0f1d] border border-red-500/30 p-6 rounded-2xl shadow-2xl space-y-4">
-            <div className="flex items-center gap-3 text-red-400">
-              <ShieldAlert className="w-6 h-6 flex-shrink-0" />
-              <div>
-                <h3 className="font-bold text-white text-sm uppercase tracking-wider">Confirm Account Erasure</h3>
-                <p className="text-[10px] text-white/60">Irreversible Action under GDPR Article 17</p>
-              </div>
-            </div>
-
-            <p className="text-xs text-on-surface-variant">
-              To proceed with permanent deletion, type your username <span className="text-white font-bold">{user.username}</span> in the box below:
-            </p>
-
-            <input
-              type="text"
-              value={confirmDeleteText}
-              onChange={(e) => setConfirmDeleteText(e.target.value)}
-              placeholder={user.username}
-              className="w-full bg-black/60 border border-white/10 rounded-xl py-2 px-3 text-xs text-white focus:outline-none focus:border-red-400"
-            />
-
-            <div className="flex justify-end gap-2 pt-2">
-              <Button 
-                variant="ghost" 
-                onClick={() => { setShowDeleteModal(false); setConfirmDeleteText(''); }}
-                className="px-4 py-2 text-xs"
-              >
-                Cancel
-              </Button>
-              <button
-                disabled={confirmDeleteText !== user.username}
-                onClick={handleExecuteDeleteAccount}
-                className="px-4 py-2 bg-red-600 hover:bg-red-500 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl text-xs cursor-pointer shadow-lg shadow-red-600/30 transition-all"
-              >
-                Permanently Delete Account
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

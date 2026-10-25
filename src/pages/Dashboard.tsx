@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
-  const { addNotification } = useSocialStore();
+  const { addNotification, friends } = useSocialStore();
 
   const handleQuickPlay = () => {
     navigate('/library');
@@ -63,16 +63,16 @@ export const Dashboard: React.FC = () => {
             <span className="material-symbols-outlined">history</span>
             <span className="font-label-md text-label-md">Games Library</span>
           </Link>
-          <Link className="text-on-surface-variant hover:text-primary hover:bg-white/5 flex items-center gap-3 px-4 py-3 cursor-pointer transition-all duration-200" to="/developer">
-            <span className="material-symbols-outlined">settings</span>
-            <span className="font-label-md text-label-md">Developer Portal</span>
+          <Link className="text-on-surface-variant hover:text-primary hover:bg-white/5 flex items-center gap-3 px-4 py-3 cursor-pointer transition-all duration-200" to="/marketplace">
+            <span className="material-symbols-outlined">storefront</span>
+            <span className="font-label-md text-label-md">Cosmetics Shop</span>
           </Link>
         </nav>
 
         <div className="mt-auto space-y-1 border-t border-white/5 pt-4">
-          <Link className="text-on-surface-variant hover:bg-white/5 flex items-center gap-3 px-4 py-3 cursor-pointer transition-all duration-200" to="/developer">
+          <Link className="text-on-surface-variant hover:bg-white/5 flex items-center gap-3 px-4 py-3 cursor-pointer transition-all duration-200" to="/friends">
             <span className="material-symbols-outlined">help</span>
-            <span className="font-label-md text-label-md">Support</span>
+            <span className="font-label-md text-label-md">Community Support</span>
           </Link>
           <button 
             onClick={handleSignOut}
@@ -260,69 +260,49 @@ export const Dashboard: React.FC = () => {
                   FRIENDS ACTIVITY
                 </h2>
 
-                <div className="space-y-4">
-                  {/* Friend 1 */}
-                  <div 
-                    onClick={() => navigate('/friends')}
-                    className="flex items-center gap-3 group cursor-pointer p-2 rounded-lg hover:bg-white/5 transition-colors"
-                  >
-                    <div className="relative">
-                      <div className="w-10 h-10 rounded-full bg-surface-container-high border border-primary/20 overflow-hidden">
-                        <img 
-                          className="w-full h-full object-cover" 
-                          src="https://lh3.googleusercontent.com/aida-public/AB6AXuDo2MwpYgR7-swugKzfkj6kG5xNfu24s1ui5lVjo_AX0ts1W2UXhjRxqTRI6ZYJ91pMEQLwIWzSPlC31-MxlXl6QOekT-xBAJ4CBK57tLU9VvC69wxlUu0dGKdAYkfy2DAEQNi7yqcWrVbVoGpsIHHtVTnsixa2VGMcjc52U4V53bKS-9nppoZD3MVWk6fz1ypW7jFKND70Ne4PoWBPNFXdkVezxYBRrrNI6hEbdr1xH77khyxBA94PLqFE1eCJPOgFNbvQ--4Wgyw"
-                          alt="Friend 1"
-                        />
-                      </div>
-                      <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-surface-container-low"></div>
+                {friends.length === 0 ? (
+                  <div className="text-center py-8 px-4 border border-dashed border-white/10 rounded-xl space-y-3">
+                    <span className="material-symbols-outlined text-3xl text-on-surface-variant/40">group_off</span>
+                    <div>
+                      <h4 className="text-xs font-bold text-white/80">No Squad Comrades Yet</h4>
+                      <p className="text-[10px] text-on-surface-variant mt-1 leading-relaxed">
+                        Your friend roster is empty. Recruit fellow pilots to squad up for live matches.
+                      </p>
                     </div>
-                    <div className="flex-grow">
-                      <h4 className="text-sm font-bold text-on-surface">Nova_Strider</h4>
-                      <p className="text-[10px] text-primary">In Game: Neo-Vanguard</p>
-                    </div>
-                    <span className="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">chat_bubble</span>
+                    <button
+                      onClick={() => navigate('/friends')}
+                      className="px-4 py-1.5 rounded-lg bg-primary/20 hover:bg-primary/30 border border-primary/30 text-primary text-xs font-bold transition-all cursor-pointer"
+                    >
+                      Recruit Friends →
+                    </button>
                   </div>
-
-                  {/* Friend 2 */}
-                  <div 
-                    onClick={() => navigate('/friends')}
-                    className="flex items-center gap-3 group cursor-pointer p-2 rounded-lg hover:bg-white/5 transition-colors"
-                  >
-                    <div className="relative">
-                      <div className="w-10 h-10 rounded-full bg-surface-container-high border border-primary/20 overflow-hidden">
-                        <img 
-                          className="w-full h-full object-cover" 
-                          src="https://lh3.googleusercontent.com/aida-public/AB6AXuDY_Ha3DQcEN8N7RfP7QYA_N2i8n0fNrXqAJXEJcRhQ6Q1wGFC0v7KzgyNM2JNn7LfQByb2LP7xYOKWYQKub4271fH6xYlmFP_meT3ac5VaCqOFfLKVyU6B1UWWces-i9r-Wh-3N-jDsjtIW5tw61H6tWl2FW3X06jVs9N4CFNEjr02SM9BOJC-IBZHuJgNBnY9IW9IgpxQFW3NFMEn3dalLbscJSm0NHVp8zbuao-vPioxfxU-EBN8w7PKPspHJQRc6k_NssvtZig"
-                          alt="Friend 2"
-                        />
+                ) : (
+                  <div className="space-y-4">
+                    {friends.map((friend) => (
+                      <div 
+                        key={friend.id}
+                        onClick={() => navigate('/friends')}
+                        className="flex items-center gap-3 group cursor-pointer p-2 rounded-lg hover:bg-white/5 transition-colors"
+                      >
+                        <div className="relative">
+                          <div className="w-10 h-10 rounded-full bg-surface-container-high border border-primary/20 overflow-hidden">
+                            <img 
+                              className="w-full h-full object-cover" 
+                              src={friend.avatarUrl} 
+                              alt={friend.username}
+                            />
+                          </div>
+                          <div className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-surface-container-low ${friend.status === 'ONLINE' ? 'bg-green-500' : friend.status === 'IN_MATCH' ? 'bg-primary' : 'bg-outline'}`} />
+                        </div>
+                        <div className="flex-grow">
+                          <h4 className="text-sm font-bold text-on-surface">{friend.username}</h4>
+                          <p className="text-[10px] text-primary">{friend.status === 'IN_MATCH' ? `Playing: ${friend.game}` : friend.status === 'ONLINE' ? 'Online: Ready to play' : 'Offline'}</p>
+                        </div>
+                        <span className="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">chat_bubble</span>
                       </div>
-                      <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-surface-container-low"></div>
-                    </div>
-                    <div className="flex-grow">
-                      <h4 className="text-sm font-bold text-on-surface">Ghost_Protocol</h4>
-                      <p className="text-[10px] text-primary">Online: Ready to play</p>
-                    </div>
-                    <span className="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">add_circle</span>
+                    ))}
                   </div>
-
-                  {/* Friend 3 (Offline) */}
-                  <div className="flex items-center gap-3 opacity-60 p-2">
-                    <div className="relative">
-                      <div className="w-10 h-10 rounded-full bg-surface-container-high border border-white/10 overflow-hidden grayscale">
-                        <img 
-                          className="w-full h-full object-cover" 
-                          src="https://lh3.googleusercontent.com/aida-public/AB6AXuA66e21cN5nNtsgJzzWyMg5cyKDfIGzPw7QCce9gKsq2DYE_tkntK6tx_Ln8btvRYLQV9m2-16oqpOG9L73l8tddsBvMv8yUi4V7DhE9nobBPK4s4pLnDOG256BTzCzTtwrwUwB16SVdNcQLVAbnEpXnvTU6Ba1I7wcHabsS9592OSuXZ_AkOawLMoB9eqpNS4FO_SIkHM688JvgULejYvLHSKfAGCgQKdiwsRjbVXAmpaEvq_D4r8w3uI7VzDJcAZ5qkyf0KCvMJM"
-                          alt="Friend 3"
-                        />
-                      </div>
-                      <div className="absolute bottom-0 right-0 w-3 h-3 bg-outline rounded-full border-2 border-surface-container-low"></div>
-                    </div>
-                    <div className="flex-grow">
-                      <h4 className="text-sm font-bold text-on-surface">Sentinel_B4</h4>
-                      <p className="text-[10px] text-on-surface-variant">Offline</p>
-                    </div>
-                  </div>
-                </div>
+                )}
               </section>
             </div>
 

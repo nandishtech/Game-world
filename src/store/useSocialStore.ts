@@ -37,61 +37,11 @@ interface SocialState {
   clearNotifications: () => void;
 }
 
-const INITIAL_FRIENDS: Friend[] = [
-  {
-    id: 'friend_01',
-    username: 'Neon_Specter',
-    status: 'ONLINE',
-    avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
-    rank: 1720
-  },
-  {
-    id: 'friend_02',
-    username: 'Valkyrie_Protocol',
-    status: 'IN_MATCH',
-    game: 'Battle Arena',
-    avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150',
-    rank: 1980
-  },
-  {
-    id: 'friend_03',
-    username: 'Ghost_Rider_4',
-    status: 'AWAY',
-    avatarUrl: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150',
-    rank: 1540
-  },
-  {
-    id: 'friend_04',
-    username: 'Astro_Boy',
-    status: 'OFFLINE',
-    avatarUrl: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=150',
-    rank: 1610
-  }
-];
+const INITIAL_FRIENDS: Friend[] = [];
 
-const INITIAL_NOTIFICATIONS: Notification[] = [
-  {
-    id: 'notif_01',
-    type: 'FRIEND_REQUEST',
-    content: 'Shadow_Ninja sent you a friend request.',
-    isRead: false,
-    createdAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-  },
-  {
-    id: 'notif_02',
-    type: 'ACHIEVEMENT',
-    content: 'Unlocked Achievement: "Hexa-Kill Specialist" (+25 XP).',
-    isRead: false,
-    createdAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-  }
-];
+const INITIAL_NOTIFICATIONS: Notification[] = [];
 
-const INITIAL_CHATS: Record<string, ChatMessage[]> = {
-  friend_01: [
-    { id: 'msg_01', sender: 'Neon_Specter', content: 'Yo, down to play some Chess Masters?', timestamp: '11:32 PM' },
-    { id: 'msg_02', sender: 'Commander_Nexus', content: 'Yeah, let me finish this build first.', timestamp: '11:33 PM' }
-  ]
-};
+const INITIAL_CHATS: Record<string, ChatMessage[]> = {};
 
 export const useSocialStore = create<SocialState>((set, get) => ({
   friends: INITIAL_FRIENDS,

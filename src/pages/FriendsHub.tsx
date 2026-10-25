@@ -6,9 +6,12 @@ import { ShaderBackground } from '../components/ShaderBackground';
 import { motion } from 'framer-motion';
 import { Search, Send, UserPlus, MessageSquare, Shield, Circle, User } from 'lucide-react';
 
+import { useAuthStore } from '../store/useAuthStore';
+
 export const FriendsHub: React.FC = () => {
+  const user = useAuthStore((state) => state.user);
   const { friends, chats, sendDirectMessage, addFriend } = useSocialStore();
-  const [selectedFriendId, setSelectedFriendId] = useState<string>('friend_01');
+  const [selectedFriendId, setSelectedFriendId] = useState<string>('');
   const [newFriendName, setNewFriendName] = useState('');
   const [messageInput, setMessageInput] = useState('');
   
@@ -71,29 +74,36 @@ export const FriendsHub: React.FC = () => {
             <h3 className="text-sm font-bold text-white mb-4">Tactical Roster</h3>
             
             <div className="space-y-2.5 overflow-y-auto max-h-[350px] lg:max-h-[500px]">
-              {friends.map((friend) => {
-                const isSelected = friend.id === selectedFriendId;
-                return (
-                  <div
-                    key={friend.id}
-                    onClick={() => setSelectedFriendId(friend.id)}
-                    className={`flex items-center justify-between p-2.5 rounded-xl cursor-pointer border transition-all ${isSelected ? 'bg-primary/10 border-primary/30' : 'bg-[#050505]/40 border-white/5 hover:border-white/10'}`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="relative">
-                        <img src={friend.avatarUrl} alt={friend.username} className="w-8 h-8 rounded-full border border-white/10" />
-                        <span className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-background ${friend.status === 'ONLINE' ? 'bg-green-400' : friend.status === 'IN_MATCH' ? 'bg-primary' : 'bg-on-surface-variant'}`} />
-                      </div>
-                      <div>
-                        <div className="text-xs font-bold text-white">{friend.username}</div>
-                        <div className="text-[9px] text-on-surface-variant mt-1">
-                          {friend.status === 'IN_MATCH' ? `Playing: ${friend.game}` : 'Available'}
+              {friends.length === 0 ? (
+                <div className="text-center py-12 px-3 text-on-surface-variant text-xs space-y-2 border border-dashed border-white/10 rounded-xl">
+                  <p className="font-semibold text-white/80">No Friends in Roster</p>
+                  <p className="text-[10px] text-white/40">Enter a username in the recruitment box above to add friends.</p>
+                </div>
+              ) : (
+                friends.map((friend) => {
+                  const isSelected = friend.id === selectedFriendId;
+                  return (
+                    <div
+                      key={friend.id}
+                      onClick={() => setSelectedFriendId(friend.id)}
+                      className={`flex items-center justify-between p-2.5 rounded-xl cursor-pointer border transition-all ${isSelected ? 'bg-primary/10 border-primary/30' : 'bg-[#050505]/40 border-white/5 hover:border-white/10'}`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="relative">
+                          <img src={friend.avatarUrl} alt={friend.username} className="w-8 h-8 rounded-full border border-white/10" />
+                          <span className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-background ${friend.status === 'ONLINE' ? 'bg-green-400' : friend.status === 'IN_MATCH' ? 'bg-primary' : 'bg-on-surface-variant'}`} />
+                        </div>
+                        <div>
+                          <div className="text-xs font-bold text-white">{friend.username}</div>
+                          <div className="text-[9px] text-on-surface-variant mt-1">
+                            {friend.status === 'IN_MATCH' ? `Playing: ${friend.game}` : 'Available'}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })
+              )}
             </div>
           </Card>
 
@@ -122,11 +132,11 @@ export const FriendsHub: React.FC = () => {
               <div className="flex-grow p-6 overflow-y-auto space-y-4 max-h-[300px] lg:max-h-[450px]">
                 {activeChats.length === 0 ? (
                   <div className="text-center py-20 text-xs text-on-surface-variant">
-                    No logs recorded. Type a secure dispatch below.
+                    No messages yet. Send a message below to start chatting!
                   </div>
                 ) : (
                   activeChats.map((msg) => {
-                    const isSelf = msg.sender === 'Commander_Nexus';
+                    const isSelf = msg.sender === (user?.username || 'You');
                     return (
                       <div key={msg.id} className={`flex ${isSelf ? 'justify-end' : 'justify-start'}`}>
                         <div className={`max-w-[70%] p-3.5 rounded-2xl text-xs leading-normal border ${isSelf ? 'bg-primary/10 border-primary/20 text-white rounded-tr-none' : 'bg-surface-container-high/40 border-white/5 text-on-surface rounded-tl-none'}`}>
@@ -148,7 +158,7 @@ export const FriendsHub: React.FC = () => {
                   type="text"
                   value={messageInput}
                   onChange={(e) => setMessageInput(e.target.value)}
-                  placeholder={`Send direct transmission to ${selectedFriend.username}...`}
+                  placeholder={`Send message to ${selectedFriend.username}...`}
                   className="flex-1 bg-[#050505] border border-white/10 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-primary transition-all placeholder-white/20"
                   required
                 />
@@ -159,10 +169,15 @@ export const FriendsHub: React.FC = () => {
 
             </Card>
           ) : (
-            <Card level={2} className="flex-grow border border-white/5 flex items-center justify-center py-20">
-              <div className="text-center space-y-2 text-on-surface-variant">
-                <MessageSquare className="w-12 h-12 mx-auto opacity-20" />
-                <p className="text-xs font-semibold">Select a combat squad comrade to initialize chat lines.</p>
+            <Card level={2} className="flex-grow border border-white/5 flex flex-col items-center justify-center p-12 text-center min-h-[450px] space-y-4">
+              <div className="w-16 h-16 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shadow-lg shadow-primary/10">
+                <UserPlus className="w-8 h-8" />
+              </div>
+              <div className="max-w-md space-y-2">
+                <h3 className="text-lg font-bold text-white">Your Friend Roster is Empty</h3>
+                <p className="text-xs text-on-surface-variant leading-relaxed">
+                  Start fresh! Add your gaming friends by username in the panel on the left to message each other, team up in multiplayer games, and climb leaderboards together.
+                </p>
               </div>
             </Card>
           )}

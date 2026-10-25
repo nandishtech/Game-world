@@ -44,19 +44,18 @@ export const Footer: React.FC = () => {
           <ul className="space-y-2 text-xs text-on-surface-variant">
             <li><Link to="/dashboard" className="hover:text-primary transition-colors">Player Stats</Link></li>
             <li><Link to="/friends" className="hover:text-primary transition-colors">Friends Hub</Link></li>
-            <li><Link to="/creator" className="hover:text-primary transition-colors">Creator Studio</Link></li>
-            <li><Link to="/developer" className="hover:text-primary transition-colors">Developer Portal</Link></li>
+            <li><Link to="/clan" className="hover:text-primary transition-colors">Clan Hub</Link></li>
+            <li><Link to="/battlepass" className="hover:text-primary transition-colors">Battle Pass</Link></li>
           </ul>
         </div>
 
         {/* Column 3: Policy / Support */}
         <div className="space-y-3">
-          <h5 className="text-xs font-bold uppercase tracking-widest text-white">Security</h5>
+          <h5 className="text-xs font-bold uppercase tracking-widest text-white">Security & Rules</h5>
           <ul className="space-y-2 text-xs text-on-surface-variant">
-            <li><Link to="/moderation" className="hover:text-primary transition-colors">Trust Center</Link></li>
             <li><Link to="/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
             <li><Link to="/terms" className="hover:text-primary transition-colors">Terms of Service</Link></li>
-            <li><Link to="/developer" className="hover:text-primary transition-colors">API Docs</Link></li>
+            <li><Link to="/friends" className="hover:text-primary transition-colors">Community Support</Link></li>
           </ul>
         </div>
 

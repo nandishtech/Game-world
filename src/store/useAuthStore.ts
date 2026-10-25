@@ -25,11 +25,13 @@ export interface UserSession {
 export interface UserProfile {
   id: string;
   username: string;
+  displayName?: string;
   email: string;
   role: UserRole;
   avatarUrl: string;
   bio: string;
   country: string;
+  age?: number;
   level: number;
   xp: number;
   coins: number;
@@ -51,6 +53,7 @@ interface AuthState {
   spendCoins: (amount: number) => boolean;
   recordGameReward: (coins: number, xp: number, rankGain?: number, won?: boolean) => void;
   updateBio: (newBio: string) => void;
+  updateProfile: (data: Partial<UserProfile>) => void;
   completeProfile: (bio: string, avatarUrl?: string) => void;
   enable2FA: (secret: string, codes: string[]) => void;
   disable2FA: () => void;
@@ -74,11 +77,13 @@ const DEFAULT_SESSIONS: UserSession[] = [
 const createZeroProfile = (username: string, email: string): UserProfile => ({
   id: `usr_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
   username,
+  displayName: username,
   email,
   role: 'USER',
   avatarUrl: `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(username || 'pilot')}`,
   bio: 'New explorer in the Game World universe. Competing and climbing ranks.',
   country: 'Global Node',
+  age: 18,
   level: 1, // Fresh level 1
   xp: 0,    // Starts at 0 XP
   coins: 0, // Starts with 0 coins
@@ -305,6 +310,19 @@ export const useAuthStore = create<AuthState>()(
         };
         saveProfileToDirectory(updatedUser);
         set({ user: updatedUser });
+      },
+
+      updateProfile: (data) => {
+        const user = get().user;
+        if (!user) return;
+        const updatedUser: UserProfile = {
+          ...user,
+          ...data,
+          isFirstLogin: false
+        };
+        saveProfileToDirectory(updatedUser);
+        set({ user: updatedUser });
+        updateLeaderboardRegistry(updatedUser);
       },
 
       completeProfile: (bio: string, avatarUrl?: string) => {
