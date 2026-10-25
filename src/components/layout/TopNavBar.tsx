@@ -18,14 +18,18 @@ import {
   Settings,
   Play,
   Activity,
-  Gamepad2
+  Gamepad2,
+  Menu
 } from 'lucide-react';
+import { useCommanderDeckStore } from '../../store/useCommanderDeckStore';
+import { CommanderDeck } from './CommanderDeck';
 
 export const TopNavBar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { isAuthenticated, user, logout } = useAuthStore();
   const { notifications, unreadNotificationCount, markNotificationAsRead, clearNotifications } = useSocialStore();
+  const { toggleDeck, openDeck } = useCommanderDeckStore();
   
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
@@ -41,21 +45,36 @@ export const TopNavBar: React.FC = () => {
   };
 
   return (
-    <header className="fixed top-0 w-full z-50 bg-background/40 backdrop-blur-3xl border-b border-white/10 shadow-xl">
-      <div className="flex justify-between items-center px-margin-desktop py-4 max-w-container-max mx-auto">
-        
-        {/* Brand Logo - Game World */}
-        <Link to="/" className="flex items-center gap-2.5 group hover:scale-[1.02] active:scale-95 transition-all">
-          <img 
-            src="/assets/brand/game_world_emblem.png" 
-            alt="Game World Logo" 
-            className="w-10 h-10 object-contain drop-shadow-[0_0_12px_rgba(52,120,246,0.6)] group-hover:drop-shadow-[0_0_18px_rgba(128,87,232,0.8)] transition-all"
-          />
-          <div className="flex flex-col leading-[1.05]">
-            <span className="font-black text-base tracking-[0.12em] text-white">GAME</span>
-            <span className="font-black text-sm tracking-[0.16em] text-[#8057E8] drop-shadow-[0_0_10px_rgba(128,87,232,0.4)]">WORLD</span>
+    <>
+      <header className="fixed top-0 w-full z-50 bg-background/40 backdrop-blur-3xl border-b border-white/10 shadow-xl">
+        <div className="flex justify-between items-center px-margin-desktop py-4 max-w-container-max mx-auto">
+          
+          {/* Left Side: 3-Line Hamburger Icon for Commander Deck + Brand Logo */}
+          <div className="flex items-center gap-3 sm:gap-4">
+            <button
+              onClick={toggleDeck}
+              className="p-2 sm:p-2.5 rounded-xl bg-white/5 hover:bg-primary/20 border border-white/10 hover:border-primary/40 text-primary transition-all duration-300 active:scale-95 cursor-pointer flex flex-col justify-center items-center gap-1.5 group shadow-lg shadow-primary/5"
+              title="Open Commander Deck (Merging Controls & Games)"
+              aria-label="Commander Deck"
+            >
+              <span className="w-5 h-0.5 bg-primary group-hover:bg-cyan-300 rounded-full transition-all duration-300 group-hover:w-6 shadow-[0_0_8px_rgba(77,142,255,0.8)]" />
+              <span className="w-3.5 h-0.5 bg-cyan-400 group-hover:bg-cyan-200 rounded-full transition-all duration-300 group-hover:w-6 shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
+              <span className="w-5 h-0.5 bg-primary group-hover:bg-cyan-300 rounded-full transition-all duration-300 group-hover:w-6 shadow-[0_0_8px_rgba(77,142,255,0.8)]" />
+            </button>
+
+            {/* Brand Logo - Game World */}
+            <Link to="/" className="flex items-center gap-2.5 group hover:scale-[1.02] active:scale-95 transition-all">
+              <img 
+                src="/assets/brand/game_world_emblem.png" 
+                alt="Game World Logo" 
+                className="w-10 h-10 object-contain drop-shadow-[0_0_12px_rgba(52,120,246,0.6)] group-hover:drop-shadow-[0_0_18px_rgba(128,87,232,0.8)] transition-all"
+              />
+              <div className="flex flex-col leading-[1.05]">
+                <span className="font-black text-base tracking-[0.12em] text-white">GAME</span>
+                <span className="font-black text-sm tracking-[0.16em] text-[#8057E8] drop-shadow-[0_0_10px_rgba(128,87,232,0.4)]">WORLD</span>
+              </div>
+            </Link>
           </div>
-        </Link>
 
         {/* Desktop Menu Routing */}
         <nav className="hidden lg:flex items-center gap-8 font-label-md text-label-md">
@@ -169,13 +188,15 @@ export const TopNavBar: React.FC = () => {
                         </Link>
                       </li>
                       <li>
-                        <Link 
-                          to="/dashboard" 
-                          onClick={() => setShowProfileMenu(false)}
-                          className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-on-surface-variant hover:text-white hover:bg-white/5 transition-all"
+                        <button 
+                          onClick={() => {
+                            setShowProfileMenu(false);
+                            openDeck();
+                          }}
+                          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-on-surface-variant hover:text-white hover:bg-white/5 transition-all text-left cursor-pointer"
                         >
-                          <LayoutDashboard className="w-4 h-4" /> Commander Deck
-                        </Link>
+                          <LayoutDashboard className="w-4 h-4 text-cyan-400" /> Commander Deck
+                        </button>
                       </li>
                       <li>
                         <Link 
@@ -258,5 +279,9 @@ export const TopNavBar: React.FC = () => {
 
       </div>
     </header>
+
+    {/* Dedicated Global Commander Deck Overlay & Side Menu */}
+    <CommanderDeck />
+  </>
   );
 };
