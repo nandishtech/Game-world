@@ -30,12 +30,12 @@ import { GAMES_CATALOG } from '../../data/gamesRegistry';
 
 // Featured fast launcher titles
 const QUICK_GAMES = [
+  { id: 'subway_surfers', name: 'Subway Surfers', genre: 'Arcade', icon: '🛹', color: 'from-amber-500/20 to-orange-700/20' },
+  { id: 'temple_run', name: 'Temple Run 2', genre: 'Runner', icon: '🗿', color: 'from-yellow-500/20 to-amber-700/20' },
+  { id: 'vectaria', name: 'Vectaria.io', genre: 'Voxel 3D', icon: '⛏️', color: 'from-emerald-500/20 to-teal-700/20' },
   { id: 'classic_2048', name: 'Classic 2048', genre: 'Puzzle', icon: '🔢', color: 'from-amber-500/20 to-amber-700/20' },
   { id: 'void_snake', name: 'Void Snake', genre: 'Arcade', icon: '🐍', color: 'from-emerald-500/20 to-emerald-700/20' },
   { id: 'chess_masters', name: 'Chess Masters', genre: 'Strategy', icon: '♟️', color: 'from-cyan-500/20 to-blue-700/20' },
-  { id: 'battle_arena', name: 'Battle Arena', genre: 'Action MOBA', icon: '⚔️', color: 'from-purple-500/20 to-indigo-700/20' },
-  { id: 'neon_ludo', name: 'Neon Ludo', genre: 'Board Game', icon: '🎲', color: 'from-pink-500/20 to-rose-700/20' },
-  { id: 'cyber_uno', name: 'Cyber UNO', genre: 'Cards', icon: '🃏', color: 'from-yellow-500/20 to-amber-700/20' },
 ];
 
 export const CommanderDeck: React.FC = () => {

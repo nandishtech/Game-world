@@ -7,14 +7,14 @@ import { useAuthStore } from '../store/useAuthStore';
 import { getLeaderboardRankings } from '../data/leaderboardRegistry';
 
 const GAMES = [
-  { name: 'Battle Arena', genre: 'Action MOBA', players: '12k', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAo6efdyY0mqX5JYN4dNeXB6HyW2Z2ZexUeXcUnjxDoYTtI06O2QBkR5XA4It9h9zkH2TMNAWZ_qirGJZwvFuYjduaAQh8bi5vXVXEGyVAuiELyjJ2kTDoSctZ6VEov4fz9s5FhtfHnGDt_IaQwlLpjpq1q9KHZHy2BV5qJ2INBT2bKxaSxIJ42g0h053Dnkdg1zg4Mnpls2EWVzW4SjeC5c7PTDL9pR9oaTFaR289hzbpukdLDIJTWqvvy6oFApKiooPYX8Bi2zAI' },
-  { name: 'Chess Masters', genre: 'Strategy', players: '8k', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBGUG1L_Q1Qpn8cAESR1Fa9xIixQaUU_w5PodV1GF3oU9P48hibbafqfJ_QGwpOB65ti3dgy_u5zFWqVPHHe7uqddwjCgdrPzz4fJqNFQfCeprq2SArfKBbB4gfUSjeu8nL9FyogrIU7rRWoWeWdxQDdiniqIjXSVXB-3RyRt-YZweRion2mMIOWBBCpZL_D8rY4C4wwtmpmqPk1c4tcOs6N5tsp8alW_8NFDiKduEpoGqVAssSTy6Y0HlKUlATdy0vBDuMZ2Qfkjw' },
-  { name: 'Neon Ludo', genre: 'Board Game', players: '5k', img: 'https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?w=500' },
-  { name: 'Cyber UNO', genre: 'Card Game', players: '15k', img: 'https://images.unsplash.com/photo-1606167668584-78701c57f13d?w=500' },
-  { name: 'Velocity Racing', genre: 'Car Racing', players: '3k', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA4l9FK_FbsZJnEQU_6DiC7iIdXOUfwctPIdSSGuUq66wNnLyPMeMHNj2sHR6HG0QKk-TzJTmcrFxdhkR713eKar7B0PCgUzpOOmkIJLqrwvPHrb0q4qKG2GY4ENpUrQvjck1a7QrlVUrJj7V9fowVd303pI-VWgqsihQhfOqYX0V4BgoRAWBw_cz2u6HZcERUEtYJAVOs-lZDlcQSR8yvf8t4hCpRh8sCkxI--1lmlU53rInz1XYmuftjIo3BFZKbqsciSV2SGjD8' },
-  { name: 'Void Snake', genre: 'Arcade', players: '2k', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDngnCpOIDpBHaTdAVsHVT3Rhu0_VCIXZveuC80szwlLIuhn9d9lyXOVA1zFK7_LQukdCLGCIdyZe1t47MNXnhKMiMjsKgDu_lHJO1k9jK_i2wg81_Nl8Npr2iJJKxx-eK_KPKpsuv9tzKngPNDfyxwhkQ8ijmVRv9KGH4zgUQ4tgIZhNfd_AUH4wVj4y96jNe8gV8awoOpgSz-uBcXc2R4i2mQiHusosB13qxkDRQ4-fUqNKIyQxAGttg5htxUw4Y-3AsuNhUuz3o' },
-  { name: 'Zen Carrom', genre: 'Board Game', players: '4k', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuChco9OjMR7zeiejAMBrVPVDIqSKFwYLJVik9WaWjRR7jHr5ESqHqOVnLrdkSvNy0mzKpqDuhqMeBSXeSc4yg7x5xFAHjskN8cAzRDZEenAq35D4n98wEL3StwVBnlXs-NpGGAXxXt_I5ol0dzWGtCFpXo0oFnJfn9J7-Rne7bt25YpdN6vdhG1j5fY5Io160j5hSIWZfAN-SefZflfsB2RpE3F1ePCzTBw-pYQWQHGksGAvjLsIXBuGnFbvqtAHx2M-bL5mKR2d4M' },
-  { name: 'Hyper Tic Tac Toe', genre: 'Casual', players: '1k', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCGYIwMk4Po8YlV1-bPVLRYCM4NezIkmW2CUloqC5VgGUQbJ18EMBK-Q2aWdU0gMmLB2y2mL56b-fmduEwz5EUZigOfsOCcTY1rWsAuUmGuY_fzBZCPObk71n7amhiHIUbur4nMaMD9ZNVHQse1athVGV-2Esr-RoEcd03Ews39OWMZYfOapVibskXHNbLZKAwrKMyPd0W68ZuiCdqvDXkP_Xo-rN-xeuaJUb2qExlaf734blpaJ4_H80EPdXxaoDwUSBDNdv_4NQc' }
+  { id: 'subway_surfers', name: 'Subway Surfers', genre: 'Arcade Runner', players: '85k', img: '/assets/games/subway_surfers.svg' },
+  { id: 'temple_run', name: 'Temple Run 2', genre: 'Endless Runner', players: '72k', img: '/assets/games/temple_run.svg' },
+  { id: 'vectaria', name: 'Vectaria.io', genre: 'Multiplayer Voxel', players: '65k', img: '/assets/games/vectaria.svg' },
+  { id: 'classic_2048', name: 'Classic 2048', genre: 'Puzzle', players: '48k', img: '/assets/games/classic_2048.svg' },
+  { id: 'battle_arena', name: 'Battle Arena', genre: 'Action MOBA', players: '12k', img: '/assets/games/battle_arena.svg' },
+  { id: 'chess_masters', name: 'Chess Masters', genre: 'Strategy', players: '8k', img: '/assets/games/chess_masters.svg' },
+  { id: 'neon_ludo', name: 'Neon Ludo', genre: 'Board Game', players: '5k', img: '/assets/games/neon_ludo.svg' },
+  { id: 'void_snake', name: 'Void Snake', genre: 'Arcade', players: '2k', img: '/assets/games/void_snake.svg' }
 ];
 
 const LEADERBOARD = [
@@ -161,6 +161,7 @@ export const Home: React.FC = () => {
           {GAMES.map((game) => (
             <div 
               key={game.name} 
+              onClick={() => navigate(`/play/embed/${game.id}`)}
               className="glass-card rounded-2xl overflow-hidden group cursor-pointer neon-glow flex flex-col h-full hover:translate-y-[-10px] transition-transform duration-300"
             >
               <div className="relative h-48 w-full overflow-hidden">
@@ -182,11 +183,11 @@ export const Home: React.FC = () => {
                   <button 
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleJoinMatch(game.name.toLowerCase().replace(' ', '_'), game.name);
+                      navigate(`/play/embed/${game.id}`);
                     }}
-                    className="text-white font-label-md flex items-center gap-2 group-hover:text-primary transition-colors cursor-pointer"
+                    className="text-white font-label-md flex items-center gap-2 group-hover:text-primary transition-colors cursor-pointer font-bold"
                   >
-                    Join Match <span className="material-symbols-outlined text-sm">play_arrow</span>
+                    PLAY NOW <span className="material-symbols-outlined text-sm">play_arrow</span>
                   </button>
                   <div className="flex -space-x-2">
                     <div className="w-6 h-6 rounded-full border border-[#050505] bg-surface-variant"></div>

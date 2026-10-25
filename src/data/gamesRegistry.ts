@@ -27,6 +27,46 @@ export interface GameItem {
 export const GAMES_CATALOG: GameItem[] = [
   // ==================== BROWSER / IFRAME GAMES (100% VERIFIED WORKING) ====================
   {
+    id: 'subway_surfers',
+    name: 'Subway Surfers',
+    type: 'web',
+    genre: 'Arcade',
+    players: '85k',
+    rating: '4.9',
+    img: '/assets/games/subway_surfers.svg',
+    banner: '/assets/games/subway_surfers.svg',
+    desc: 'Dash down endless train tracks, evade the relentless inspector, dodge oncoming subway cars, and pull off acrobatic hoverboard stunts in the world-famous runner.',
+    url: '/games/subway-surfers/index.html',
+    features: ['High-speed 3-lane dodge and slide maneuvers', 'Hoverboard flight surges and gold coin magnets', 'Iconic San Francisco World Tour tracks', 'Instant responsive keyboard arrow & swipe controls']
+  },
+  {
+    id: 'temple_run',
+    name: 'Temple Run 2',
+    type: 'web',
+    genre: 'Arcade',
+    players: '72k',
+    rating: '4.8',
+    img: '/assets/games/temple_run.svg',
+    banner: '/assets/games/temple_run.svg',
+    desc: 'Sprint through treacherous ancient temples, leap across crumbling chasms, slide under flaming traps, and outrun the ferocious demon monkey.',
+    url: '/games/temple-run/index.html',
+    features: ['Fast-paced endless runner reflex challenges', 'Ancient perilous temple ruins and zip lines', 'Shields, coin magnets and speed boost power-ups', 'Smooth 60FPS WebGL 3D graphics']
+  },
+  {
+    id: 'vectaria',
+    name: 'Vectaria.io',
+    type: 'web',
+    genre: 'Arcade',
+    players: '65k',
+    rating: '4.8',
+    img: '/assets/games/vectaria.svg',
+    banner: '/assets/games/vectaria.svg',
+    desc: 'Multiplayer 3D voxel sandbox adventure. Mine blocks, craft weapons, construct towering bases, and survive against rival players in real-time online servers.',
+    url: 'https://vaz63.github.io/g22/class-431/',
+    officialUrl: 'https://vectaria.io',
+    features: ['Multiplayer voxel survival and peaceful creative modes', 'Block mining, inventory crafting and weapon combat', 'First-person WASD movement and mouse-aim pointer lock', 'Live global multiplayer server connectivity']
+  },
+  {
     id: 'classic_2048',
     name: '2048',
     type: 'web',

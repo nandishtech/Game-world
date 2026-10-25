@@ -46,10 +46,12 @@ const getRecommendedHeight = (gameId: string, genre: string): number => {
     'checkers', 
     'neon_ludo', 
     'hyper_ttt', 
-    'adarkroom'
+    'adarkroom',
+    'subway_surfers',
+    'temple_run'
   ];
   if (tallGames.includes(gameId)) {
-    return 760; // 760px fits 2048 and arcade grids completely
+    return 760; // 760px fits 2048, runners, and arcade grids completely
   }
 
   // Large desktop/web apps that benefit from deep canvases
@@ -61,7 +63,8 @@ const getRecommendedHeight = (gameId: string, genre: string): number => {
     'openfront_io', 
     'dungeon_crawl', 
     'monkeytype',
-    'chess_masters'
+    'chess_masters',
+    'vectaria'
   ];
   if (expansiveGames.includes(gameId)) {
     return 780;
@@ -357,7 +360,7 @@ export const EmbedGame: React.FC = () => {
             ref={iframeRef}
             src={game.url}
             className="w-full h-full border-0 bg-black"
-            allow="autoplay; gamepad; fullscreen; focus-without-user-activation"
+            allow="autoplay; gamepad; fullscreen; focus-without-user-activation; pointer-lock; accelerometer; gyroscope; keyboard-map"
             sandbox="allow-scripts allow-same-origin allow-forms allow-pointer-lock allow-popups"
             title={game.name}
           />
@@ -508,7 +511,7 @@ export const EmbedGame: React.FC = () => {
               ref={iframeRef}
               src={game.url}
               className="w-full h-full rounded-xl sm:rounded-2xl border-0 bg-black block touch-manipulation"
-              allow="autoplay; gamepad; fullscreen; focus-without-user-activation"
+              allow="autoplay; gamepad; fullscreen; focus-without-user-activation; pointer-lock; accelerometer; gyroscope; keyboard-map"
               sandbox="allow-scripts allow-same-origin allow-forms allow-pointer-lock allow-popups"
               title={game.name}
             />
