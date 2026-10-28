@@ -1,16 +1,24 @@
 import type { IncomingMessage, ServerResponse } from 'http';
 import { initDb, createUser, createSession, sanitizeUser, checkBruteForce } from '../_db';
 
-const parseBody = (req: any): Promise<any> => {
+const parseBody = async (req: any): Promise<any> => {
+  if (req.body && typeof req.body === 'object') return req.body;
+  if (typeof req.body === 'string') {
+    try { return JSON.parse(req.body); } catch { return {}; }
+  }
+  if (req.readableEnded) return {};
+
   return new Promise((resolve) => {
-    if (req.body && typeof req.body === 'object') return resolve(req.body);
-    if (typeof req.body === 'string') {
-      try { return resolve(JSON.parse(req.body)); } catch { return resolve({}); }
-    }
     let data = '';
-    req.on('data', (chunk: any) => data += chunk);
+    const timeout = setTimeout(() => resolve({}), 800);
+    req.on('data', (chunk: any) => { data += chunk; });
     req.on('end', () => {
+      clearTimeout(timeout);
       try { resolve(JSON.parse(data)); } catch { resolve({}); }
+    });
+    req.on('error', () => {
+      clearTimeout(timeout);
+      resolve({});
     });
   });
 };

@@ -49,18 +49,20 @@ const usernameIndex: Map<string, string> = new Map(); // key: lowercase username
 const sessions: Map<string, SessionRecord> = new Map(); // key: token -> SessionRecord
 const bruteForceMap: Map<string, AttemptRecord> = new Map(); // key: ip or identifier -> AttemptRecord
 
-// Determine writable persistence path
+// Determine writable persistence path safely
 const getDbFilePath = (): string => {
-  // On Vercel serverless /tmp is writable; locally process.cwd()/scratch or node_modules/.cache
-  const isVercel = process.env.VERCEL === '1';
-  if (isVercel) {
+  if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME || process.env.NODE_ENV === 'production') {
     return path.join('/tmp', 'gameworld_users.json');
   }
-  const scratchDir = path.join(process.cwd(), 'scratch');
-  if (!fs.existsSync(scratchDir)) {
-    try { fs.mkdirSync(scratchDir, { recursive: true }); } catch {}
+  try {
+    const scratchDir = path.join(process.cwd(), 'scratch');
+    if (!fs.existsSync(scratchDir)) {
+      fs.mkdirSync(scratchDir, { recursive: true });
+    }
+    return path.join(scratchDir, 'gameworld_users.json');
+  } catch {
+    return path.join('/tmp', 'gameworld_users.json');
   }
-  return path.join(scratchDir, 'gameworld_users.json');
 };
 
 // Load saved users on startup
