@@ -245,6 +245,7 @@ export interface SecurityAuditEvent {
   severity: 'INFO' | 'WARN' | 'CRITICAL';
   eventType: 
     | 'AUTH_LOGIN_SUCCESS' 
+    | 'AUTH_REGISTER_SUCCESS'
     | 'AUTH_LOGIN_FAILED' 
     | 'AUTH_LOCKOUT' 
     | 'AUTH_2FA_CHALLENGE' 

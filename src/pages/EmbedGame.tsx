@@ -92,12 +92,26 @@ export const EmbedGame: React.FC = () => {
   });
 
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 640);
+  const [mobileRatio, setMobileRatio] = useState<'auto' | 'tall' | 'wide' | 'full'>('auto');
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 640);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  const getComputedHeight = () => {
+    if (!isMobile) return `${iframeHeight}px`;
+    if (mobileRatio === 'tall') return 'min(78vh, 660px)';
+    if (mobileRatio === 'wide') return 'min(56.25vw, 360px)';
+    if (mobileRatio === 'full') return 'calc(100dvh - 160px)';
+    // Auto detection
+    const tallGames = ['classic_2048', 'hextris', 'pacman', 'subway_surfers', 'temple_run', 'floppybird', 'clumsy_bird', 'flappy_bird'];
+    if (tallGames.includes(gameId || '')) {
+      return 'min(76vh, 630px)';
+    }
+    return 'min(64vh, 480px)';
+  };
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
@@ -327,16 +341,16 @@ export const EmbedGame: React.FC = () => {
       {/* Dynamic Background Shader */}
       <ShaderBackground type="core" />
 
-      {/* Fullscreen Overlay Mode */}
+      {/* Fullscreen Overlay Mode - Notch Safe with 100dvh */}
       {isFullscreen && (
-        <div className="fixed inset-0 w-screen h-screen z-50 bg-black flex flex-col">
-          {/* Floating Exit Fullscreen Bar */}
-          <div className="absolute top-4 left-4 z-50 flex items-center gap-2 bg-black/80 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 shadow-2xl">
+        <div className="fixed inset-0 w-full h-[100dvh] z-50 bg-black flex flex-col">
+          {/* Floating Exit Fullscreen Bar with iOS Safe Area support */}
+          <div className="absolute top-[max(0.75rem,env(safe-area-inset-top))] left-[max(0.75rem,env(safe-area-inset-left))] z-50 flex items-center gap-2 bg-black/85 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/20 shadow-2xl">
             <button
               onClick={handleToggleFullscreen}
               className="flex items-center gap-1.5 text-xs font-bold text-white hover:text-primary transition-colors cursor-pointer"
             >
-              <Minimize className="w-4 h-4 text-primary" /> EXIT FULLSCREEN (ESC)
+              <Minimize className="w-3.5 h-3.5 text-primary" /> EXIT (ESC)
             </button>
             <span className="text-white/20">|</span>
             <button
@@ -359,7 +373,7 @@ export const EmbedGame: React.FC = () => {
             key={`fs-${iframeKey}`}
             ref={iframeRef}
             src={game.url}
-            className="w-full h-full border-0 bg-black"
+            className="w-full h-full border-0 bg-black touch-manipulation"
             allow="autoplay; gamepad; fullscreen; focus-without-user-activation; pointer-lock; accelerometer; gyroscope; keyboard-map"
             sandbox="allow-scripts allow-same-origin allow-forms allow-pointer-lock allow-popups"
             title={game.name}
@@ -387,13 +401,45 @@ export const EmbedGame: React.FC = () => {
               </h1>
             </div>
             <p className="text-[9px] sm:text-[10px] text-on-surface-variant">
-              {isMobile ? 'Mobile Optimized View' : 'Live Game • Instant Play'}
+              {isMobile ? `Mobile • ${mobileRatio.toUpperCase()} Fit` : 'Live Game • Instant Play'}
             </p>
           </div>
         </div>
 
         {/* Action Controls */}
         <div className="flex items-center gap-1.5 sm:gap-2">
+          {/* Mobile Ratio Selector Pills */}
+          <div className="flex md:hidden items-center gap-0.5 bg-black/60 border border-white/10 p-0.5 rounded-xl">
+            <button
+              onClick={() => setMobileRatio('auto')}
+              className={`px-1.5 py-0.5 rounded text-[9px] font-bold transition-colors ${mobileRatio === 'auto' ? 'bg-primary text-black' : 'text-white/60'}`}
+              title="Smart Auto Ratio"
+            >
+              Auto
+            </button>
+            <button
+              onClick={() => setMobileRatio('tall')}
+              className={`px-1.5 py-0.5 rounded text-[9px] font-bold transition-colors ${mobileRatio === 'tall' ? 'bg-primary text-black' : 'text-white/60'}`}
+              title="Tall Aspect (Runners & Grid Games)"
+            >
+              Tall
+            </button>
+            <button
+              onClick={() => setMobileRatio('wide')}
+              className={`px-1.5 py-0.5 rounded text-[9px] font-bold transition-colors ${mobileRatio === 'wide' ? 'bg-primary text-black' : 'text-white/60'}`}
+              title="16:9 Widescreen"
+            >
+              16:9
+            </button>
+            <button
+              onClick={() => setMobileRatio('full')}
+              className={`px-1.5 py-0.5 rounded text-[9px] font-bold transition-colors ${mobileRatio === 'full' ? 'bg-primary text-black' : 'text-white/60'}`}
+              title="Full Available Height"
+            >
+              Max
+            </button>
+          </div>
+
           {/* Quick Height Adjuster Pills - Desktop only */}
           <div className="hidden md:flex items-center gap-1 bg-black/50 border border-white/10 px-2 py-1 rounded-xl">
             <span className="text-[9px] font-bold text-white/40 uppercase tracking-wider mr-1">Height</span>
@@ -501,8 +547,8 @@ export const EmbedGame: React.FC = () => {
           <div 
             className="relative w-full bg-[#060c18] p-1.5 sm:p-2 rounded-2xl sm:rounded-3xl border border-white/10 shadow-2xl overflow-hidden group transition-all duration-300"
             style={{ 
-              height: isMobile ? 'min(68vh, 520px)' : `${iframeHeight}px`,
-              minHeight: isMobile ? '360px' : undefined 
+              height: getComputedHeight(),
+              minHeight: isMobile ? '320px' : undefined 
             }}
           >
             <iframe

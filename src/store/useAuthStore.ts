@@ -4,7 +4,7 @@ import { UserRole, securityAuditLogger } from '../services/securityService';
 import { rewardSecurityLedger } from '../services/rewardSecurity';
 import { privacyService } from '../services/privacyService';
 import { updateLeaderboardRegistry } from '../data/leaderboardRegistry';
-import { useSocialStore } from './useSocialStore';
+import { authService } from '../services/authService';
 
 export interface UserStats {
   wins: number;
@@ -46,6 +46,9 @@ export interface UserProfile {
 interface AuthState {
   isAuthenticated: boolean;
   user: UserProfile | null;
+  loginWithCredentials: (identifier: string, password: string) => Promise<UserProfile>;
+  registerWithCredentials: (username: string, email: string, password: string) => Promise<UserProfile>;
+  checkSession: () => Promise<boolean>;
   login: (username: string, email: string) => void;
   logout: () => void;
   addXP: (amount: number) => void;
@@ -73,7 +76,7 @@ const DEFAULT_SESSIONS: UserSession[] = [
   }
 ];
 
-// Factory to create a completely clean profile starting strictly from ZERO
+// Helper to create a zero-stat profile
 const createZeroProfile = (username: string, email: string): UserProfile => ({
   id: `usr_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
   username,
@@ -98,7 +101,7 @@ const createZeroProfile = (username: string, email: string): UserProfile => ({
   activeSessions: DEFAULT_SESSIONS
 });
 
-// Helper to retrieve saved profiles catalog from localStorage
+// Helper for local cached directory fallback
 const getSavedProfilesMap = (): Record<string, UserProfile> => {
   try {
     const raw = localStorage.getItem('gw_profiles_directory');
@@ -125,16 +128,121 @@ export const useAuthStore = create<AuthState>()(
       isAuthenticated: false,
       user: null,
 
+      // Authenticate against real server backend with cryptographic verification
+      loginWithCredentials: async (identifier: string, password: string) => {
+        const response = await authService.login(identifier, password);
+        const serverUser = response.user;
+
+        const profile: UserProfile = {
+          id: serverUser.id,
+          username: serverUser.username,
+          displayName: serverUser.displayName || serverUser.username,
+          email: serverUser.email,
+          role: serverUser.role || 'USER',
+          avatarUrl: serverUser.avatarUrl || `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(serverUser.username)}`,
+          bio: serverUser.bio || 'New explorer in the Game World universe.',
+          country: serverUser.country || 'Global Node',
+          age: serverUser.age || 18,
+          level: serverUser.level || 1,
+          xp: serverUser.xp || 0,
+          coins: serverUser.coins || 0,
+          stats: serverUser.stats || { wins: 0, losses: 0, rank: 0, hoursPlayed: 0 },
+          is2FAEnabled: false,
+          activeSessions: DEFAULT_SESSIONS,
+          isFirstLogin: false
+        };
+
+        saveProfileToDirectory(profile);
+        securityAuditLogger.log({
+          severity: 'INFO',
+          eventType: 'AUTH_LOGIN_SUCCESS',
+          actor: profile.username,
+          ipAddress: '127.0.0.1',
+          details: `User verified via cryptographic backend (Level: ${profile.level}, Rank: ${profile.stats.rank})`
+        });
+
+        set({ isAuthenticated: true, user: profile });
+        return profile;
+      },
+
+      // Register new user on backend with salt + PBKDF2 hash
+      registerWithCredentials: async (username: string, email: string, password: string) => {
+        const response = await authService.register(username, email, password);
+        const serverUser = response.user;
+
+        const profile: UserProfile = {
+          id: serverUser.id,
+          username: serverUser.username,
+          displayName: serverUser.displayName || serverUser.username,
+          email: serverUser.email,
+          role: 'USER',
+          avatarUrl: serverUser.avatarUrl || `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(serverUser.username)}`,
+          bio: serverUser.bio || 'New explorer in the Game World universe.',
+          country: serverUser.country || 'Global Node',
+          age: serverUser.age || 18,
+          level: 1,
+          xp: 0,
+          coins: 0,
+          stats: { wins: 0, losses: 0, rank: 0, hoursPlayed: 0 },
+          is2FAEnabled: false,
+          activeSessions: DEFAULT_SESSIONS,
+          isFirstLogin: true
+        };
+
+        saveProfileToDirectory(profile);
+        securityAuditLogger.log({
+          severity: 'INFO',
+          eventType: 'AUTH_REGISTER_SUCCESS',
+          actor: profile.username,
+          ipAddress: '127.0.0.1',
+          details: `New commander account created on backend with cryptographic salt & hash`
+        });
+
+        set({ isAuthenticated: true, user: profile });
+        return profile;
+      },
+
+      // Validate session token with backend on boot
+      checkSession: async () => {
+        try {
+          const serverUser = await authService.getMe();
+          if (serverUser) {
+            const current = get().user;
+            const profile: UserProfile = {
+              id: serverUser.id,
+              username: serverUser.username,
+              displayName: serverUser.displayName || serverUser.username,
+              email: serverUser.email,
+              role: serverUser.role || 'USER',
+              avatarUrl: serverUser.avatarUrl,
+              bio: serverUser.bio,
+              country: serverUser.country,
+              age: serverUser.age,
+              level: serverUser.level,
+              xp: serverUser.xp,
+              coins: serverUser.coins,
+              stats: serverUser.stats,
+              is2FAEnabled: current?.is2FAEnabled || false,
+              activeSessions: current?.activeSessions || DEFAULT_SESSIONS,
+              isFirstLogin: current?.isFirstLogin || false
+            };
+            set({ isAuthenticated: true, user: profile });
+            return true;
+          }
+        } catch {
+          // Token invalid or expired
+        }
+        return false;
+      },
+
+      // Legacy fallback
       login: (username, email) => {
         const cleanEmail = email.trim().toLowerCase();
         const cleanUsername = username.trim();
         const savedDirectory = getSavedProfilesMap();
 
-        // Check if an existing profile is saved for this email or username
         let profile = savedDirectory[cleanEmail] || savedDirectory[cleanUsername.toLowerCase()];
-
         if (!profile) {
-          // BRAND NEW PROFILE: Starts strictly with ZERO stats
           profile = createZeroProfile(cleanUsername, cleanEmail);
           saveProfileToDirectory(profile);
         }
@@ -147,10 +255,7 @@ export const useAuthStore = create<AuthState>()(
           details: `User session authenticated (Level: ${profile.level}, Rank: ${profile.stats.rank})`
         });
 
-        set({
-          isAuthenticated: true,
-          user: profile
-        });
+        set({ isAuthenticated: true, user: profile });
       },
 
       logout: () => {
@@ -165,6 +270,7 @@ export const useAuthStore = create<AuthState>()(
             details: 'User explicitly logged out of current station'
           });
         }
+        authService.logout();
         set({ isAuthenticated: false, user: null });
       },
 
@@ -222,6 +328,7 @@ export const useAuthStore = create<AuthState>()(
         };
         saveProfileToDirectory(updatedUser);
         set({ user: updatedUser });
+        authService.updateProfile({ level: newLevel, xp: newXP }).catch(() => {});
       },
 
       addCoins: (amount) => {
@@ -233,6 +340,7 @@ export const useAuthStore = create<AuthState>()(
         };
         saveProfileToDirectory(updatedUser);
         set({ user: updatedUser });
+        authService.updateProfile({ coins: updatedUser.coins }).catch(() => {});
       },
 
       spendCoins: (amount) => {
@@ -244,10 +352,10 @@ export const useAuthStore = create<AuthState>()(
         };
         saveProfileToDirectory(updatedUser);
         set({ user: updatedUser });
+        authService.updateProfile({ coins: updatedUser.coins }).catch(() => {});
         return true;
       },
 
-      // Records gameplay outcomes: adds XP, increases Level, gains Coins, and scales Rank!
       recordGameReward: (coins: number, xp: number, rankGain = 15, won = true) => {
         const user = get().user;
         if (!user) return;
@@ -271,7 +379,7 @@ export const useAuthStore = create<AuthState>()(
           stats: {
             wins: won ? user.stats.wins + 1 : user.stats.wins,
             losses: won ? user.stats.losses : user.stats.losses + 1,
-            rank: user.stats.rank + rankGain, // Increases rank with every match played
+            rank: user.stats.rank + rankGain,
             hoursPlayed: Math.round((user.stats.hoursPlayed + 0.1) * 10) / 10
           }
         };
@@ -279,15 +387,21 @@ export const useAuthStore = create<AuthState>()(
         saveProfileToDirectory(updatedUser);
         set({ user: updatedUser });
 
-        // Step 15 in process: Update global leaderboard
         updateLeaderboardRegistry(updatedUser);
+        authService.updateProfile({
+          coins: updatedUser.coins,
+          level: updatedUser.level,
+          xp: updatedUser.xp,
+          stats: updatedUser.stats
+        }).catch(() => {});
 
-        // Step 13 in process: Level Up notification
         if (leveledUp) {
-          useSocialStore.getState().addNotification(
-            'ACHIEVEMENT',
-            `🎉 LEVEL UP! Commander reached Level ${newLevel}! Global statistics updated.`
-          );
+          import('./useSocialStore').then(({ useSocialStore }) => {
+            useSocialStore.getState().addNotification(
+              'ACHIEVEMENT',
+              `🎉 LEVEL UP! Commander reached Level ${newLevel}! Global statistics updated.`
+            );
+          });
         }
       },
 
@@ -310,6 +424,7 @@ export const useAuthStore = create<AuthState>()(
         };
         saveProfileToDirectory(updatedUser);
         set({ user: updatedUser });
+        authService.updateProfile({ bio: newBio }).catch(() => {});
       },
 
       updateProfile: (data) => {
@@ -323,6 +438,7 @@ export const useAuthStore = create<AuthState>()(
         saveProfileToDirectory(updatedUser);
         set({ user: updatedUser });
         updateLeaderboardRegistry(updatedUser);
+        authService.updateProfile(data).catch(() => {});
       },
 
       completeProfile: (bio: string, avatarUrl?: string) => {
@@ -336,12 +452,14 @@ export const useAuthStore = create<AuthState>()(
         };
         saveProfileToDirectory(updatedUser);
         set({ user: updatedUser });
+        authService.updateProfile({ bio: updatedUser.bio, avatarUrl: updatedUser.avatarUrl }).catch(() => {});
       },
 
       deleteAccount: () => {
         const user = get().user;
         if (!user) return;
         privacyService.purgeAccount(user.id, user.username);
+        authService.logout();
         try {
           const map = getSavedProfilesMap();
           delete map[user.email.toLowerCase()];

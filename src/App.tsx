@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from './store/useAuthStore';
 import { TopNavBar } from './components/layout/TopNavBar';
@@ -41,20 +41,33 @@ import { RetroSnakeGame } from './pages/RetroSnakeGame';
 import { CyberSnakeGame } from './pages/CyberSnakeGame';
 import { PrivacyPolicy } from './pages/PrivacyPolicy';
 import { TermsOfService } from './pages/TermsOfService';
+import { NotFound } from './pages/NotFound';
 
-// Simple Route Guard for Private/Protected routes
+// Protected Route Guard that preserves intended destination URL
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  return isAuthenticated ? <>{children}</> : <Navigate to="/auth" replace />;
+  const location = useLocation();
+
+  return isAuthenticated ? (
+    <>{children}</>
+  ) : (
+    <Navigate to="/auth" state={{ from: location }} replace />
+  );
 };
 
 const AppContent: React.FC = () => {
   const location = useLocation();
   const isStandalone = location.pathname.startsWith('/standalone/');
+  const checkSession = useAuthStore((state) => state.checkSession);
+
+  // Restore session from token on application startup
+  useEffect(() => {
+    checkSession();
+  }, [checkSession]);
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-on-surface select-none">
@@ -67,13 +80,24 @@ const AppContent: React.FC = () => {
           <Route path="/" element={<Home />} />
           <Route path="/auth" element={<Auth />} />
           
-          {/* Protected Routes */}
+          {/* Public & Accessible Game Discovery Routes */}
+          <Route path="/library" element={<Library />} />
+          <Route path="/game/:id" element={<GameDetails />} />
+          <Route path="/play/embed/:gameId" element={<EmbedGame />} />
+
+          {/* User Operations (Require Login) */}
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="/library" element={<ProtectedRoute><Library /></ProtectedRoute>} />
-          <Route path="/game/:id" element={<ProtectedRoute><GameDetails /></ProtectedRoute>} />
-          
-          {/* Universal Iframe Player Route */}
-          <Route path="/play/embed/:gameId" element={<ProtectedRoute><EmbedGame /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/friends" element={<ProtectedRoute><FriendsHub /></ProtectedRoute>} />
+          <Route path="/clan" element={<ProtectedRoute><ClanHub /></ProtectedRoute>} />
+          <Route path="/matchmaking" element={<ProtectedRoute><Matchmaking /></ProtectedRoute>} />
+          <Route path="/tournaments" element={<ProtectedRoute><TournamentCenter /></ProtectedRoute>} />
+          <Route path="/marketplace" element={<ProtectedRoute><Marketplace /></ProtectedRoute>} />
+          <Route path="/battlepass" element={<ProtectedRoute><BattlePass /></ProtectedRoute>} />
+          <Route path="/cloud" element={<ProtectedRoute><CloudPlay /></ProtectedRoute>} />
+          <Route path="/live" element={<ProtectedRoute><LiveBroadcast /></ProtectedRoute>} />
+          <Route path="/creator" element={<ProtectedRoute><CreatorStudio /></ProtectedRoute>} />
+          <Route path="/developer" element={<ProtectedRoute><DeveloperPortal /></ProtectedRoute>} />
 
           {/* Standalone Pure Game Routes for clean Iframe embedding */}
           <Route path="/standalone/neon_ludo" element={<LudoGame />} />
@@ -92,44 +116,37 @@ const AppContent: React.FC = () => {
           <Route path="/standalone/checkers" element={<CheckersGame />} />
 
           {/* Direct legacy Play Routes */}
-          <Route path="/play/neon_ludo" element={<ProtectedRoute><LudoGame /></ProtectedRoute>} />
-          <Route path="/play/chess_masters" element={<ProtectedRoute><ChessGame /></ProtectedRoute>} />
-          <Route path="/play/hyper_ttt" element={<ProtectedRoute><TicTacToeGame /></ProtectedRoute>} />
-          <Route path="/play/void_snake" element={<ProtectedRoute><VoidSnakeGame /></ProtectedRoute>} />
-          <Route path="/play/retro_snake" element={<ProtectedRoute><RetroSnakeGame /></ProtectedRoute>} />
-          <Route path="/play/cyber_snake" element={<ProtectedRoute><CyberSnakeGame /></ProtectedRoute>} />
-          <Route path="/play/flappy_bird" element={<ProtectedRoute><FlappyBirdGame /></ProtectedRoute>} />
-          <Route path="/play/velocity_racing" element={<ProtectedRoute><VelocityRacingGame /></ProtectedRoute>} />
-          <Route path="/play/cyber_uno" element={<ProtectedRoute><CyberUnoGame /></ProtectedRoute>} />
-          <Route path="/play/zen_carrom" element={<ProtectedRoute><ZenCarromGame /></ProtectedRoute>} />
-          <Route path="/play/battle_arena" element={<ProtectedRoute><BattleArenaGame /></ProtectedRoute>} />
-          <Route path="/play/connect_4" element={<ProtectedRoute><Connect4Game /></ProtectedRoute>} />
-          <Route path="/play/gomoku" element={<ProtectedRoute><GomokuGame /></ProtectedRoute>} />
-          <Route path="/play/othello" element={<ProtectedRoute><OthelloGame /></ProtectedRoute>} />
-          <Route path="/play/snakes_ladders" element={<ProtectedRoute><SnakesLaddersGame /></ProtectedRoute>} />
-          <Route path="/play/dominoes" element={<ProtectedRoute><DominoesGame /></ProtectedRoute>} />
-          <Route path="/play/checkers" element={<ProtectedRoute><CheckersGame /></ProtectedRoute>} />
+          <Route path="/play/neon_ludo" element={<LudoGame />} />
+          <Route path="/play/chess_masters" element={<ChessGame />} />
+          <Route path="/play/hyper_ttt" element={<TicTacToeGame />} />
+          <Route path="/play/void_snake" element={<VoidSnakeGame />} />
+          <Route path="/play/retro_snake" element={<RetroSnakeGame />} />
+          <Route path="/play/cyber_snake" element={<CyberSnakeGame />} />
+          <Route path="/play/flappy_bird" element={<FlappyBirdGame />} />
+          <Route path="/play/velocity_racing" element={<VelocityRacingGame />} />
+          <Route path="/play/cyber_uno" element={<CyberUnoGame />} />
+          <Route path="/play/zen_carrom" element={<ZenCarromGame />} />
+          <Route path="/play/battle_arena" element={<BattleArenaGame />} />
+          <Route path="/play/connect_4" element={<Connect4Game />} />
+          <Route path="/play/gomoku" element={<GomokuGame />} />
+          <Route path="/play/othello" element={<OthelloGame />} />
+          <Route path="/play/snakes_ladders" element={<SnakesLaddersGame />} />
+          <Route path="/play/dominoes" element={<DominoesGame />} />
+          <Route path="/play/checkers" element={<CheckersGame />} />
           
-          {/* Platform Centers */}
-          <Route path="/matchmaking" element={<ProtectedRoute><Matchmaking /></ProtectedRoute>} />
-          <Route path="/tournaments" element={<ProtectedRoute><TournamentCenter /></ProtectedRoute>} />
-          <Route path="/marketplace" element={<ProtectedRoute><Marketplace /></ProtectedRoute>} />
-          <Route path="/battlepass" element={<ProtectedRoute><BattlePass /></ProtectedRoute>} />
-          <Route path="/friends" element={<ProtectedRoute><FriendsHub /></ProtectedRoute>} />
-          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-          <Route path="/cloud" element={<ProtectedRoute><CloudPlay /></ProtectedRoute>} />
-          <Route path="/live" element={<ProtectedRoute><LiveBroadcast /></ProtectedRoute>} />
-          <Route path="/creator" element={<ProtectedRoute><CreatorStudio /></ProtectedRoute>} />
-          <Route path="/developer" element={<ProtectedRoute><DeveloperPortal /></ProtectedRoute>} />
+          {/* Navigation Route Aliases */}
+          <Route path="/clans" element={<Navigate to="/clan" replace />} />
+          <Route path="/games" element={<Navigate to="/library" replace />} />
           <Route path="/admin" element={<Navigate to="/dashboard" replace />} />
           <Route path="/moderation" element={<Navigate to="/dashboard" replace />} />
           <Route path="/liveops" element={<Navigate to="/dashboard" replace />} />
-          <Route path="/clan" element={<ProtectedRoute><ClanHub /></ProtectedRoute>} />
+
+          {/* Legal Pages */}
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
           
-          {/* Fallback to Home */}
-          <Route path="*" element={<Navigate to="/" replace />} />
+          {/* 404 Route */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
 

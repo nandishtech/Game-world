@@ -120,15 +120,15 @@ export const Library: React.FC = () => {
             <Search className="w-4 h-4 text-on-surface-variant absolute left-3.5 top-1/2 -translate-y-1/2" />
           </div>
 
-          {/* Category Filter Chips */}
-          <div className="flex flex-wrap gap-1.5 justify-center">
+          {/* Category Filter Chips - Smooth horizontal thumb swipe on mobile, wrap on desktop */}
+          <div className="flex flex-nowrap md:flex-wrap gap-1.5 overflow-x-auto w-full pb-1 scrollbar-none justify-start md:justify-center">
             {categories.map((cat) => {
               const active = filterType === cat.value;
               return (
                 <button
                   key={cat.value}
                   onClick={() => setFilterType(cat.value)}
-                  className={`px-3 py-1.5 rounded-xl text-[10px] uppercase font-bold tracking-wider transition-all border flex items-center gap-1.5 cursor-pointer ${
+                  className={`shrink-0 px-3 py-1.5 rounded-xl text-[10px] uppercase font-bold tracking-wider transition-all border flex items-center gap-1.5 cursor-pointer touch-manipulation ${
                     active 
                       ? 'bg-primary text-black border-primary shadow-[0_0_12px_rgba(77,142,255,0.4)]' 
                       : 'bg-transparent text-on-surface-variant border-white/10 hover:border-white/25 hover:text-white'

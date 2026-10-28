@@ -2,7 +2,7 @@
   "framework": "vite",
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/((?!api|games|assets).*)",
       "destination": "/index.html"
     }
   ]
